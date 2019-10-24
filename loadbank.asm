@@ -25,7 +25,7 @@ loadbank:
    tax
    inx
    jmp @loop
-
+   
 @load:               ; load banked RAM using params starting at ZP_PTR_1
    ldx 0
    lda (ZP_PTR_1,x)
@@ -84,9 +84,9 @@ getramaddr: ; A = Offset into RAM bank >> 5
    tay
    rts
 
-   
 
-loadvram:   ; A = RAM bank,
+
+bank2vram:  ; A = RAM bank,
             ; X = beginning of data offset >> 5,
             ; Y = end of data offset >> 5 (0 = whole bank)
    sta RAM_BANK
