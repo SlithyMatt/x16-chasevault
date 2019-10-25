@@ -24,7 +24,7 @@ b2_filename:   .asciiz "bitmap.b002.bin"
 b3_filename:   .asciiz "bitmap.b003.bin"
 b4_filename:   .asciiz "bitmap.b004.bin"
 end_filenames:
-BANKS_TO_LOAD = 10
+BANKS_TO_LOAD = 5
 bankparams:
 .byte b1_filename-b0_filename-1
 .byte <b0_filename
@@ -43,44 +43,7 @@ bankparams:
 .byte >b4_filename
 
 .include "loadbank.asm"
-
-loadvram:   ; A = VRAM address (19:12)
-            ; X = VRAM address (11:4)
-            ; Y = filename address (7:0)
-   pha      ; push original A argument
-   and #F0  ; mask VRAM bank << 4
-   lsr
-   lsr
-   lsr
-   lsr
-   clc
-   adc #2
-   pha            ; push VRAM bank + 2
-   txa
-   sta ZP_PTR_1   ; store original X argument to ZP
-   tya
-   sta ZP_PTR_1+1 ; store original Y argument to ZP
-   lda #0
-   sta ROM_BANK
-   pla            ; pull VRAM bank + 2
-   tay            ; SA = VRAM bank + 2
-   lda #1
-   ldx #1
-   jsr SETLFS     ; SetFileParams(SD Card to VRAM bank)
-   lda ZP_PTR_1+1    ; A = low byte of filename address
-   sta ZP_PTR_2
-   ldy #>filenames   ; Y = high byte of filename address
-   sty ZP_PTR_2+1
-   ldx #0
-@loop:
-   lda (ZP_PTR_2,x)
-   beq @foundnull
-   inx
-   jmp @loop
-   txa               ; A = filename length
-   ldx ZP_PTR_1+1    ; X = low byte of filename address
-   jsr SETNAM
-   ; TODO LOAD
+.include "loadvram.asm"
 
 start:
    lda #0
@@ -114,7 +77,31 @@ start:
    sta VERA_data
    sta VERA_data
 
-   ; TODO: load VRAM data from binaries
+   ; load VRAM data from binaries
+   lda #>(VRAM_TILEMAP>>4)
+   ldx #<(VRAM_TILEMAP>>4)
+   ldy #<tilemap_fn
+   jsr loadvram
+
+   lda #>(VRAM_SPRITES>>4)
+   ldx #<(VRAM_SPRITES>>4)
+   ldy #<sprites_fn
+   jsr loadvram
+
+   lda #>(VRAM_TILES>>4)
+   ldx #<(VRAM_TILES>>4)
+   ldy #<tiles_fn
+   jsr loadvram
+
+   lda #>(VRAM_palette>>4)
+   ldx #<(VRAM_palette>>4)
+   ldy #<palette_fn
+   jsr loadvram
+
+   lda #>(VRAM_sprattr>>4)
+   ldx #<(VRAM_sprattr>>4)
+   ldy #<spriteattr_fn
+   jsr loadvram
 
    ; TODO: store bitmap binaries to banked RAM
 
@@ -126,13 +113,14 @@ start:
 
    ; TODO: setup interrupts
 
-   ; TODO: enable sprites
-
    VERA_SET_ADDR VRAM_layer1, 0  ; enable VRAM layer 1
    lda #$01
    ora VERA_data
    sta VERA_data
 
+   VERA_SET_ADDR VRAM_sprreg, 0  ; enable sprites
+   lda #$01
+   sta VERA_data
 
 end:
    nop

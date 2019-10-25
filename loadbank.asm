@@ -1,7 +1,5 @@
 .include "x16.inc"
 
-.include "bankparams.asm"
-
 loadbank:
    lda #0
    sta ROM_BANK
@@ -25,7 +23,7 @@ loadbank:
    tax
    inx
    jmp @loop
-   
+
 @load:               ; load banked RAM using params starting at ZP_PTR_1
    ldx 0
    lda (ZP_PTR_1,x)
