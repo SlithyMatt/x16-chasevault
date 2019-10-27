@@ -27,10 +27,11 @@ RAM_WIN           = $A000
 RAM_WIN_SIZE      = $2000
 ROM_WIN           = $C000
 
-; Kernal 
-SETLFS   = $FFBA
-SETNAM   = $FFBD
-LOAD     = $FFD5
+; Kernal
+SETLFS   		:= $FFBA
+SETNAM   		:= $FFBD
+LOAD     		:= $FFD5
+
 
 ; VRAM Addresses
 
@@ -47,6 +48,11 @@ VRAM_spi       = $F7000
 VRAM_uart      = $F8000
 
 VROM_petscii   = $1F000
+
+; IRQs
+IRQVec         := $0314
+BRKVec         := $0316
+NMIVec         := $0318
 
 ;   Macros
 

@@ -44,6 +44,9 @@ bankparams:
 
 .include "loadbank.asm"
 .include "loadvram.asm"
+.include "superimpose.asm"
+.include "irq.asm"
+.include "vsync.asm"
 
 start:
    lda #0
@@ -111,8 +114,6 @@ start:
 
    ; TODO: setup game parameters and initialize states
 
-   ; TODO: setup interrupts
-
    VERA_SET_ADDR VRAM_layer1, 0  ; enable VRAM layer 1
    lda #$01
    ora VERA_data
@@ -122,6 +123,14 @@ start:
    lda #$01
    sta VERA_data
 
-end:
-   nop
-   jmp end  ; loop forever
+   ; demo superimpose
+   superimpose "ready?", 7, 9
+   superimpose_restore
+   superimpose "go!", 8, 9
+
+   ; setup interrupts
+   jsr init_irq
+
+mainloop:
+   jsr check_vsync
+   jmp mainloop  ; loop forever
