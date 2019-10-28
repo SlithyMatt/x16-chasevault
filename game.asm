@@ -1,6 +1,8 @@
 .ifndef GAME_INC
 GAME_INC = 1
 
+.include "player.asm"
+
 .ifndef VRAM_SPRITES
 VRAM_SPRITES = $0E000
 .endif

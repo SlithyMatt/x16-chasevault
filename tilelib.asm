@@ -139,5 +139,74 @@ xy2vaddr:   ; Input:
    rts
 
 
+pix2tilexy  ; Input:
+            ; A: layer
+            ; X: display x
+            ; Y: display y
+            ; Output:
+            ; A: layer
+            ; X: tile x
+            ; Y: tile y
+   jmp @start
+@ctrl1:     .byte 0
+@xoff:      .byte 0
+@yoff:      .byte 0
+@xshift:    .byte 3
+@yshift:    .byte 3
+@start:
+   pha                     ; push layer
+   cmp #0
+   bne @layer1
+   sta VERA_ctrl
+   VERA_SET_ADDR VRAM_layer0, 1
+   jmp @readlayer
+@layer1:
+   stz VERA_ctrl
+   VERA_SET_ADDR VRAM_layer1, 1
+@readlayer:
+   lda VERA_data ; ignore CTRL0
+   lda VERA_data
+   sta @ctrl1
+   lda VERA_data ; ignore MAP_BASE
+   lda VERA_data
+   lda VERA_data ; ignore TILE_BASE
+   lda VERA_data
+   lda VERA_data
+   sta @xoff
+   lda VERA_data
+   lda VERA_data
+   sta @yoff
+   lda VERA_data
+@gettw:
+   lda @ctrl1
+   and #$10
+   bne @tw16
+   lda @xoff
+   and #$07    ; A = xoff % 8
+   jmp @calcx
+@tw16:
+   lda #4
+   sta @xshift
+   lda @xoff
+   and #$0F    ; A = xoff %16
+@calcx:
+   sta @xoff
+   txa
+   clc
+   sbc @xoff
+   bpl @do_xshift
+   stz @xoff
+   bra @getth
+@do_xshift:
+   ldx @xshift
+@xshift_loop:
+   beq @done_xshift
+   lsr
+   dex
+   bra @xshift_loop
+@done_xshift
+   sta @xoff
+@getth:
+
 
 .endif
