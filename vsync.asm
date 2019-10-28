@@ -12,8 +12,7 @@ check_vsync:
    ; VSYNC has occurred, handle
    jsr game_tick
 
-   lda #0
-   sta vsync_trig
+   stz vsync_trig
 @done:
    rts
 

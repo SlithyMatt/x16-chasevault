@@ -21,8 +21,7 @@ xy2vaddr:   ; Input:
    VERA_SET_ADDR VRAM_layer0, 1
    jmp @readlayer
 @layer1:
-   lda #0
-   sta VERA_ctrl
+   stz VERA_ctrl
    VERA_SET_ADDR VRAM_layer1, 1
 @readlayer:
    lda VERA_data ; ignore CTRL0

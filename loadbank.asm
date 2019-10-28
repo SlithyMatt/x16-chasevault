@@ -16,23 +16,20 @@ loadbank:
    cpx #BANKS_TO_LOAD
    beq end_loadbank
    stx RAM_BANK
-   txa
-   pha
+   phx
    jsr @load         ; load bank
-   pla
-   tax
+   plx
    inx
    jmp @loop
 
 @load:               ; load banked RAM using params starting at ZP_PTR_1
-   ldx 0
-   lda (ZP_PTR_1,x)
+   lda (ZP_PTR_1)
    pha               ; push filename length to stack
    jsr @inczp1
-   lda (ZP_PTR_1,x)
+   lda (ZP_PTR_1)
    pha               ; push filename address low byte to stack
    jsr @inczp1
-   lda (ZP_PTR_1,x)
+   lda (ZP_PTR_1)
    tay               ; Y = filename address high byte
    jsr @inczp1
    pla               ; pull filename address low byte from stack
@@ -88,8 +85,7 @@ bank2vram:  ; A = RAM bank,
             ; X = beginning of data offset >> 5,
             ; Y = end of data offset >> 5 (0 = whole bank)
    sta RAM_BANK
-   tya
-   pha               ; push end offset
+   phy               ; push end offset
    txa
    jsr getramaddr    ; get start address
    stx ZP_PTR_1
@@ -99,16 +95,14 @@ bank2vram:  ; A = RAM bank,
    jsr getramaddr    ; get end address from offset
    stx ZP_PTR_2
    sty ZP_PTR_2+1
-   jmp @initloop
+   jmp @loop
 @wholebank:
    lda #<(RAM_WIN+RAM_WIN_SIZE)
    sta ZP_PTR_2
    lda #>(RAM_WIN+RAM_WIN_SIZE)
    sta ZP_PTR_2+1
-@initloop:
-   ldx #0
 @loop:
-   lda (ZP_PTR_1,x)  ; load from banked RAM
+   lda (ZP_PTR_1)    ; load from banked RAM
    sta VERA_data     ; store to next VRAM address
    clc
    lda #1

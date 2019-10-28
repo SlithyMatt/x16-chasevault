@@ -50,8 +50,7 @@ bankparams:
 .include "game.asm"
 
 start:
-   lda #0
-   sta VERA_ctrl
+   stz VERA_ctrl
    VERA_SET_ADDR VRAM_layer0, 0  ; disable VRAM layer 0
    lda #$FE
    and VERA_data
@@ -129,5 +128,6 @@ start:
    jsr init_irq
 
 mainloop:
+   wai
    jsr check_vsync
    jmp mainloop  ; loop forever

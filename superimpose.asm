@@ -24,7 +24,6 @@ SUPERIMPOSE_INC = 1
          sta (ZP_PTR_2),y
          iny
          dex
-         txa
          bne loop
          lda #1
          ldx #x_arg
@@ -59,8 +58,7 @@ SUPERIMPOSE_INC = 1
 
 
 .macro __superimpose_args2veraloop
-   lda #0
-   sta VERA_ctrl
+   stz VERA_ctrl
    lda __superimpose_bank
    sta VERA_addr_bank
    stx VERA_addr_low
