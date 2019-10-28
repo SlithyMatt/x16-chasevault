@@ -8,7 +8,7 @@
    jmp start
 
 VRAM_TILEMAP   = $04000 ; 128x128
-VRAM_SPRITES   = $0E000 ; 128 4bpp 16x16 frames
+VRAM_SPRITES   = $0E000 ; 64 4bpp 16x16 frames
 VRAM_TILES     = $10000 ; 424 4bpp 16x16 (may also be used as sprite frames)
 VRAM_BITMAP    = $16A00 ; 4bpp 320x240
 
@@ -47,6 +47,7 @@ bankparams:
 .include "superimpose.asm"
 .include "irq.asm"
 .include "vsync.asm"
+.include "game.asm"
 
 start:
    lda #0
@@ -112,7 +113,8 @@ start:
 
    ; TODO: load screen 0 bitmap from banked RAM into layer 0
 
-   ; TODO: setup game parameters and initialize states
+   ; setup game parameters and initialize states
+   jsr init_game
 
    VERA_SET_ADDR VRAM_layer1, 0  ; enable VRAM layer 1
    lda #$01
@@ -122,11 +124,6 @@ start:
    VERA_SET_ADDR VRAM_sprreg, 0  ; enable sprites
    lda #$01
    sta VERA_data
-
-   ; demo superimpose
-   superimpose "ready?", 7, 9
-   superimpose_restore
-   superimpose "go!", 8, 9
 
    ; setup interrupts
    jsr init_irq

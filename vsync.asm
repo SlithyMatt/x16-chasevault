@@ -1,6 +1,8 @@
 .ifndef VSYNC_INC
 VSYNC_INC = 1
 
+.include "game.asm"
+
 vsync_trig: .byte 0
 
 check_vsync:
@@ -8,7 +10,7 @@ check_vsync:
    beq @done
 
    ; VSYNC has occurred, handle
-
+   jsr game_tick
 
    lda #0
    sta vsync_trig

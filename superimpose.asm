@@ -4,7 +4,7 @@ SUPERIMPOSE_INC = 1
 .include "x16.inc"
 .include "tilelib.asm"
 
-.macro superimpose str_arg, x_arg, y_arg
+.macro SUPERIMPOSE str_arg, x_arg, y_arg
    .scope
          jmp end_string
       string_begin: .asciiz str_arg
@@ -39,7 +39,7 @@ SUPERIMPOSE_INC = 1
    .endscope
 .endmacro
 
-.macro superimpose_restore vaddr, length
+.macro SUPERIMPOSE_RESTORE vaddr, length
    .if (.paramcount > 0)
       lda #(^vaddr | $10)
       sta __superimpose_bank
