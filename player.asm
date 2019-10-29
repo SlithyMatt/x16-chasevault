@@ -18,7 +18,6 @@ player_move:
    lda player
    ora #$02
    sta player
-   jsr player_animate
    rts
 
 player_stop:
@@ -42,9 +41,30 @@ player_freeze:
 
 player_tick:
    lda player
-   and #$02
+   bit #$02             ; check for movable
    beq @check_animate
-   ; TODO: handle movement
+   and #$F3             ; clear direction
+   ldx #1
+   cpx joystick1_right
+   bne @check_left
+   bra @move
+@check_left:
+   cpx joystick1_left
+   bne @check_down
+   ora #$04
+   bra @move
+@check_down:
+   cpx joystick1_down
+   bne @check_up
+   ora #$08
+   bra @move
+@check_up:
+   cpx joystick1_up
+   bne @check_animate
+   ora #$0C
+@move:
+   ; TODO move player sprite, if possible
+   ; TODO handle collision
 @check_animate:
    lda player
    and #$01

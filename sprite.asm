@@ -38,4 +38,13 @@ sprite_frame:     ; A: frame
    rts
 
 
+sprite_getpos: ; Input:
+               ; A: sprite index
+               ; Output:
+               ; A: tile overlap (n:ne:e:se:s:sw:w:nw)
+               ; X: tile x
+               ; Y: tile y
+   ; TODO: get sprite position, overlap bitmap
+   rts
+
 .endif

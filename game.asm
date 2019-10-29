@@ -49,7 +49,7 @@ readygo:
    jmp timer_done
 @gooff:
    SUPERIMPOSE_RESTORE
-   jsr player_animate
+   jsr player_move
    jmp timer_done
 
 .endif
