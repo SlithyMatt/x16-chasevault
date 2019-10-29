@@ -140,21 +140,21 @@ xy2vaddr:   ; Input:
 
 
 pix2tilexy: ; Input:
-            ; A: layer
-            ; X: display x
-            ; Y: display y
+            ; A: bit 4: layer; bits 3,2: x (9:8), bits 1,0: y (9:8)
+            ; X: display x (7:0)
+            ; Y: display y (7:0)
             ; Output:
-            ; A: layer
+            ; A: bits 7-4: TILEW/2, bits 3-0: TILEH/2
             ; X: tile x
             ; Y: tile y
    jmp @start
 @ctrl1:     .byte 0
-@xoff:      .byte 0
-@yoff:      .byte 0
+@xoff:      .word 0
+@yoff:      .word 0
 @xshift:    .byte 3
 @yshift:    .byte 3
 @start:
-   pha                     ; push layer
+   pha                     ; push A params
    cmp #0
    bne @layer1
    sta VERA_ctrl
@@ -194,14 +194,28 @@ pix2tilexy: ; Input:
    txa
    clc
    sbc @xoff
+   php
+   plx
+   sta @xoff
+   pla
+   pha
+   and #$0C
+   lsr
+   lsr
+   phx
+   plp
+   sbc #0
    bpl @do_xshift
    stz @xoff
+   stz @xoff+1
    bra @getth
 @do_xshift:
+   sta @xoff+1
    ldx @xshift
 @xshift_loop:
    beq @done_xshift
-   lsr
+   lsr @xoff+1
+   ror @xoff
    dex
    bra @xshift_loop
 @done_xshift:
@@ -223,20 +237,47 @@ pix2tilexy: ; Input:
    tya
    clc
    sbc @yoff
+   php
+   plx
+   sta @xoff
+   pla
+   pha
+   and #$03
+   phx
+   plp
+   sbc #0
    bpl @do_yshift
    stz @yoff
+   stz @yoff+1
    bra @end
 @do_yshift:
    ldy @yshift
 @yshift_loop:
    beq @done_yshift
-   lsr
+   lsr @yoff+1
+   ror @yoff
    dey
    bra @yshift_loop
 @done_yshift:
    sta @yoff
 @end:
    pla
+   and #$30
+   bit #$20
+   beq @ret_th8
+   ora #$08
+   bra @ret_tw
+@ret_th8:
+   ora #$04
+@ret_tw:
+   bit #$10
+   beq @ret_tw8
+   and #$0F
+   ora #$80
+   bra @return
+   and #$0F
+   ora #$40
+@return:
    ldx @xoff
    ldy @yoff
    rts
