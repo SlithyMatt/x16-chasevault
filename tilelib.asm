@@ -139,7 +139,7 @@ xy2vaddr:   ; Input:
    rts
 
 
-pix2tilexy  ; Input:
+pix2tilexy: ; Input:
             ; A: layer
             ; X: display x
             ; Y: display y
@@ -204,9 +204,41 @@ pix2tilexy  ; Input:
    lsr
    dex
    bra @xshift_loop
-@done_xshift
+@done_xshift:
    sta @xoff
 @getth:
-
+   lda @ctrl1
+   and #$20
+   bne @th16
+   lda @yoff
+   and #$07    ; A = yoff % 8
+   jmp @calcy
+@th16:
+   lda #4
+   sta @yshift
+   lda @yoff
+   and #$0F    ; A = yoff %16
+@calcy:
+   sta @yoff
+   tya
+   clc
+   sbc @yoff
+   bpl @do_yshift
+   stz @yoff
+   bra @end
+@do_yshift:
+   ldy @yshift
+@yshift_loop:
+   beq @done_yshift
+   lsr
+   dey
+   bra @yshift_loop
+@done_yshift:
+   sta @yoff
+@end:
+   pla
+   ldx @xoff
+   ldy @yoff
+   rts
 
 .endif

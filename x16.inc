@@ -5,6 +5,10 @@ __CX16__ = 1
 
 ; RAM Addresses
 
+; Kernal Zero-Page
+JOY1					= $EF
+JOY2					= $F2
+
 ; Zero-Page userspace
 ZP_PTR_1 = $FB
 ZP_PTR_2 = $FD
@@ -28,6 +32,7 @@ RAM_WIN_SIZE      = $2000
 ROM_WIN           = $C000
 
 ; Kernal
+GETJOY			:= $FF06
 SETLFS   		:= $FFBA
 SETNAM   		:= $FFBD
 LOAD     		:= $FFD5
