@@ -8,18 +8,14 @@ SPRITE_INC = 1
 VRAM_SPRITES = $0E000
 .endif
 
-sprite_frame:     ; A: frame
-                  ; X: sprite index
-   asl
-   asl
-   pha
+__sprattr:  ; A: sprite index
    stz VERA_ctrl
-   txa
+   pha
    asl
    asl
    asl
    sta VERA_addr_low
-   txa
+   pla
    lsr
    lsr
    lsr
@@ -29,6 +25,15 @@ sprite_frame:     ; A: frame
    sta VERA_addr_high
    lda #(^VRAM_sprattr | $10)
    sta VERA_addr_bank
+   rts
+
+sprite_frame:     ; A: frame
+                  ; X: sprite index
+   asl
+   asl
+   pha
+   txa
+   jsr __sprattr
    pla
    clc
    adc #<(VRAM_SPRITES >> 5)
@@ -57,24 +62,7 @@ sprite_getpos: ; Input:
 @start:
    cpx #1
    php
-   stz VERA_ctrl
-   tax
-   asl
-   asl
-   asl
-   clc
-   adc #2
-   sta VERA_addr_low
-   txa
-   lsr
-   lsr
-   lsr
-   lsr
-   lsr
-   ora #>VRAM_sprattr
-   sta VERA_addr_high
-   lda #(^VRAM_sprattr | $10)
-   sta VERA_addr_bank
+   jsr __sprattr
    lda VERA_data
    sta @xpos
    lda VERA_data
@@ -219,5 +207,122 @@ sprite_getpos: ; Input:
    ply
    plx
    rts
+
+move_sprite_right:   ; A: sprite index
+   bra @start
+@xpos: .word 0
+@start:
+   jsr __sprattr
+   lda VERA_data
+   lda VERA_data
+   lda VERA_data
+   sta @xpos
+   lda VERA_data
+   sta @xpos+1
+   lda @xpos
+   clc
+   adc #1
+   sta @xpos
+   lda @xpos+1
+   adc #0
+   sta @xpos+1
+   jsr __sprattr
+   lda VERA_data
+   lda VERA_data
+   lda @xpos
+   sta VERA_data
+   lda @xpos+1
+   sta VERA_data
+   rts
+
+move_sprite_left:   ; A: sprite index
+   bra @start
+@xpos: .word 0
+@start:
+   jsr __sprattr
+   lda VERA_data
+   lda VERA_data
+   lda VERA_data
+   sta @xpos
+   lda VERA_data
+   sta @xpos+1
+   lda @xpos
+   clc
+   sbc #1
+   sta @xpos
+   lda @xpos+1
+   sbc #0
+   bmi @return
+   sta @xpos+1
+   jsr __sprattr
+   lda VERA_data
+   lda VERA_data
+   lda @xpos
+   sta VERA_data
+   lda @xpos+1
+   sta VERA_data
+@return:
+   rts
+
+move_sprite_down:   ; A: sprite index
+   bra @start
+@ypos: .word 0
+@start:
+   jsr __sprattr
+   lda VERA_data
+   lda VERA_data
+   lda VERA_data
+   lda VERA_data
+   lda VERA_data
+   sta @ypos
+   lda VERA_data
+   sta @ypos+1
+   lda @ypos
+   clc
+   adc #1
+   sta @ypos
+   lda @ypos+1
+   adc #0
+   sta @ypos+1
+   jsr __sprattr
+   lda VERA_data
+   lda VERA_data
+   lda @ypos
+   sta VERA_data
+   lda @ypos+1
+   sta VERA_data
+   rts
+
+move_sprite_up:   ; A: sprite index
+   bra @start
+@ypos: .word 0
+@start:
+   jsr __sprattr
+   lda VERA_data
+   lda VERA_data
+   lda VERA_data
+   lda VERA_data
+   lda VERA_data
+   sta @ypos
+   lda VERA_data
+   sta @ypos+1
+   lda @ypos
+   clc
+   sbc #1
+   sta @ypos
+   lda @ypos+1
+   sbc #0
+   bmi @return
+   sta @ypos+1
+   jsr __sprattr
+   lda VERA_data
+   lda VERA_data
+   lda @ypos
+   sta VERA_data
+   lda @ypos+1
+   sta VERA_data
+@return:
+   rts
+
 
 .endif

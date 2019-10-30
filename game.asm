@@ -11,12 +11,6 @@ GAME_INC = 1
 ; timing
 frame_num:  .byte 0
 
-; state
-level:      .byte 1
-score:      .dword 0
-pellets:    .byte 101
-keys:       .byte 0
-
 init_game:
    SET_TIMER 60, readygo
    rts

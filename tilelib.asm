@@ -176,7 +176,6 @@ pix2tilexy: ; Input:
    lda VERA_data
    lda VERA_data
    sta @yoff
-   lda VERA_data
 @gettw:
    lda @ctrl1
    and #$10
@@ -275,11 +274,33 @@ pix2tilexy: ; Input:
    and #$0F
    ora #$80
    bra @return
+@ret_tw8:
    and #$0F
    ora #$40
 @return:
    ldx @xoff
    ldy @yoff
+   rts
+
+
+get_tile:   ; Input:
+            ; A: layer
+            ; X: tile display x position
+            ; Y: tile display y position
+            ; Output:
+            ; A: layer
+            ; X: tile entry 0
+            ; Y: tile entry 1
+   pha
+   jsr xy2vaddr
+   stz VERA_ctrl
+   ora #$10
+   sta VERA_addr_bank
+   stx VERA_addr_low
+   sty VERA_addr_high
+   ldx VERA_data
+   ldy VERA_data
+   pla
    rts
 
 .endif
