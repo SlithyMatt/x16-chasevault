@@ -191,7 +191,7 @@ pix2tilexy: ; Input:
 @calcx:
    sta @xoff
    txa
-   clc
+   sec
    sbc @xoff
    php
    plx
@@ -234,7 +234,7 @@ pix2tilexy: ; Input:
 @calcy:
    sta @yoff
    tya
-   clc
+   sec
    sbc @yoff
    php
    plx

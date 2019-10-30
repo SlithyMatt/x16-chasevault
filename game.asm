@@ -26,6 +26,7 @@ game_tick:        ; called after every VSYNC detected (60 Hz)
    jsr timer_tick
    jsr joystick_tick
    jsr player_tick
+   jsr enemy_tick
    ; TODO add other tick handlers
    rts
 

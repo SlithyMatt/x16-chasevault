@@ -131,7 +131,7 @@ sprite_getpos: ; Input:
    cmp @halfwidth
    bmi @west         ; overlaps to west
    lda @tilew
-   clc
+   sec
    sbc @halfwidth
    sta @xpos+1
    cpx @xpos+1
@@ -156,7 +156,7 @@ sprite_getpos: ; Input:
    cmp @halfheight
    bmi @north        ; overlaps to north
    lda @tileh
-   clc
+   sec
    sbc @halfheight
    sta @ypos+1
    cpy @ypos+1
@@ -247,7 +247,7 @@ move_sprite_left:   ; A: sprite index
    lda VERA_data
    sta @xpos+1
    lda @xpos
-   clc
+   sec
    sbc #1
    sta @xpos
    lda @xpos+1
@@ -307,7 +307,7 @@ move_sprite_up:   ; A: sprite index
    lda VERA_data
    sta @ypos+1
    lda @ypos
-   clc
+   sec
    sbc #1
    sta @ypos
    lda @ypos+1

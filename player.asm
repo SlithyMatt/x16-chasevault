@@ -6,18 +6,25 @@ PLAYER_INC = 1
 .include "joystick.asm"
 .include "enemy.asm"
 
-
-
 PELLET         = $00B
 POWER_PELLET   = $00C
+
+ACTIVE_ENEMY_L = $0E400
+ACTIVE_ENEMY_H = $0E600
+VULN_ENEMY     = $0E680
+
+SCOREBOARD_X   = 10
+SCOREBOARD_Y   = 1
 
 ; state
 player:     .byte 0 ; 7-4 (TBD) | 3:2 - direction | 1 - movable | 0 - animated
 ;                                 0:R,1:L,2:D,3:U
+lives:      .byte 4
 level:      .byte 1
-score:      .dword 0
+score:      .dword 0    ; BCD
 pellets:    .byte 101
 keys:       .byte 0
+score_mult: .byte 1
 
 ; player animation
 player_frames_h: .byte 2,2,1,0,0,1,1,2
@@ -56,31 +63,37 @@ player_tick:
    bne @check_right
    jmp @check_animate
 @check_right:
-   and #$F3             ; clear direction
    ldx #1
    cpx joystick1_right
    bne @check_left
+   and #$F3
    bra @move
 @check_left:
    cpx joystick1_left
    bne @check_down
+   and #$F3
    ora #$04
    bra @move
 @check_down:
    cpx joystick1_down
    bne @check_up
+   and #$F3
    ora #$08
    bra @move
 @check_up:
    cpx joystick1_up
    bne @no_direction
+   and #$F3
    ora #$0C
    bra @move
 @no_direction:
    sta player
+   jsr player_freeze
    jmp @check_collision
 @move:
    sta player
+   jsr player_animate
+   lda player
    and #$0C
    lsr
    tax
@@ -255,15 +268,35 @@ eat_powerpellet:  ; Input:
    lda #100
    jsr add_score
    jsr make_vulnerable
+   lda #1
+   sta score_mult
    rts
 
-add_score:  ; Input:
-            ; A: points to add
+add_score:  ; A: points to add
+   bra @start
+@bin: .byte 0
+@bcd: .word 0
+@score_tiles: .byte $30,$30,$30,$30,$30,$30,$30,$30
+@start:
+   sta @bin
+   sed         ; Start BCD mode
+   ldx #8
+@bin2bcd_loop:
+   asl @bin
+   lda @bcd
+   adc @bcd
+   sta @bcd
+   lda @bcd+1
+   adc @bcd+1
+   sta @bcd+1
+   dex
+   bne @loop
+   lda @bcd
    clc
    adc score
    sta score
-   lda score+1
-   adc #0
+   lda @bcd+1
+   adc score+1
    sta score+1
    lda score+2
    adc #0
@@ -271,11 +304,190 @@ add_score:  ; Input:
    lda score+3
    adc #0
    sta score+3
-   ; TODO: update score display
+   cld         ; End BCD mode
+   ldx #0
+   ldy #7
+@tile_loop:
+   lda score,x
+   and #$0F
+   ora @score_tiles,y
+   sta @score_tiles,y
+   dey
+   lda score,x
+   lsr
+   lsr
+   lsr
+   lsr
+   ora @score_tiles,y
+   sta @score_tiles,y
+   inx
+   dey
+   bpl @tile_loop
+   lda #1
+   ldx #SCOREBOARD_X
+   ldy #SCOREBOARD_Y
+   jsr xy2vaddr
+   stz VERA_ctrl
+   ora #$20
+   sta VERA_addr_bank
+   stx VERA_addr_low
+   sty VERA_addr_high
+   ldx #0
+@vram_loop:
+   lda @score_tiles,x
+   sta VERA_data
+   inx
+   cpx #8
+   bne @vram_loop
    rts
 
+.macro IS_COLLIDING  ; sets Carry bit if colliding
+      sec
+      lda @p_xpos
+      sbc @e_xpos
+      sta @e_xpos
+      lda @p_xpos+1
+      sbc @e_xpos+1
+      beq :+
+      bmi :+
+      bra :++
+   :  lda @e_xpos
+      clc
+      adc #4
+      bmi :+
+      cmp #9
+      bpl :+
+      sec
+      bra :++
+   :  clc
+   :  nop
+.endmacro
+
 check_collision:
-   ; TODO: handle collision
+   bra @start
+@p_xpos: .word 0
+@p_ypos: .word 0
+@s_addr: .word 0
+@s_xpos: .word 0
+@s_xpos: .word 0
+@eaten:  .byte 0
+@start:
+   stz VERA_ctrl
+   VERA_SET_ADDR VRAM_sprattr, 1
+   lda VERA_data ; ignore
+   lda VERA_data ; ignore
+   lda VERA_data
+   sta @p_xpos
+   lda VERA_data
+   sta @p_xpos+1
+   lda VERA_data
+   sta @p_ypos
+   lda VERA_data
+   sta @p_ypos+1
+   lda VERA_data ; ignore
+   lda VERA_data ; ignore
+   ldx #4
+@loop:
+   lda VERA_data
+   sta @s_addr
+   lda VERA_data
+   sta @s_addr+1
+   lda VERA_data
+   sta @s_xpos
+   lda VERA_data
+   sta @s_xpos+1
+   lda VERA_data
+   sta @s_ypos
+   lda VERA_data
+   sta @s_ypos+1
+   lda VERA_data
+   and #$0C
+   clc
+   php
+   beq @end_loop ; disabled
+   lda @s_addr
+   cmp #>(VULN_ENEMY >> 5)
+   lda @s_addr+1
+   sbc #<(VULN_ENEMY >> 5)
+   beq @check_vuln
+   bcs @end_loop
+   IS_COLLIDING
+   bcc @end_loop
+   jsr die
+   bra @return ; player dead, don't bother continuing loop
+@check_vuln:
+   plp
+   IS_COLLIDING
+   php
+@end_loop:
+   plp
+   ror @eaten
+   lda VERA_data ; ignore
+   dex
+   bne @loop
+   lsr @eaten
+   lsr @eaten
+   lsr @eaten
+   lsr @eaten
+   lda VERA_data ; ignore
+   lda VERA_data ; ignore
+   lda VERA_data
+   sta @s_xpos
+   lda VERA_data
+   sta @s_xpos+1
+   lda VERA_data
+   sta @s_ypos
+   lda VERA_data
+   sta @s_ypos+1
+   lda VERA_data
+   and #$0C
+   beq @eat_enemies
+   IS_COLLIDING
+   bcc @eat_enemies
+   jsr eat_fruit
+@eat_enemies:
+   ldx #1
+@eat_loop:
+   lsr @eaten
+   bcc @end_eat_loop
+   txa
+   phx
+   jsr eat_enemy
+   plx
+@end_eat_loop:
+   inx
+   cmp #5
+   bne @eat_loop
+@return:
    rts
+
+
+eat_fruit:
+   ; TODO: disappear fruit
+   lda #200       ; Add 500 to score
+   jsr add_score
+   jsr add_score
+   lda #100
+   jsr add_score
+   ; TODO: add icon to achievement tray
+   ; TODO: level-specific result
+   rts
+
+eat_enemy:  ; A: enemy sprite index
+   jsr enemy_eaten
+   ldx score_mult
+@score:
+   lda #200
+   jsr add_score
+   dex
+   bne @score
+   inc score_mult
+   rts
+
+die:
+   ; TODO: toes up and out!
+   ; TODO: decrement lives
+   ; TODO: check for game over
+   rts;
 
 .endif
