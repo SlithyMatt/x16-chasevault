@@ -6,7 +6,7 @@ GAME_INC = 1
 .include "timer.asm"
 .include "joystick.asm"
 .include "superimpose.asm"
-
+.include "debug.asm"
 
 ; timing
 frame_num:  .byte 0

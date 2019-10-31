@@ -5,6 +5,7 @@ PLAYER_INC = 1
 .include "timer.asm"
 .include "joystick.asm"
 .include "enemy.asm"
+.include "debug.asm"
 
 PELLET         = $00B
 POWER_PELLET   = $00C
@@ -126,6 +127,17 @@ player_tick:
    sta @overlap
    stx @xpos
    sty @ypos
+
+   ldx #0
+   ldy #0
+   ;jsr debug
+   lda @xpos
+   ;ldy #1
+   jsr debug
+   ;lda @ypos
+   ;ldy #2
+   ;jsr debug
+
    lda #1
    jsr get_tile
    cpx #PELLET
@@ -227,10 +239,21 @@ player_tick:
    and #$08
    bne @vertical
    lda player_frames_h,x
-   jmp @loadframe
+   bra @check_flip
 @vertical:
    lda player_frames_v,x
+@check_flip:
+   pha
+   ldy #0
+   lda player
+   and #$0C
+   cmp #$0C
+   beq @loadframe
+   lsr
+   lsr
+   tay
 @loadframe:
+   pla
    ldx #0
    jsr sprite_frame
 @done_animate:
@@ -249,6 +272,7 @@ eat_pellet: ; Input:
    sty VERA_addr_high
    stz VERA_data
    stz VERA_data
+   dec pellets
    lda #10
    jsr add_score
    rts
@@ -265,6 +289,7 @@ eat_powerpellet:  ; Input:
    sty VERA_addr_high
    stz VERA_data
    stz VERA_data
+   dec pellets
    lda #100
    jsr add_score
    jsr make_vulnerable
@@ -290,7 +315,7 @@ add_score:  ; A: points to add
    adc @bcd+1
    sta @bcd+1
    dex
-   bne @loop
+   bne @bin2bcd_loop
    lda @bcd
    clc
    adc score
@@ -344,14 +369,29 @@ add_score:  ; A: points to add
 .macro IS_COLLIDING  ; sets Carry bit if colliding
       sec
       lda @p_xpos
-      sbc @e_xpos
-      sta @e_xpos
+      sbc @s_xpos
+      sta @s_xpos
       lda @p_xpos+1
-      sbc @e_xpos+1
+      sbc @s_xpos+1
+      beq :+
+      bmi :+
+      bra :+++
+   :  lda @s_xpos
+      clc
+      adc #4
+      bmi :+
+      cmp #9
+      bpl :+
+      sec
+      lda @p_ypos
+      sbc @s_ypos
+      sta @s_ypos
+      lda @p_ypos+1
+      sbc @s_ypos+1
       beq :+
       bmi :+
       bra :++
-   :  lda @e_xpos
+   :  lda @s_ypos
       clc
       adc #4
       bmi :+
@@ -369,7 +409,7 @@ check_collision:
 @p_ypos: .word 0
 @s_addr: .word 0
 @s_xpos: .word 0
-@s_xpos: .word 0
+@s_ypos: .word 0
 @eaten:  .byte 0
 @start:
    stz VERA_ctrl
@@ -404,17 +444,21 @@ check_collision:
    and #$0C
    clc
    php
-   beq @end_loop ; disabled
+   bne @check_frame
+   jmp @end_loop ; disabled
+@check_frame:
    lda @s_addr
-   cmp #>(VULN_ENEMY >> 5)
+   cmp #<(VULN_ENEMY >> 5)
    lda @s_addr+1
-   sbc #<(VULN_ENEMY >> 5)
+   sbc #>(VULN_ENEMY >> 5)
    beq @check_vuln
-   bcs @end_loop
+   bcc @check_colliding
+   jmp @end_loop
+@check_colliding:
    IS_COLLIDING
    bcc @end_loop
    jsr die
-   bra @return ; player dead, don't bother continuing loop
+   jmp @return ; player dead, don't bother continuing loop
 @check_vuln:
    plp
    IS_COLLIDING
@@ -424,7 +468,9 @@ check_collision:
    ror @eaten
    lda VERA_data ; ignore
    dex
-   bne @loop
+   beq @check_eating
+   jmp @loop
+@check_eating:
    lsr @eaten
    lsr @eaten
    lsr @eaten
@@ -456,7 +502,7 @@ check_collision:
    plx
 @end_eat_loop:
    inx
-   cmp #5
+   cpx #5
    bne @eat_loop
 @return:
    rts
@@ -488,6 +534,6 @@ die:
    ; TODO: toes up and out!
    ; TODO: decrement lives
    ; TODO: check for game over
-   rts;
+   rts
 
 .endif

@@ -36,83 +36,83 @@ joystick_tick:
    jsr GETJOY
    lda JOY1
    ldx #1
-   bit JOY_RT
+   bit #JOY_RT
    beq :+
    stz joystick1_right
    bra :++
 :  stx joystick1_right
-:  bit JOY_LT
+:  bit #JOY_LT
    beq :+
    stz joystick1_left
    bra :++
 :  stx joystick1_left
-:  bit JOY_DN
+:  bit #JOY_DN
    beq :+
    stz joystick1_down
    bra :++
 :  stx joystick1_down
-:  bit JOY_UP
+:  bit #JOY_UP
    beq :+
    stz joystick1_up
    bra :++
 :  stx joystick1_up
-:  bit JOY_STA
+:  bit #JOY_STA
    beq :+
    stz joystick1_start
    bra :++
 :  stx joystick1_start
-:  bit JOY_SEL
+:  bit #JOY_SEL
    beq :+
    stz joystick1_select
    bra :++
 :  stx joystick1_select
-:  bit JOY_B
+:  bit #JOY_B
    beq :+
    stz joystick1_b
    bra :++
 :  stx joystick1_b
-:  bit JOY_A
+:  bit #JOY_A
    beq :+
    stz joystick1_a
    bra :++
 :  stx joystick1_a
 :  lda JOY2
-   bit JOY_RT
+   bit #JOY_RT
    beq :+
    stz joystick2_right
    bra :++
 :  stx joystick2_right
-:  bit JOY_LT
+:  bit #JOY_LT
    beq :+
    stz joystick2_left
    bra :++
 :  stx joystick2_left
-:  bit JOY_DN
+:  bit #JOY_DN
    beq :+
    stz joystick2_down
    bra :++
 :  stx joystick2_down
-:  bit JOY_UP
+:  bit #JOY_UP
    beq :+
    stz joystick2_up
    bra :++
 :  stx joystick2_up
-:  bit JOY_STA
+:  bit #JOY_STA
    beq :+
    stz joystick2_start
    bra :++
 :  stx joystick2_start
-:  bit JOY_SEL
+:  bit #JOY_SEL
    beq :+
    stz joystick2_select
    bra :++
 :  stx joystick2_select
-:  bit JOY_B
+:  bit #JOY_B
    beq :+
    stz joystick2_b
    bra :++
 :  stx joystick2_b
-:  bit JOY_A
+:  bit #JOY_A
    beq :+
    stz joystick2_a
    bra :++

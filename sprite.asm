@@ -29,6 +29,7 @@ __sprattr:  ; A: sprite index
 
 sprite_frame:     ; A: frame
                   ; X: sprite index
+                  ; Y: flip (0: none, 1: H, 2: V, 3: H&V)
    asl
    asl
    pha
@@ -40,6 +41,13 @@ sprite_frame:     ; A: frame
    sta VERA_data
    lda #0
    adc #>(VRAM_SPRITES >> 5)
+   sta VERA_data
+   lda VERA_data
+   lda VERA_data
+   lda VERA_data
+   lda VERA_data
+   tya
+   ora #$0C
    sta VERA_data
    rts
 
