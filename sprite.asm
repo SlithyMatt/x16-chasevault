@@ -3,6 +3,7 @@ SPRITE_INC = 1
 
 .include "x16.inc"
 .include "tilelib.asm"
+.include "debug.asm"
 
 .ifndef VRAM_SPRITES
 VRAM_SPRITES = $0E000
@@ -71,6 +72,8 @@ sprite_getpos: ; Input:
    cpx #1
    php
    jsr __sprattr
+   lda VERA_data ; ignore
+   lda VERA_data ; ignore
    lda VERA_data
    sta @xpos
    lda VERA_data
@@ -295,6 +298,8 @@ move_sprite_down:   ; A: sprite index
    jsr __sprattr
    lda VERA_data
    lda VERA_data
+   lda VERA_data
+   lda VERA_data
    lda @ypos
    sta VERA_data
    lda @ypos+1
@@ -323,6 +328,8 @@ move_sprite_up:   ; A: sprite index
    bmi @return
    sta @ypos+1
    jsr __sprattr
+   lda VERA_data
+   lda VERA_data
    lda VERA_data
    lda VERA_data
    lda @ypos

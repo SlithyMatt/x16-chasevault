@@ -1,6 +1,8 @@
 .ifndef TILELIB_INC
 TILELIB_INC = 1
 
+.include "debug.asm"
+
 xy2vaddr:   ; Input:
             ;  A: layer
             ;  X: tile display x position
@@ -155,11 +157,12 @@ pix2tilexy: ; Input:
 @yshift:    .byte 3
 @start:
    pha                     ; push A params
+   and #$10
    cmp #0
    bne @layer1
-   sta VERA_ctrl
+   stz VERA_ctrl
    VERA_SET_ADDR VRAM_layer0, 1
-   jmp @readlayer
+   bra @readlayer
 @layer1:
    stz VERA_ctrl
    VERA_SET_ADDR VRAM_layer1, 1
@@ -187,7 +190,7 @@ pix2tilexy: ; Input:
    lda #4
    sta @xshift
    lda @xoff
-   and #$0F    ; A = xoff %16
+   and #$0F    ; A = xoff % 16
 @calcx:
    sta @xoff
    txa
@@ -212,13 +215,11 @@ pix2tilexy: ; Input:
    sta @xoff+1
    ldx @xshift
 @xshift_loop:
-   beq @done_xshift
+   beq @getth
    lsr @xoff+1
    ror @xoff
    dex
    bra @xshift_loop
-@done_xshift:
-   sta @xoff
 @getth:
    lda @ctrl1
    and #$20
@@ -238,9 +239,8 @@ pix2tilexy: ; Input:
    sbc @yoff
    php
    plx
-   sta @xoff
+   sta @yoff
    pla
-   pha
    and #$03
    phx
    plp
@@ -252,32 +252,19 @@ pix2tilexy: ; Input:
 @do_yshift:
    ldy @yshift
 @yshift_loop:
-   beq @done_yshift
+   beq @end
    lsr @yoff+1
    ror @yoff
    dey
    bra @yshift_loop
-@done_yshift:
-   sta @yoff
 @end:
-   pla
-   and #$30
-   bit #$20
-   beq @ret_th8
-   ora #$08
-   bra @ret_tw
-@ret_th8:
-   ora #$04
-@ret_tw:
-   bit #$10
-   beq @ret_tw8
-   and #$0F
-   ora #$80
-   bra @return
-@ret_tw8:
-   and #$0F
-   ora #$40
-@return:
+   lda @xshift
+   asl
+   asl
+   asl
+   asl
+   ora @yshift
+   asl
    ldx @xoff
    ldy @yoff
    rts

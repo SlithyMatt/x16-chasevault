@@ -12,6 +12,7 @@ GAME_INC = 1
 frame_num:  .byte 0
 
 init_game:
+   ; TODO: Disable mouse
    SET_TIMER 60, readygo
    rts
 
@@ -28,23 +29,19 @@ game_tick:        ; called after every VSYNC detected (60 Hz)
    jsr player_tick
    jsr enemy_tick
    ; TODO add other tick handlers
+
+   lda pellets
+   bne @end
+   jsr complete_level
+@end:
    rts
 
-readygo:
-   SUPERIMPOSE "ready?", 7, 9
-   SET_TIMER 30, @readyoff
-   jmp timer_done
-@readyoff:
-   SUPERIMPOSE_RESTORE
-   SET_TIMER 15, @go
-   jmp timer_done
-@go:
-   SUPERIMPOSE "go!", 8, 9
-   SET_TIMER 30, @gooff
-   jmp timer_done
-@gooff:
-   SUPERIMPOSE_RESTORE
-   jsr player_move
-   jmp timer_done
+
+complete_level:
+   ; TODO remove remaining barriers
+   ; TODO announce
+   ; TODO add score
+   rts
+
 
 .endif

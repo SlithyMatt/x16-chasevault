@@ -9,6 +9,7 @@ PLAYER_INC = 1
 
 PELLET         = $00B
 POWER_PELLET   = $00C
+KEY            = $010
 
 ACTIVE_ENEMY_L = $0E400
 ACTIVE_ENEMY_H = $0E600
@@ -17,7 +18,8 @@ VULN_ENEMY     = $0E680
 SCOREBOARD_X   = 10
 SCOREBOARD_Y   = 1
 
-; state
+; --------- Global Variables ---------
+
 player:     .byte 0 ; 7-4 (TBD) | 3:2 - direction | 1 - movable | 0 - animated
 ;                                 0:R,1:L,2:D,3:U
 lives:      .byte 4
@@ -28,9 +30,12 @@ keys:       .byte 0
 score_mult: .byte 1
 
 ; player animation
-player_frames_h: .byte 2,2,1,0,0,1,1,2
-player_frames_v: .byte 4,4,3,0,0,3,3,4
-player_frames_d: .byte 0,0,3,3,3,4,4,4,5,5,5,6,6,7,7,17
+player_frames_h:  .byte 2,2,1,0,0,1,1,2
+player_frames_v:  .byte 4,4,3,0,0,3,3,4
+player_frames_d:  .byte 0,0,3,3,3,4,4,4,5,5,5,6,6,7,7,17
+player_index_d:   .byte 0
+
+; --------- Subroutines ---------
 
 player_move:
    lda player
@@ -127,17 +132,7 @@ player_tick:
    sta @overlap
    stx @xpos
    sty @ypos
-
-   ldx #0
-   ldy #0
-   ;jsr debug
-   lda @xpos
-   ;ldy #1
-   jsr debug
-   ;lda @ypos
-   ;ldy #2
-   ;jsr debug
-
+   CORNER_DEBUG
    lda #1
    jsr get_tile
    cpx #PELLET
@@ -145,9 +140,14 @@ player_tick:
    jmp @eat_pellet
 @check_powerpellet:
    cpx #POWER_PELLET
-   bne @check_north
+   bne @check_key
    jmp @eat_powerpellet
+@check_key:
+   cpx #KEY
+   bne @check_north
+   jmp @eat_key
 @check_north:
+                  jmp @check_collision ; ***************** TEMP *************
    lda player
    and #$0C
    tax
@@ -224,6 +224,11 @@ player_tick:
    ldx @xpos
    ldy @ypos
    jsr eat_powerpellet
+   bra @check_collision
+@eat_key:
+   ldx @xpos
+   ldy @ypos
+   jsr eat_key
 @check_collision:
    jsr check_collision
 @check_animate:
@@ -295,6 +300,23 @@ eat_powerpellet:  ; Input:
    jsr make_vulnerable
    lda #1
    sta score_mult
+   rts
+
+eat_key: ; Input:
+         ; X: key x
+         ; Y: key y
+   lda #1
+   jsr xy2vaddr
+   stz VERA_ctrl
+   ora #$10
+   sta VERA_addr_bank
+   stx VERA_addr_low
+   sty VERA_addr_high
+   stz VERA_data
+   stz VERA_data
+   inc keys
+   lda #200
+   jsr add_score
    rts
 
 add_score:  ; A: points to add
@@ -530,10 +552,60 @@ eat_enemy:  ; A: enemy sprite index
    inc score_mult
    rts
 
+
+; --------- Timer Handlers ---------
+
 die:
-   ; TODO: toes up and out!
-   ; TODO: decrement lives
-   ; TODO: check for game over
+   jsr player_stop
+   stz player_index_d
+   SET_TIMER 3, @animation
    rts
+@animation:
+   ldx player_index_d
+   lda player_frames_d,x
+   ldx #0
+   ldy #0
+   jsr sprite_frame
+   inc player_index_d
+   ldx #(player_index_d-player_frames_d)
+   cpx player_index_d
+   beq @animation_done
+   SET_TIMER 3, @animation
+   jmp timer_done
+@animation_done:
+   dec lives
+   bne @regenerate
+   SET_TIMER 30, game_over
+   bra @return
+@regenerate:
+   SET_TIMER 30, regenerate
+@return:
+   jmp timer_done
+
+regenerate:
+   ; TODO: reset player
+readygo:
+   SUPERIMPOSE "ready?", 7, 9
+   SET_TIMER 30, @readyoff
+   jmp timer_done
+@readyoff:
+   SUPERIMPOSE_RESTORE
+   SET_TIMER 15, @go
+   jmp timer_done
+@go:
+   SUPERIMPOSE "go!", 8, 9
+   SET_TIMER 30, @gooff
+   jmp timer_done
+@gooff:
+   SUPERIMPOSE_RESTORE
+   jsr player_move
+   jmp timer_done
+
+game_over:
+   SUPERIMPOSE "game over", 5, 9
+   ; TODO: prompt for continue/exit
+   jmp timer_done
+
+
 
 .endif
