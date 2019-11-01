@@ -9,8 +9,10 @@ PLAYER_INC = 1
 .include "debug.asm"
 .include "loadvram.asm"
 
-PELLET         = $00B
-POWER_PELLET   = $00C
+HLOCK          = $00B
+VLOCK          = $00C
+PELLET         = $00D
+POWER_PELLET   = $00E
 KEY            = $010
 
 ACTIVE_ENEMY_L = $0E400
@@ -134,7 +136,7 @@ player_tick:
    sta @overlap
    stx @xpos
    sty @ypos
-   ;CORNER_DEBUG
+   CORNER_DEBUG
    lda #1
    jsr get_tile
    cpx #PELLET
@@ -149,15 +151,14 @@ player_tick:
    bne @check_north
    jmp @eat_key
 @check_north:
-                  jmp @check_collision ; ***************** TEMP *************
    lda player
    and #$0C
    tax
    lda @overlap
    bit #$80
    beq @check_east
-   cpx #$0C
-   bne @check_east
+   ;cpx #$0C
+   ;bne @check_east
    lda #1
    ldx @xpos
    ldy @ypos
@@ -165,6 +166,15 @@ player_tick:
    jsr get_tile
    cpx #0
    beq @check_east
+   cpx #HLOCK
+   bmi @adjust_down
+   cpx #PELLET
+   bpl @check_east
+   lda keys
+   beq @adjust_down
+   ; TODO: handle key unlock
+   bra @check_east
+@adjust_down:
    lda #0
    jmp @move_down
 @check_east:
@@ -174,8 +184,8 @@ player_tick:
    lda @overlap
    bit #$20
    beq @check_south
-   cpx #$00
-   bne @check_south
+   ;cpx #$00
+   ;bne @check_south
    lda #1
    ldx @xpos
    inx
@@ -183,6 +193,15 @@ player_tick:
    jsr get_tile
    cpx #0
    beq @check_south
+   cpx #HLOCK
+   bmi @adjust_left
+   cpx #PELLET
+   bpl @check_south
+   lda keys
+   beq @adjust_left
+   ; TODO: handle key unlock
+   bra @check_south
+@adjust_left:
    lda #0
    jmp @move_left
 @check_south:
@@ -192,8 +211,8 @@ player_tick:
    lda @overlap
    bit #$08
    beq @check_west
-   cpx #$08
-   bne @check_west
+   ;cpx #$08
+   ;bne @check_west
    lda #1
    ldx @xpos
    ldy @ypos
@@ -201,6 +220,15 @@ player_tick:
    jsr get_tile
    cpx #0
    beq @check_west
+   cpx #HLOCK
+   bmi @adjust_up
+   cpx #PELLET
+   bpl @check_west
+   lda keys
+   beq @adjust_up
+   ; TODO: handle key unlock
+   bra @check_west
+@adjust_up:
    lda #0
    jmp @move_up
 @check_west:
@@ -210,8 +238,8 @@ player_tick:
    lda @overlap
    bit #$02
    beq @check_collision
-   cpx #$04
-   bne @check_collision
+   ;cpx #$04
+   ;bne @check_collision
    lda #1
    ldx @xpos
    dex
@@ -219,6 +247,15 @@ player_tick:
    jsr get_tile
    cpx #0
    beq @check_collision
+   cpx #HLOCK
+   bmi @adjust_right
+   cpx #PELLET
+   bpl @check_collision
+   lda keys
+   beq @adjust_right
+   ; TODO: handle key unlock
+   bra @check_collision
+@adjust_right:
    lda #0
    jmp @move_right
 @eat_pellet:
@@ -323,15 +360,28 @@ eat_key: ; Input:
    inc keys
    lda #200
    jsr add_score
+   ; TODO - update key count on display
    rts
 
 add_score:  ; A: points to add
    bra @start
+@vars:
 @bin: .byte 0
 @bcd: .word 0
 @score_tiles: .byte $30,$30,$30,$30,$30,$30,$30,$30
 @start:
    sta @bin
+   stz @bcd
+   stz @bcd+1
+   lda #$30
+   sta @score_tiles
+   sta @score_tiles+1
+   sta @score_tiles+2
+   sta @score_tiles+3
+   sta @score_tiles+4
+   sta @score_tiles+5
+   sta @score_tiles+6
+   sta @score_tiles+7
    sed         ; Start BCD mode
    ldx #8
 @bin2bcd_loop:
@@ -344,8 +394,8 @@ add_score:  ; A: points to add
    sta @bcd+1
    dex
    bne @bin2bcd_loop
-   lda @bcd
    clc
+   lda @bcd
    adc score
    sta score
    lda @bcd+1
@@ -358,25 +408,26 @@ add_score:  ; A: points to add
    adc #0
    sta score+3
    cld         ; End BCD mode
-   DEBUG_WORD score
    ldx #0
-   ldy #7
+   ldy #6
 @tile_loop:
    lda score,x
-   and #$0F
+   lsr
+   lsr
+   lsr
+   lsr
    ora @score_tiles,y
    sta @score_tiles,y
-   dey
    lda score,x
-   lsr
-   lsr
-   lsr
-   lsr
-   ora @score_tiles,y
-   sta @score_tiles,y
-   inx
+   and #$0F
+   ora @score_tiles+1,y
+   sta @score_tiles+1,y
    dey
-   bpl @tile_loop
+   dey
+   inx
+   cpx #8
+   bne @tile_loop
+
    lda #1
    ldx #SCOREBOARD_X
    ldy #SCOREBOARD_Y
@@ -434,6 +485,7 @@ add_score:  ; A: points to add
 
 check_collision:
    bra @start
+@vars:
 @p_xpos: .word 0
 @p_ypos: .word 0
 @s_addr: .word 0
@@ -457,6 +509,7 @@ check_collision:
    lda VERA_data ; ignore
    ldx #4
 @loop:
+   phx
    lda VERA_data
    sta @s_addr
    lda VERA_data
@@ -488,6 +541,7 @@ check_collision:
    bcc @end_loop
    jsr player_die
    plp ; clear stack
+   plx
    jmp @return ; player dead, don't bother continuing loop
 @check_vuln:
    plp
@@ -497,6 +551,7 @@ check_collision:
    plp
    ror @eaten
    lda VERA_data ; ignore
+   plx
    dex
    beq @check_eating
    jmp @loop
@@ -598,6 +653,7 @@ regenerate:
    ldx #<(VRAM_sprattr>>4)
    ldy #<spriteattr_fn
    jsr loadvram
+   ; TODO: update lives count display
    SET_TIMER 60, readygo
    rts
 readygo:

@@ -61,6 +61,7 @@ sprite_getpos: ; Input:
                ; X: tile x
                ; Y: tile y
    bra @start
+@vars:
 @xpos:         .word 0
 @ypos:         .word 0
 @halfwidth:    .byte 4
@@ -71,6 +72,14 @@ sprite_getpos: ; Input:
 @start:
    cpx #1
    php
+   ldx #(@start-@vars-1)
+@init:
+   stz @vars,x
+   dex
+   bpl @init
+   ldx #4
+   stx @halfwidth
+   stx @halfheight
    jsr __sprattr
    lda VERA_data ; ignore
    lda VERA_data ; ignore
@@ -147,6 +156,7 @@ sprite_getpos: ; Input:
    sta @xpos+1
    cpx @xpos+1
    bmi @test_north   ; entire width of sprite inside tile
+   beq @test_north
    lda @overlap
    ora #$20          ; overlaps to east
    sta @overlap
@@ -172,6 +182,7 @@ sprite_getpos: ; Input:
    sta @ypos+1
    cpy @ypos+1
    bmi @return       ; entire height of sprite inside tile
+   beq @return
    lda @overlap
    ora #$08          ; overlaps to south
    sta @overlap
@@ -223,6 +234,7 @@ move_sprite_right:   ; A: sprite index
    bra @start
 @xpos: .word 0
 @start:
+   pha
    jsr __sprattr
    lda VERA_data
    lda VERA_data
@@ -237,6 +249,7 @@ move_sprite_right:   ; A: sprite index
    lda @xpos+1
    adc #0
    sta @xpos+1
+   pla
    jsr __sprattr
    lda VERA_data
    lda VERA_data
@@ -250,6 +263,7 @@ move_sprite_left:   ; A: sprite index
    bra @start
 @xpos: .word 0
 @start:
+   pha
    jsr __sprattr
    lda VERA_data
    lda VERA_data
@@ -265,6 +279,7 @@ move_sprite_left:   ; A: sprite index
    sbc #0
    bmi @return
    sta @xpos+1
+   pla
    jsr __sprattr
    lda VERA_data
    lda VERA_data
@@ -279,6 +294,7 @@ move_sprite_down:   ; A: sprite index
    bra @start
 @ypos: .word 0
 @start:
+   pha
    jsr __sprattr
    lda VERA_data
    lda VERA_data
@@ -295,6 +311,7 @@ move_sprite_down:   ; A: sprite index
    lda @ypos+1
    adc #0
    sta @ypos+1
+   pla
    jsr __sprattr
    lda VERA_data
    lda VERA_data
@@ -310,6 +327,7 @@ move_sprite_up:   ; A: sprite index
    bra @start
 @ypos: .word 0
 @start:
+   pha
    jsr __sprattr
    lda VERA_data
    lda VERA_data
@@ -327,6 +345,7 @@ move_sprite_up:   ; A: sprite index
    sbc #0
    bmi @return
    sta @ypos+1
+   pla
    jsr __sprattr
    lda VERA_data
    lda VERA_data

@@ -11,12 +11,21 @@ xy2vaddr:   ; Input:
             ;  A: VRAM bank
             ;  X/Y: VRAM addr
    jmp @start
+@vars:
 @ctrl1:     .byte 0
 @map:       .word 0
 @xoff:      .word 0
 @yoff:      .word 0
+@end_vars:
 @banks:     .byte 0,1
 @start:
+   phx
+   ldx #(@end_vars-@vars-1)
+@init:
+   stz @vars,x
+   dex
+   bpl @init
+   plx
    cmp #0
    bne @layer1
    sta VERA_ctrl
@@ -183,6 +192,8 @@ pix2tilexy: ; Input:
    lda @ctrl1
    and #$10
    bne @tw16
+   lda #3
+   sta @xshift
    lda @xoff
    and #$07    ; A = xoff % 8
    jmp @calcx
@@ -224,6 +235,8 @@ pix2tilexy: ; Input:
    lda @ctrl1
    and #$20
    bne @th16
+   lda #3
+   sta @yshift
    lda @yoff
    and #$07    ; A = yoff % 8
    jmp @calcy
