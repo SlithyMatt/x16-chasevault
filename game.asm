@@ -13,7 +13,7 @@ frame_num:  .byte 0
 
 init_game:
    ; TODO: Disable mouse
-   SET_TIMER 60, readygo
+   jsr regenerate
    rts
 
 game_tick:        ; called after every VSYNC detected (60 Hz)

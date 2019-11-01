@@ -1,6 +1,8 @@
 .ifndef TIMER_INC
 TIMER_INC = 1
 
+.include "debug.asm"
+
 .macro SET_TIMER ticks, vector
    lda #<ticks
    sta timer
@@ -23,9 +25,13 @@ timer_tick:
    bne @dec_timer
    jmp timer_done
 @dec_timer:
-   dec timer
-   bpl @check_timer
-   dec timer+1
+   sec
+   lda timer
+   sbc #1
+   sta timer
+   lda timer+1
+   sbc #0
+   sta timer+1
 @check_timer:
    lda timer
    bne timer_done

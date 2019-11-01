@@ -1,11 +1,13 @@
 .ifndef PLAYER_INC
 PLAYER_INC = 1
 
+.include "x16.inc"
 .include "sprite.asm"
 .include "timer.asm"
 .include "joystick.asm"
 .include "enemy.asm"
 .include "debug.asm"
+.include "loadvram.asm"
 
 PELLET         = $00B
 POWER_PELLET   = $00C
@@ -132,7 +134,7 @@ player_tick:
    sta @overlap
    stx @xpos
    sty @ypos
-   CORNER_DEBUG
+   ;CORNER_DEBUG
    lda #1
    jsr get_tile
    cpx #PELLET
@@ -163,6 +165,7 @@ player_tick:
    jsr get_tile
    cpx #0
    beq @check_east
+   lda #0
    jmp @move_down
 @check_east:
    lda player
@@ -180,6 +183,7 @@ player_tick:
    jsr get_tile
    cpx #0
    beq @check_south
+   lda #0
    jmp @move_left
 @check_south:
    lda player
@@ -197,6 +201,7 @@ player_tick:
    jsr get_tile
    cpx #0
    beq @check_west
+   lda #0
    jmp @move_up
 @check_west:
    lda player
@@ -214,6 +219,7 @@ player_tick:
    jsr get_tile
    cpx #0
    beq @check_collision
+   lda #0
    jmp @move_right
 @eat_pellet:
    ldx @xpos
@@ -352,6 +358,7 @@ add_score:  ; A: points to add
    adc #0
    sta score+3
    cld         ; End BCD mode
+   DEBUG_WORD score
    ldx #0
    ldy #7
 @tile_loop:
@@ -479,7 +486,8 @@ check_collision:
 @check_colliding:
    IS_COLLIDING
    bcc @end_loop
-   jsr die
+   jsr player_die
+   plp ; clear stack
    jmp @return ; player dead, don't bother continuing loop
 @check_vuln:
    plp
@@ -555,10 +563,13 @@ eat_enemy:  ; A: enemy sprite index
 
 ; --------- Timer Handlers ---------
 
-die:
+player_die:
    jsr player_stop
    stz player_index_d
-   SET_TIMER 3, @animation
+   SET_TIMER 5, @animation
+   lda player
+   ora #$80
+   sta player
    rts
 @animation:
    ldx player_index_d
@@ -583,7 +594,12 @@ die:
    jmp timer_done
 
 regenerate:
-   ; TODO: reset player
+   lda #>(VRAM_sprattr>>4)
+   ldx #<(VRAM_sprattr>>4)
+   ldy #<spriteattr_fn
+   jsr loadvram
+   SET_TIMER 60, readygo
+   rts
 readygo:
    SUPERIMPOSE "ready?", 7, 9
    SET_TIMER 30, @readyoff

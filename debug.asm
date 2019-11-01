@@ -23,6 +23,26 @@ DEBUG_INC = 1
    pla
 .endmacro
 
+.macro DEBUG_WORD word
+   pha
+   phx
+   phy
+   lda word+1
+   ldx #0
+   ldy #2
+   jsr debug
+   lda word
+   ldx #2
+   ldy #2
+   jsr debug
+   ply
+   plx
+   pla
+.endmacro
+
+
+
+
 .include "tilelib.asm"
 
 debug:   ; A: value to display

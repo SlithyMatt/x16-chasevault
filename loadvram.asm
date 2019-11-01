@@ -1,3 +1,6 @@
+.ifndef LOADVRAM_INC
+LOADVRAM_INC = 1
+
 .include "x16.inc"
 
 loadvram:   ; A = VRAM address (19:12)
@@ -63,3 +66,5 @@ loadvram:   ; A = VRAM address (19:12)
    pla                ; A = VRAM bank + 2
    jsr LOAD
    rts
+
+.endif
