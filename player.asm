@@ -15,6 +15,12 @@ PELLET         = $00D
 POWER_PELLET   = $00E
 KEY            = $010
 
+ENEMY1_idx     = 1
+ENEMY2_idx     = 2
+ENEMY3_idx     = 3
+ENEMY4_idx     = 4
+FRUIT_idx      = 5
+
 ACTIVE_ENEMY_L = $0E400
 ACTIVE_ENEMY_H = $0E600
 VULN_ENEMY     = $0E680
@@ -136,7 +142,7 @@ player_tick:
    sta @overlap
    stx @xpos
    sty @ypos
-   CORNER_DEBUG
+   ;CORNER_DEBUG
    lda #1
    jsr get_tile
    cpx #PELLET
@@ -157,8 +163,6 @@ player_tick:
    lda @overlap
    bit #$80
    beq @check_east
-   ;cpx #$0C
-   ;bne @check_east
    lda #1
    ldx @xpos
    ldy @ypos
@@ -184,8 +188,6 @@ player_tick:
    lda @overlap
    bit #$20
    beq @check_south
-   ;cpx #$00
-   ;bne @check_south
    lda #1
    ldx @xpos
    inx
@@ -211,8 +213,6 @@ player_tick:
    lda @overlap
    bit #$08
    beq @check_west
-   ;cpx #$08
-   ;bne @check_west
    lda #1
    ldx @xpos
    ldy @ypos
@@ -238,8 +238,6 @@ player_tick:
    lda @overlap
    bit #$02
    beq @check_collision
-   ;cpx #$04
-   ;bne @check_collision
    lda #1
    ldx @xpos
    dex
@@ -493,8 +491,13 @@ check_collision:
 @s_ypos: .word 0
 @eaten:  .byte 0
 @start:
+   stz @eaten
    stz VERA_ctrl
-   VERA_SET_ADDR VRAM_sprattr, 1
+   lda #(^VRAM_sprattr | $10)
+   sta VERA_addr_bank
+   lda #>VRAM_sprattr
+   sta VERA_addr_high
+   stz VERA_addr_low
    lda VERA_data ; ignore
    lda VERA_data ; ignore
    lda VERA_data
@@ -507,9 +510,15 @@ check_collision:
    sta @p_ypos+1
    lda VERA_data ; ignore
    lda VERA_data ; ignore
-   ldx #4
+   ldx #(ENEMY1_idx * 8)
 @loop:
    phx
+   stz VERA_ctrl
+   lda #(^VRAM_sprattr | $10)
+   sta VERA_addr_bank
+   lda #>VRAM_sprattr
+   sta VERA_addr_high
+   stx VERA_addr_low
    lda VERA_data
    sta @s_addr
    lda VERA_data
@@ -523,6 +532,25 @@ check_collision:
    lda VERA_data
    sta @s_ypos+1
    lda VERA_data
+   pha           ; check later for enabled
+   lda VERA_data ; ignore
+
+   cpx #8
+   bne @nodebug
+   lda @s_xpos
+   sta @e1_xpos
+   lda @s_xpos+1
+   sta @e1_xpos+1
+   lda @s_ypos
+   sta @e1_ypos
+   lda @s_ypos+1
+   sta @e1_ypos+1
+   bra @nodebug
+@e1_xpos: .word 0
+@e1_ypos: .word 0
+@nodebug:
+
+   pla
    and #$0C
    clc
    php
@@ -550,9 +578,12 @@ check_collision:
 @end_loop:
    plp
    ror @eaten
-   lda VERA_data ; ignore
    plx
-   dex
+   txa
+   clc
+   adc #8
+   tax
+   cmp #((ENEMY4_idx + 1) * 8)
    beq @check_eating
    jmp @loop
 @check_eating:
@@ -560,6 +591,13 @@ check_collision:
    lsr @eaten
    lsr @eaten
    lsr @eaten
+   stz VERA_ctrl
+   lda #(^VRAM_sprattr | $10)
+   sta VERA_addr_bank
+   lda #>VRAM_sprattr
+   sta VERA_addr_high
+   lda #(FRUIT_idx * 8)
+   sta VERA_addr_low
    lda VERA_data ; ignore
    lda VERA_data ; ignore
    lda VERA_data
@@ -571,6 +609,9 @@ check_collision:
    lda VERA_data
    sta @s_ypos+1
    lda VERA_data
+   pha
+   lda VERA_data ; ignore
+   pla
    and #$0C
    beq @eat_enemies
    IS_COLLIDING
@@ -590,6 +631,10 @@ check_collision:
    cpx #5
    bne @eat_loop
 @return:
+;DEBUG_WORD @p_xpos, 0, 2
+;DEBUG_WORD @p_ypos, 5, 2
+;DEBUG_WORD @e1_xpos, 11, 2
+;DEBUG_WORD @e1_ypos, 16, 2
    rts
 
 
