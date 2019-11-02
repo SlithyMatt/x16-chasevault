@@ -1,7 +1,7 @@
 # x16-chasevault
 Chase Vault: A new game for the Commander X16 retrocomputer.
 
-As seen on YouTube: https://youtu.be/hK2nTTLKTUk
+As seen on YouTube: https://youtu.be/bLf6OZcqwIY
 
 ![](ChaseVaultDemo.png)
 
