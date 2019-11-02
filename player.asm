@@ -697,8 +697,19 @@ regenerate:
    lda #>(VRAM_sprattr>>4)
    ldx #<(VRAM_sprattr>>4)
    ldy #<spriteattr_fn
-   jsr loadvram
-   ; TODO: update lives count display
+   jsr loadvram            ; reset sprites
+   lda #1
+   ldx #2
+   ldy #14
+   jsr xy2vaddr
+   stz VERA_ctrl
+   sta VERA_addr_bank
+   stx VERA_addr_low
+   sty VERA_addr_high
+   lda lives
+   clc
+   adc #$30
+   sta VERA_data
    SET_TIMER 60, readygo
    rts
 readygo:
