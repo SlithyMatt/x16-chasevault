@@ -3,7 +3,7 @@ Chase Vault: A new game for the Commander X16 retrocomputer.
 
 As seen on YouTube: https://youtu.be/bLf6OZcqwIY
 
-![](ChaseVaultDemo.png)
+![](chasevault2_loop.gif)
 
 Too build PRG file, run **build.sh** in bash (Git bash is recommended for Windows).
 
