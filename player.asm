@@ -265,7 +265,8 @@ player_tick:
    ldx @xpos
    ldy @ypos
    jsr eat_powerpellet
-   bra @check_collision
+   ;bra @check_collision
+   bra @check_animate
 @eat_key:
    ldx @xpos
    ldy @ypos
@@ -338,7 +339,7 @@ eat_powerpellet:  ; Input:
    dec pellets
    lda #100
    jsr add_score
-   lda #75 ; 5 seconds, TODO: reduce over with level upgrades
+   lda #240 ; 4 seconds, TODO: reduce over with level upgrades
    jsr make_vulnerable
    lda #1
    sta score_mult
@@ -535,22 +536,6 @@ check_collision:
    lda VERA_data
    pha           ; check later for enabled
    lda VERA_data ; ignore
-
-   cpx #8
-   bne @nodebug
-   lda @s_xpos
-   sta @e1_xpos
-   lda @s_xpos+1
-   sta @e1_xpos+1
-   lda @s_ypos
-   sta @e1_ypos
-   lda @s_ypos+1
-   sta @e1_ypos+1
-   bra @nodebug
-@e1_xpos: .word 0
-@e1_ypos: .word 0
-@nodebug:
-
    pla
    and #$0C
    clc
@@ -558,12 +543,20 @@ check_collision:
    bne @check_frame
    jmp @end_loop ; disabled
 @check_frame:
-   lda @s_addr
-   cmp #<(VULN_ENEMY >> 5)
-   lda @s_addr+1
-   sbc #>(VULN_ENEMY >> 5)
+   txa
+   lsr
+   lsr
+   lsr
+   tax
+   phx
+   jsr enemy_check_vuln
+   cmp #1
    beq @check_vuln
-   bcc @check_colliding
+   plx
+   jsr enemy_check_eyes
+   cmp #1
+   bne @check_colliding
+   clc
    jmp @end_loop
 @check_colliding:
    IS_COLLIDING
@@ -652,7 +645,8 @@ eat_enemy:  ; X: enemy sprite index
    lda #200
    jsr add_score
    dex
-   bne @score
+   cpx #0
+   ;bne @score
    inc score_mult
    rts
 

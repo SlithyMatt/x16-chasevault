@@ -21,19 +21,10 @@ vuln_frame:    .byte 13
 eye_frames:    .byte 14, 14, 15, 15
 eye_flips:     .byte $0, $1, $2, $0
 
-ticks_vuln_rem:   .word 0
+ticks_vuln_rem:   .byte 0
 
-make_vulnerable: ; A: fifteenths of seconds (0 to 17 seconds)
+make_vulnerable: ; A: ticks
    sta ticks_vuln_rem
-   stz ticks_vuln_rem+1
-   asl ticks_vuln_rem
-   rol ticks_vuln_rem+1
-   asl ticks_vuln_rem
-   rol ticks_vuln_rem+1
-   asl ticks_vuln_rem
-   rol ticks_vuln_rem+1
-   asl ticks_vuln_rem
-   rol ticks_vuln_rem+1
    ldx #0
 @loop:
    lda enemies,x
@@ -51,19 +42,10 @@ enemy_tick:
    ldx #0
    lda ticks_vuln_rem
    cmp #0
-   bne @dec_ticks
-   lda ticks_vuln_rem+1
-   cmp #0
    beq @loop
-   lda ticks_vuln_rem
-   cmp #0
 @dec_ticks:
-   sec
-   sbc #1
-   sta ticks_vuln_rem
-   lda ticks_vuln_rem+1
-   sbc #0
-   sta ticks_vuln_rem+1
+   dec ticks_vuln_rem
+   brk
    bra @loop
 @enemy_temp: .byte 0
 @sprite_idx: .byte 0
@@ -85,6 +67,18 @@ enemy_tick:
    lda @enemy_temp
    bit #$08
    beq @check_eyes
+   lda ticks_vuln_rem
+   bne @check_ending
+   lda @enemy_temp
+   and #$F7
+   sta @enemy_temp
+   bra @normal
+@check_ending:
+   cmp #90
+   bpl @vulnerable
+   bit #$08
+   bne @normal    ; flash to normal frame every 8 ticks for last 1.5 seconds
+@vulnerable:
    lda vuln_frame
    ldx @sprite_idx
    ldy #0
@@ -102,7 +96,13 @@ enemy_tick:
    jsr sprite_frame
    jmp @end_loop
 @normal:
-   
+   lda @enemy_temp
+   and #$03
+   tax
+   lda body_frames,x
+   ldx @sprite_idx
+   ldy #0
+   jsr sprite_frame
 @end_loop:
    plx
    lda @enemy_temp
@@ -112,6 +112,25 @@ enemy_tick:
    beq @return
    jmp @loop
 @return:
+   rts
+
+enemy_check_vuln: ; Input: X: sprite index
+                  ; Output: A: 0=not vulnerable, 1=vulnerable
+   ldy enemy_map,x
+   lda enemies,y
+   and #$08
+   lsr
+   lsr
+   lsr
+   rts
+
+enemy_check_eyes: ; Input: X: sprite index
+                  ; Output: A: 0=full body, 1=eyes only
+   ldy enemy_map,x
+   lda enemies,y
+   and #$04
+   lsr
+   lsr
    rts
 
 enemy_eaten: ; X: sprite index
