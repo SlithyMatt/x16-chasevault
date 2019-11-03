@@ -338,6 +338,7 @@ eat_powerpellet:  ; Input:
    dec pellets
    lda #100
    jsr add_score
+   lda #75 ; 5 seconds, TODO: reduce over with level upgrades
    jsr make_vulnerable
    lda #1
    sta score_mult
@@ -622,7 +623,6 @@ check_collision:
 @eat_loop:
    lsr @eaten
    bcc @end_eat_loop
-   txa
    phx
    jsr eat_enemy
    plx
@@ -631,10 +631,6 @@ check_collision:
    cpx #5
    bne @eat_loop
 @return:
-;DEBUG_WORD @p_xpos, 0, 2
-;DEBUG_WORD @p_ypos, 5, 2
-;DEBUG_WORD @e1_xpos, 11, 2
-;DEBUG_WORD @e1_ypos, 16, 2
    rts
 
 
@@ -649,7 +645,7 @@ eat_fruit:
    ; TODO: level-specific result
    rts
 
-eat_enemy:  ; A: enemy sprite index
+eat_enemy:  ; X: enemy sprite index
    jsr enemy_eaten
    ldx score_mult
 @score:
