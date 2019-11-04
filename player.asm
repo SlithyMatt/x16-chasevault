@@ -15,11 +15,13 @@ PELLET         = $00D
 POWER_PELLET   = $00E
 KEY            = $010
 
-ENEMY1_idx     = 1
-ENEMY2_idx     = 2
-ENEMY3_idx     = 3
-ENEMY4_idx     = 4
-FRUIT_idx      = 5
+; sprite indices
+PLAYER_idx     = 1
+ENEMY1_idx     = 2
+ENEMY2_idx     = 3
+ENEMY3_idx     = 4
+ENEMY4_idx     = 5
+FRUIT_idx      = 6
 
 ACTIVE_ENEMY_L = $0E400
 ACTIVE_ENEMY_H = $0E600
@@ -27,6 +29,8 @@ VULN_ENEMY     = $0E680
 
 SCOREBOARD_X   = 10
 SCOREBOARD_Y   = 1
+
+
 
 ; --------- Global Variables ---------
 
@@ -136,7 +140,7 @@ player_tick:
 @xpos:      .byte 0
 @ypos:      .byte 0
 @check_pos:
-   lda #0
+   lda #PLAYER_idx
    ldx #1
    jsr sprite_getpos
    sta @overlap
@@ -272,7 +276,7 @@ player_tick:
    ldy @ypos
    jsr eat_key
 @check_collision:
-   jsr check_collision
+   ;jsr check_collision
 @check_animate:
    lda player
    and #$01
@@ -499,7 +503,8 @@ check_collision:
    sta VERA_addr_bank
    lda #>VRAM_sprattr
    sta VERA_addr_high
-   stz VERA_addr_low
+   lda #PLAYER_idx
+   sta VERA_addr_low
    lda VERA_data ; ignore
    lda VERA_data ; ignore
    lda VERA_data

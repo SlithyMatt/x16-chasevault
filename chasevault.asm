@@ -21,12 +21,21 @@ VRAM_BITMAP    = $16A00 ; 4bpp 320x240
 .include "game.asm"
 
 start:
+   ; move text to layer 0 (TODO: replace with bitmap)
    stz VERA_ctrl
-   VERA_SET_ADDR VRAM_layer0, 0  ; disable VRAM layer 0
-   lda #$FE
-   and VERA_data
+   VERA_SET_ADDR VRAM_layer0, 1
+   lda #1
+   sta VERA_ctrl
+   VERA_SET_ADDR VRAM_layer1, 1
+   ldx #10
+@copy_loop:
+   lda VERA_data2
    sta VERA_data
+   dex
+   bne @copy_loop
 
+   ; Setup tiles on layer 1
+   stz VERA_ctrl
    VERA_SET_ADDR VRAM_layer1, 1  ; configure VRAM layer 1
    lda #$60                      ; 4bpp tiles
    sta VERA_data
@@ -48,8 +57,8 @@ start:
 
    VERA_SET_ADDR VRAM_hscale, 1  ; set display to 2x scale
    lda #64
-   sta VERA_data
-   sta VERA_data
+   ;sta VERA_data
+   ;sta VERA_data
 
    ; load VRAM data from binaries
    lda #>(VRAM_TILEMAP>>4)

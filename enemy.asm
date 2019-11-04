@@ -10,10 +10,10 @@ enemy_map: .byte 0,0,1,2,3
 ;  Bit 2: eyes only
 ;  Bit 1-0: Direction (0:R,1:L,2:D,3:U)
 enemies:
-enemy1:  .byte $21
-enemy2:  .byte $43
-enemy3:  .byte $62
-enemy4:  .byte $83
+enemy1:  .byte $41
+enemy2:  .byte $63
+enemy3:  .byte $82
+enemy4:  .byte $A3
 end_enemies:
 
 body_frames:   .byte  9, 11, 10, 12
@@ -45,7 +45,6 @@ enemy_tick:
    beq @loop
 @dec_ticks:
    dec ticks_vuln_rem
-   brk
    bra @loop
 @enemy_temp: .byte 0
 @sprite_idx: .byte 0

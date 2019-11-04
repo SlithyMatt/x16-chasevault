@@ -1,12 +1,14 @@
-# $F5000: sprite 0
+# $F5000: sprite 0 - Mouse
+00 00 00 00 00 00 00 00
+# $F5008: sprite 1 - Player
 08 07 90 00 A0 00 1C 50
-# $F5008: sprite 1
+# $F5010: sprite 2 - Enemy 1
 2C 07 90 00 50 00 2C 50
-# $F5010: sprite 2
+# $F5018: sprite 3 - Enemy 2
 30 07 80 00 6e 00 2C 51
-# $F5018: sprite 3
+# $F5020: sprite 4 - Enemy 3
 28 07 90 00 71 00 2C 52
-# $F5020: sprite 4
+# $F5028: sprite 5 - Enemy 4
 30 07 a0 00 6e 00 2C 53
-# $F5028: sprite 5
+# $F5030: sprite 6 - Fruit
 40 07 00 00 00 00 40 50

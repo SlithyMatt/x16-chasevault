@@ -12,7 +12,8 @@ GAME_INC = 1
 frame_num:  .byte 0
 
 init_game:
-   ; TODO: Disable mouse
+   lda #0
+   jsr MOUSE   ; disable mouse
    jsr regenerate
    rts
 
