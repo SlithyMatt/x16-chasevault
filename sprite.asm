@@ -231,10 +231,12 @@ sprite_getpos: ; Input:
    rts
 
 move_sprite_right:   ; A: sprite index
+                     ; X: pixels
    bra @start
 @xpos: .word 0
 @start:
    pha
+   phx
    jsr __sprattr
    lda VERA_data
    lda VERA_data
@@ -242,9 +244,10 @@ move_sprite_right:   ; A: sprite index
    sta @xpos
    lda VERA_data
    sta @xpos+1
-   lda @xpos
+   plx
+   txa
    clc
-   adc #1
+   adc @xpos
    sta @xpos
    lda @xpos+1
    adc #0
@@ -259,11 +262,14 @@ move_sprite_right:   ; A: sprite index
    sta VERA_data
    rts
 
-move_sprite_left:   ; A: sprite index
+move_sprite_left:    ; A: sprite index
+                     ; X: pixels
    bra @start
 @xpos: .word 0
+@pixels: .byte 0
 @start:
    pha
+   stx @pixels
    jsr __sprattr
    lda VERA_data
    lda VERA_data
@@ -273,7 +279,7 @@ move_sprite_left:   ; A: sprite index
    sta @xpos+1
    lda @xpos
    sec
-   sbc #1
+   sbc @pixels
    sta @xpos
    lda @xpos+1
    sbc #0
@@ -291,10 +297,12 @@ move_sprite_left:   ; A: sprite index
    rts
 
 move_sprite_down:   ; A: sprite index
+                     ; X: pixels
    bra @start
 @ypos: .word 0
 @start:
    pha
+   phx
    jsr __sprattr
    lda VERA_data
    lda VERA_data
@@ -304,9 +312,10 @@ move_sprite_down:   ; A: sprite index
    sta @ypos
    lda VERA_data
    sta @ypos+1
-   lda @ypos
+   plx
+   txa
    clc
-   adc #1
+   adc @ypos
    sta @ypos
    lda @ypos+1
    adc #0
@@ -324,10 +333,13 @@ move_sprite_down:   ; A: sprite index
    rts
 
 move_sprite_up:   ; A: sprite index
+                  ; X: pixels
    bra @start
 @ypos: .word 0
+@pixels: .byte 0
 @start:
    pha
+   stx @pixels
    jsr __sprattr
    lda VERA_data
    lda VERA_data
@@ -339,7 +351,7 @@ move_sprite_up:   ; A: sprite index
    sta @ypos+1
    lda @ypos
    sec
-   sbc #1
+   sbc @pixels
    sta @ypos
    lda @ypos+1
    sbc #0

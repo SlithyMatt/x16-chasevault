@@ -8,9 +8,6 @@ GAME_INC = 1
 .include "superimpose.asm"
 .include "debug.asm"
 
-; timing
-frame_num:  .byte 0
-
 init_game:
    lda #0
    jsr MOUSE   ; disable mouse

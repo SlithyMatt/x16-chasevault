@@ -15,8 +15,7 @@ VRAM_BITMAP    = $16A00 ; 4bpp 320x240
 .include "filenames.asm"
 .include "loadbank.asm"
 .include "loadvram.asm"
-.include "irq.asm"
-.include "vsync.asm"
+.include "player.asm"
 .include "game.asm"
 
 start:
@@ -32,11 +31,6 @@ start:
    sta VERA_data
    dex
    bne @copy_loop
-   stz VERA_ctrl
-   VERA_SET_ADDR VRAM_layer0, 0  ; disable VRAM layer 0
-   lda #$FE
-   and VERA_data
-   ;sta VERA_data
 
    ; Setup tiles on layer 1
    stz VERA_ctrl
@@ -85,15 +79,6 @@ start:
    ldy #<palette_fn
    jsr loadvram
 
-   ; TODO: store bitmap binaries to banked RAM
-
-   ; TODO: configure layer 0 for background bitmaps
-
-   ; TODO: load screen 0 bitmap from banked RAM into layer 0
-
-   ; setup game parameters and initialize states
-   jsr init_game
-
    VERA_SET_ADDR VRAM_layer1, 0  ; enable VRAM layer 1
    lda #$01
    ora VERA_data
@@ -103,10 +88,16 @@ start:
    lda #$01
    sta VERA_data
 
-   ; setup interrupts
-   jsr init_irq
+   ; Setup state
+   jsr init_game
+   jsr timer_clear
+   lda player
+   ora #$03
+   sta player
 
-mainloop:
-   wai
-   jsr check_vsync
-   bra mainloop  ; loop forever
+   jsr player_tick
+   lda #PLAYER_idx
+   ldx #48
+   jsr move_sprite_left
+   jsr player_tick
+   brk

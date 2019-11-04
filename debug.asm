@@ -23,25 +23,13 @@ DEBUG_INC = 1
    pla
 .endmacro
 
-.macro DEBUG_WORD word, xpos, ypos
+.macro DEBUG_BYTE addr, xpos, ypos
    pha
    phx
    phy
-   lda word+1
+   lda addr
    .ifnblank x
       ldx #xpos
-   .else
-      ldx #0
-   .endif
-   .ifnblank y
-      ldy #ypos
-   .else
-      ldy #2
-   .endif
-   jsr debug
-   lda word
-   .ifnblank x
-      ldx #(xpos+2)
    .else
       ldx #0
    .endif
@@ -54,6 +42,12 @@ DEBUG_INC = 1
    ply
    plx
    pla
+.endmacro
+
+
+.macro DEBUG_WORD word, xpos, ypos
+   DEBUG_BYTE word+1, xpos, ypos
+   DEBUG_BYTE word, xpos+1, ypos
 .endmacro
 
 

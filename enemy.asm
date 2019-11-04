@@ -1,7 +1,7 @@
 .ifndef ENEMY_INC
 ENEMY_INC = 1
 
-enemy_map: .byte 0,0,1,2,3
+enemy_map: .byte 0,0,0,1,2,3
 
 ; Enemy status:
 ;  Bits 7-5: sprite index

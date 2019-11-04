@@ -15,8 +15,10 @@ TIMER_INC = 1
 .endmacro
 
 
+; timing
+frame_num:  .byte 0
 timer:      .word 0
-timervec:   .word $0000
+timervec:   .word timer_done
 
 timer_tick:
    lda timer
@@ -41,5 +43,18 @@ timer_tick:
 timer_done:
    rts
 
+timer_clear:
+   stz timer
+   stz timer+1
+   lda #<timer_done
+   sta timervec
+   lda #>timer_done
+   sta timervec+1
+   rts
+
+timer_flush:
+   stz timer
+   stz timer+1
+   jmp (timervec)
 
 .endif

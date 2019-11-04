@@ -8,6 +8,7 @@ PLAYER_INC = 1
 .include "enemy.asm"
 .include "debug.asm"
 .include "loadvram.asm"
+.include "superimpose.asm"
 
 HLOCK          = $00B
 VLOCK          = $00C
@@ -30,6 +31,7 @@ VULN_ENEMY     = $0E680
 SCOREBOARD_X   = 10
 SCOREBOARD_Y   = 1
 
+TICK_MOVEMENT  = 1
 
 
 ; --------- Global Variables ---------
@@ -117,7 +119,7 @@ player_tick:
    and #$0C
    lsr
    tax
-   lda #0
+   lda #PLAYER_idx
    jmp (@jmptable,x)
 @jmptable:
    .word @move_right
@@ -125,15 +127,19 @@ player_tick:
    .word @move_down
    .word @move_up
 @move_right:
+   ldx #TICK_MOVEMENT
    jsr move_sprite_right
    bra @check_pos
 @move_left:
+   ldx #TICK_MOVEMENT
    jsr move_sprite_left
    bra @check_pos
 @move_down:
+   ldx #TICK_MOVEMENT
    jsr move_sprite_down
    bra @check_pos
 @move_up:
+   ldx #TICK_MOVEMENT
    jsr move_sprite_up
    bra @check_pos
 @overlap:   .byte 0
@@ -183,7 +189,7 @@ player_tick:
    ; TODO: handle key unlock
    bra @check_east
 @adjust_down:
-   lda #0
+   lda #PLAYER_idx
    jmp @move_down
 @check_east:
    lda player
@@ -208,7 +214,7 @@ player_tick:
    ; TODO: handle key unlock
    bra @check_south
 @adjust_left:
-   lda #0
+   lda #PLAYER_idx
    jmp @move_left
 @check_south:
    lda player
@@ -233,7 +239,7 @@ player_tick:
    ; TODO: handle key unlock
    bra @check_west
 @adjust_up:
-   lda #0
+   lda #PLAYER_idx
    jmp @move_up
 @check_west:
    lda player
@@ -258,7 +264,7 @@ player_tick:
    ; TODO: handle key unlock
    bra @check_collision
 @adjust_right:
-   lda #0
+   lda #PLAYER_idx
    jmp @move_right
 @eat_pellet:
    ldx @xpos
@@ -276,7 +282,7 @@ player_tick:
    ldy @ypos
    jsr eat_key
 @check_collision:
-   ;jsr check_collision
+   jsr check_collision
 @check_animate:
    lda player
    and #$01
@@ -305,7 +311,7 @@ player_tick:
    tay
 @loadframe:
    pla
-   ldx #0
+   ldx #PLAYER_idx
    jsr sprite_frame
 @done_animate:
    ; TODO: other maintenance
@@ -496,6 +502,8 @@ check_collision:
 @s_xpos: .word 0
 @s_ypos: .word 0
 @eaten:  .byte 0
+@sprattr_addr_low: .byte 0
+@loopcount: .byte 0
 @start:
    stz @eaten
    stz VERA_ctrl
@@ -503,7 +511,7 @@ check_collision:
    sta VERA_addr_bank
    lda #>VRAM_sprattr
    sta VERA_addr_high
-   lda #PLAYER_idx
+   lda #(PLAYER_idx * 8)
    sta VERA_addr_low
    lda VERA_data ; ignore
    lda VERA_data ; ignore
@@ -517,15 +525,25 @@ check_collision:
    sta @p_ypos+1
    lda VERA_data ; ignore
    lda VERA_data ; ignore
-   ldx #(ENEMY1_idx * 8)
+   lda #(ENEMY1_idx * 8)
+   sta @sprattr_addr_low
+   stz @loopcount
 @loop:
-   phx
+   inc @loopcount
+
+   lda @sprattr_addr_low
+   cmp #0
+   bne :+
+   brk
+:  nop
+
    stz VERA_ctrl
    lda #(^VRAM_sprattr | $10)
    sta VERA_addr_bank
    lda #>VRAM_sprattr
    sta VERA_addr_high
-   stx VERA_addr_low
+   lda @sprattr_addr_low
+   sta VERA_addr_low
    lda VERA_data
    sta @s_addr
    lda VERA_data
@@ -548,7 +566,7 @@ check_collision:
    bne @check_frame
    jmp @end_loop ; disabled
 @check_frame:
-   txa
+   lda @sprattr_addr_low
    lsr
    lsr
    lsr
@@ -568,7 +586,6 @@ check_collision:
    bcc @end_loop
    jsr player_die
    plp ; clear stack
-   plx
    jmp @return ; player dead, don't bother continuing loop
 @check_vuln:
    plp
@@ -577,12 +594,18 @@ check_collision:
 @end_loop:
    plp
    ror @eaten
-   plx
-   txa
+   lda @sprattr_addr_low
    clc
    adc #8
-   tax
-   cmp #((ENEMY4_idx + 1) * 8)
+
+   cmp #0
+   bne :+
+   brk
+:  nop
+   
+   sta @sprattr_addr_low
+   lda @loopcount
+   cmp #4
    beq @check_eating
    jmp @loop
 @check_eating:
@@ -611,7 +634,7 @@ check_collision:
    pha
    lda VERA_data ; ignore
    pla
-   and #$0C
+   and #$0C          ; check for fruit sprite enabled
    beq @eat_enemies
    IS_COLLIDING
    bcc @eat_enemies
@@ -669,7 +692,7 @@ player_die:
 @animation:
    ldx player_index_d
    lda player_frames_d,x
-   ldx #0
+   ldx #PLAYER_idx
    ldy #0
    jsr sprite_frame
    inc player_index_d
@@ -728,6 +751,8 @@ game_over:
    SUPERIMPOSE "game over", 5, 9
    ; TODO: prompt for continue/exit
    jmp timer_done
+   lda #1
+
 
 
 
