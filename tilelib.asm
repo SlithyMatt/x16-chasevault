@@ -28,7 +28,7 @@ xy2vaddr:   ; Input:
    plx
    cmp #0
    bne @layer1
-   sta VERA_ctrl
+   stz VERA_ctrl
    VERA_SET_ADDR VRAM_layer0, 1
    jmp @readlayer
 @layer1:

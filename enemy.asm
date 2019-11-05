@@ -21,10 +21,14 @@ vuln_frame:    .byte 13
 eye_frames:    .byte 14, 14, 15, 15
 eye_flips:     .byte $0, $1, $2, $0
 
-ticks_vuln_rem:   .byte 0
+ticks_vuln_rem:   .word 0
 
-make_vulnerable: ; A: ticks
+make_vulnerable: ; A: 15ths of seconds (0 to 17 seconds)
    sta ticks_vuln_rem
+   asl ticks_vuln_rem
+   rol ticks_vuln_rem+1
+   asl ticks_vuln_rem
+   rol ticks_vuln_rem+1
    ldx #0
 @loop:
    lda enemies,x
@@ -39,12 +43,21 @@ make_vulnerable: ; A: ticks
    rts
 
 enemy_tick:
+   ;DEBUG_BYTE ticks_vuln_rem,0,0
    ldx #0
-   lda ticks_vuln_rem
+   lda ticks_vuln_rem+1
    cmp #0
+   bne @dec_ticks
+   lda ticks_vuln_rem
    beq @loop
 @dec_ticks:
-   dec ticks_vuln_rem
+   sec
+   lda ticks_vuln_rem
+   sbc #1
+   sta ticks_vuln_rem
+   lda ticks_vuln_rem+1
+   sbc #0
+   sta ticks_vuln_rem+1
    bra @loop
 @enemy_temp: .byte 0
 @sprite_idx: .byte 0
@@ -66,6 +79,8 @@ enemy_tick:
    lda @enemy_temp
    bit #$08
    beq @check_eyes
+   lda ticks_vuln_rem+1
+   bne @check_ending
    lda ticks_vuln_rem
    bne @check_ending
    lda @enemy_temp
@@ -73,8 +88,11 @@ enemy_tick:
    sta @enemy_temp
    bra @normal
 @check_ending:
+   lda ticks_vuln_rem+1
+   bne @vulnerable
+   lda ticks_vuln_rem
    cmp #90
-   bpl @vulnerable
+   bcs @vulnerable
    bit #$08
    bne @normal    ; flash to normal frame every 8 ticks for last 1.5 seconds
 @vulnerable:

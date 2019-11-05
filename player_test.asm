@@ -95,11 +95,27 @@ start:
    ora #$03
    sta player
 
-   jsr player_tick
-   lda #PLAYER_idx
-   ldx #8
+   lda #255
+   jsr make_vulnerable
+   lda #2
+   ldx #48
    jsr move_sprite_left
+   lda #3
+   ldx #32
+   jsr move_sprite_left
+   jsr enemy_tick
    lda #1
    sta joystick1_left
-   jsr player_tick
+   .repeat 48
+      jsr player_tick
+   .endrepeat
+   stz joystick1_left
+   lda #1
+   sta joystick1_up
+   sta score_mult
+   .repeat 80
+      jsr player_tick
+      jsr enemy_tick
+   .endrepeat
+
    brk

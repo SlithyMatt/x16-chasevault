@@ -152,7 +152,7 @@ player_tick:
    sta @overlap
    stx @xpos
    sty @ypos
-   CORNER_DEBUG
+   ;CORNER_DEBUG
    lda #1
    jsr get_tile
    cpx #PELLET
@@ -348,7 +348,7 @@ eat_powerpellet:  ; Input:
    dec pellets
    lda #100
    jsr add_score
-   lda #240 ; 4 seconds, TODO: reduce over with level upgrades
+   lda #90 ; 6 seconds, TODO: reduce over with level upgrades
    jsr make_vulnerable
    lda #1
    sta score_mult
@@ -434,9 +434,8 @@ add_score:  ; A: points to add
    dey
    dey
    inx
-   cpx #8
+   cpx #4
    bne @tile_loop
-
    lda #1
    ldx #SCOREBOARD_X
    ldy #SCOREBOARD_Y
@@ -453,6 +452,7 @@ add_score:  ; A: points to add
    inx
    cpx #8
    bne @vram_loop
+@return:
    rts
 
 check_collision:
@@ -471,7 +471,9 @@ check_collision:
 @enemy_loop:
    SPRITE_SCREEN_POS @index, @s_xpos, @s_ypos
    cmp #0
-   beq @next_enemy
+   bne @check_box
+   jmp @next_enemy
+@check_box:
    SPRITE_CHECK_BOX 4, @p_xpos, @p_ypos, @s_xpos, @s_ypos
    cmp #0
    beq @next_enemy
@@ -527,7 +529,9 @@ eat_enemy:  ; X: enemy sprite index
    ldx score_mult
 @score:
    lda #200
+   phx
    jsr add_score
+   plx
    dex
    cpx #0
    bne @score

@@ -47,7 +47,7 @@ DEBUG_INC = 1
 
 .macro DEBUG_WORD word, xpos, ypos
    DEBUG_BYTE word+1, xpos, ypos
-   DEBUG_BYTE word, xpos+1, ypos
+   DEBUG_BYTE word, xpos+2, ypos
 .endmacro
 
 

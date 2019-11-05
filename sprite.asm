@@ -382,46 +382,39 @@ move_sprite_up:   ; A: sprite index
 .macro SPRITE_SCREEN_POS idx_addr, xpos_addr, ypos_addr
    lda idx_addr
    jsr __sprite_screen_pos
-   plx
-   stx ypos_addr+1
-   plx
-   stx ypos_addr
-   plx
-   stx xpos_addr+1
-   plx
+   ldx __sprite_sp_x
    stx xpos_addr
+   ldx __sprite_sp_x+1
+   stx xpos_addr+1
+   ldx __sprite_sp_y
+   stx ypos_addr
+   ldx __sprite_sp_y+1
+   stx ypos_addr+1
 .endmacro
+
+__sprite_sp_x: .word 0
+__sprite_sp_y: .word 0
 
 __sprite_screen_pos: ; Input: A: sprite index
                      ; Output:
                      ;  A: z-depth
-                     ;  Stack: <x,>x,<y,>y
-   bra @start
-@sp: .word 0
-@start:
-   plx
-   stx @sp
-   plx
-   stx @sp+1
+                     ;  __sprite_sp_x: sprite X position
+                     ;  __sprite_sp_y: sprite Y position
    jsr __sprattr
    lda VERA_data  ; ignore
    lda VERA_data  ; ignore
    lda VERA_data
-   pha
+   sta __sprite_sp_x
    lda VERA_data
-   pha
+   sta __sprite_sp_x+1
    lda VERA_data
-   pha
+   sta __sprite_sp_y
    lda VERA_data
-   pha
+   sta __sprite_sp_y+1
    lda VERA_data
    and #$0C
    lsr
    lsr
-   ldx @sp+1
-   phx
-   ldx @sp
-   phx
    rts
 
 
@@ -435,103 +428,96 @@ __sprite_screen_pos: ; Input: A: sprite index
 ; Output:
 ;  A: 0=outside box; 1: inside box
 .macro SPRITE_CHECK_BOX max, x1_addr, y1_addr, x2_addr, y2_addr
-   lda y2_addr+1
-   pha
-   lda y2_addr
-   pha
-   lda x2_addr+1
-   pha
-   lda x2_addr
-   pha
-   lda y1_addr+1
-   pha
-   lda y1_addr
-   pha
-   lda x1_addr+1
-   pha
    lda x1_addr
-   pha
+   sta __sprite_cb_x1
+   lda x1_addr+1
+   sta __sprite_cb_x1+1
+   lda y1_addr
+   sta __sprite_cb_y1
+   lda y1_addr+1
+   sta __sprite_cb_y1+1
+   lda x2_addr
+   sta __sprite_cb_x2
+   lda x2_addr+1
+   sta __sprite_cb_x2+1
+   lda y2_addr
+   sta __sprite_cb_y2
+   lda y2_addr+1
+   sta __sprite_cb_y2+1
    lda #max
    jsr __sprite_check_box
 .endmacro
 
+__sprite_cb_x1:     .word 0
+__sprite_cb_y1:     .word 0
+__sprite_cb_x2:     .word 0
+__sprite_cb_y2:     .word 0
+
 __sprite_check_box:  ; Input:
                      ;  A: Max pixels in either direction between positions
-                     ;  Stack: >y2,<y2,>x2,<x2,>y1,<y1,>x1,<x1
+                     ;  __sprite_cb_x1: X coordinate of position 1
+                     ;  __sprite_cb_y1: X coordinate of position 1
+                     ;  __sprite_cb_x2: X coordinate of position 2
+                     ;  __sprite_cb_y1: X coordinate of position 2
                      ; Output:
                      ;  A: 0=outside box; 1: inside box
    bra @start
 @max:    .byte 0
-@x1:     .word 0
-@y1:     .word 0
-@x2:     .word 0
-@y2:     .word 0
 @minx:   .word 0
 @miny:   .word 0
 @maxx:   .word 0
 @maxy:   .word 0
-@sp:     .word 0
 @start:
-   plx
-   stx @sp
-   plx
-   stx @sp+1
    sta @max
    ldx #0
-@pull_loop:
-   pla
-   sta @x1,x
-   inx
-   cpx #8
-   bne @pull_loop
    sec
-   lda @x2
+   lda __sprite_cb_x2
    sbc @max
    sta @minx
-   lda @x2+1
+   lda __sprite_cb_x2+1
    sbc #0
    sta @minx+1
    sec
-   lda @y2
+   lda __sprite_cb_y2
    sbc @max
    sta @miny
-   lda @y2+1
+   lda __sprite_cb_y2+1
    sbc #0
    sta @miny+1
    inc @max
    clc
-   lda @x2
+   lda __sprite_cb_x2
    adc @max
    sta @maxx
-   lda @x2+1
+   lda __sprite_cb_x2+1
    adc #0
    sta @maxx+1
    clc
-   lda @y2
+   lda __sprite_cb_y2
    adc @max
    sta @maxy
-   lda @y2+1
+   lda __sprite_cb_y2+1
    adc #0
    sta @maxy+1
-   lda @x1
+   lda __sprite_cb_x1
    cmp @minx
-   lda @x1+1
+   lda __sprite_cb_x1+1
    sbc @minx+1
    bmi @outside
-   lda @y1
+   lda __sprite_cb_y1
    cmp @miny
-   lda @y1+1
+   lda __sprite_cb_y1+1
    sbc @miny+1
    bmi @outside
    lda @maxx
-   cmp @x1
+   cmp __sprite_cb_x1
    lda @maxx+1
-   sbc @x1+1
+   sbc __sprite_cb_x1+1
    bmi @outside
    lda @maxy
-   cmp @y1
+   cmp __sprite_cb_y1
    lda @maxy+1
-   sbc @y1+1
+   sbc __sprite_cb_y1+1
    bmi @outside
    lda #1
    bra @return
@@ -539,10 +525,6 @@ __sprite_check_box:  ; Input:
    lda #0
    bra @return
 @return:
-   ldx @sp+1
-   phx
-   ldx @sp
-   phx
    rts
 
 
