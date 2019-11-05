@@ -1,6 +1,14 @@
 .ifndef ENEMY_INC
 ENEMY_INC = 1
 
+.include "sprite.asm"
+.include "debug.asm"
+.include "joystick.asm"
+
+.ifndef PLAYER_IDX
+PLAYER_IDX = 1
+.endif
+
 enemy_map: .byte 0,0,0,1,2,3
 
 ; Enemy status:
@@ -16,12 +24,70 @@ enemy3:  .byte $82
 enemy4:  .byte $A3
 end_enemies:
 
+ENEMY1_TGT_X = 18
+ENEMY2_TGT_X = 1
+ENEMY3_TGT_X = 19
+ENEMY4_TGT_X = 0
+ENEMY1_TGT_Y = 0
+ENEMY2_TGT_Y = 0
+ENEMY3_TGT_Y = 14
+ENEMY4_TGT_Y = 14
+
+target_x:   .byte ENEMY1_TGT_X, ENEMY2_TGT_X, ENEMY3_TGT_X, ENEMY4_TGT_X
+target_y:   .byte ENEMY1_TGT_Y, ENEMY2_TGT_Y, ENEMY3_TGT_Y, ENEMY4_TGT_Y
+
 body_frames:   .byte  9, 11, 10, 12
 vuln_frame:    .byte 13
 eye_frames:    .byte 14, 14, 15, 15
 eye_flips:     .byte $0, $1, $2, $0
 
 ticks_vuln_rem:   .word 0
+chase:            .byte 0     ; 0=scatter mode, 1=chase mode
+ticks_mode_rem:   .word 420   ; ticks remaining until switch between chase and scatter
+scatter_time:     .word 420
+chase_time:       .word 1200
+
+enemy_reset:
+   stz ticks_vuln_rem
+   stz ticks_vuln_rem+1
+   jsr __enemy_scatter
+   rts
+
+__enemy_scatter:
+   stz chase
+   lda scatter_time
+   sta ticks_mode_rem
+   lda scatter_time+1
+   sta ticks_mode_rem+1
+   lda ENEMY1_TGT_X
+   sta target_x
+   lda ENEMY2_TGT_X
+   sta target_x+1
+   lda ENEMY3_TGT_X
+   sta target_x+2
+   lda ENEMY4_TGT_X
+   sta target_x+3
+   lda ENEMY1_TGT_Y
+   sta target_y
+   lda ENEMY2_TGT_Y
+   sta target_y+1
+   lda ENEMY3_TGT_Y
+   sta target_y+2
+   lda ENEMY4_TGT_Y
+   sta target_y+3
+   rts
+
+enemy_set_mode_times:   ; Input:
+                        ; A: scatter time, 15ths of seconds (0 to 17 seconds)
+                        ; X/Y: chase time, ticks (0 to 1091-14/15 seconds)
+   sta scatter_time
+   asl scatter_time
+   rol scatter_time+1
+   asl scatter_time
+   rol scatter_time+1
+   stx chase_time
+   sty chase_time+1
+   rts
 
 make_vulnerable: ; A: 15ths of seconds (0 to 17 seconds)
    sta ticks_vuln_rem
@@ -44,12 +110,11 @@ make_vulnerable: ; A: 15ths of seconds (0 to 17 seconds)
 
 enemy_tick:
    ;DEBUG_BYTE ticks_vuln_rem,0,0
-   ldx #0
    lda ticks_vuln_rem+1
    cmp #0
    bne @dec_ticks
    lda ticks_vuln_rem
-   beq @loop
+   beq @mode_tick
 @dec_ticks:
    sec
    lda ticks_vuln_rem
@@ -58,9 +123,13 @@ enemy_tick:
    lda ticks_vuln_rem+1
    sbc #0
    sta ticks_vuln_rem+1
-   bra @loop
+   bra @start_loop
 @enemy_temp: .byte 0
 @sprite_idx: .byte 0
+@mode_tick:
+   jsr __enemy_mode_tick
+@start_loop:
+   ldx #0
 @loop:
    phx
    lda enemies,x
@@ -73,8 +142,9 @@ enemy_tick:
    sta @sprite_idx
    lda @enemy_temp
    bit #$10
-   beq @set_frame
-   ; TODO: move
+   beq @move
+@move:
+   jsr __enemy_move
 @set_frame:
    lda @enemy_temp
    bit #$08
@@ -129,6 +199,94 @@ enemy_tick:
    beq @return
    jmp @loop
 @return:
+   rts
+
+__enemy_mode_tick:
+   lda ticks_mode_rem+1
+   cmp #0
+   bne @dec_ticks
+   lda ticks_mode_rem
+   beq @change_mode
+   @dec_ticks:
+   sec
+   lda ticks_mode_rem
+   sbc #1
+   sta ticks_mode_rem
+   lda ticks_mode_rem+1
+   sbc #0
+   sta ticks_mode_rem+1
+   bra @return
+@change_mode:
+   lda chase
+   bne @scatter
+   lda #1
+   sta chase
+   lda chase_time
+   sta ticks_mode_rem
+   lda chase_time+1
+   sta ticks_mode_rem+1
+   jsr __enemy_chase_targets
+@scatter:
+   jsr __enemy_scatter
+@return:
+   rts
+
+__enemy_chase_targets:
+bra @start
+@enemy:     .byte 0
+@target_x:  .byte 0
+@target_y:  .byte 0
+@index:     .byte 0
+@player_x:  .byte 0
+@player_y:  .byte 0
+@start:
+   ldx #0
+@loop:
+   phx
+   lda enemies,x
+   sta @enemy
+   and #$E0
+   lsr
+   lsr
+   lsr
+   lsr
+   lsr
+   sta @index
+   lda #PLAYER_idx
+   ldx #1
+   jsr sprite_getpos
+   stx @player_x
+   sty @player_y
+   ; TODO calc target position
+@end_loop:
+   plx
+   inx
+   cpx #4
+   bne @loop
+   rts
+
+__enemy_move:  ; X: enemy offset (0-3)
+   bra @start
+@enemy:     .byte 0
+@target_x:  .byte 0
+@target_y:  .byte 0
+@index:     .byte 0
+@start:
+   lda enemies,x
+   sta @enemy
+   lda target_x,x
+   sta @target_x
+   lda target_y,x
+   sta @target_y
+   lda #$E0
+   and @enemy
+   lsr
+   lsr
+   lsr
+   lsr
+   lsr
+   sta @index
+   ; TODO move towards target
    rts
 
 enemy_check_vuln: ; Input: X: sprite index
