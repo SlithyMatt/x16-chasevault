@@ -36,7 +36,7 @@ start:
    VERA_SET_ADDR VRAM_layer0, 0  ; disable VRAM layer 0
    lda #$FE
    and VERA_data
-   ;sta VERA_data
+   sta VERA_data
 
    ; Setup tiles on layer 1
    stz VERA_ctrl
@@ -61,8 +61,8 @@ start:
 
    VERA_SET_ADDR VRAM_hscale, 1  ; set display to 2x scale
    lda #64
-   ;sta VERA_data
-   ;sta VERA_data
+   sta VERA_data
+   sta VERA_data
 
    ; load VRAM data from binaries
    lda #>(VRAM_TILEMAP>>4)

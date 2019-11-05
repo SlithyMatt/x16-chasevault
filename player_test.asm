@@ -97,7 +97,9 @@ start:
 
    jsr player_tick
    lda #PLAYER_idx
-   ldx #48
+   ldx #8
    jsr move_sprite_left
+   lda #1
+   sta joystick1_left
    jsr player_tick
    brk

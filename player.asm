@@ -152,7 +152,7 @@ player_tick:
    sta @overlap
    stx @xpos
    sty @ypos
-   ;CORNER_DEBUG
+   CORNER_DEBUG
    lda #1
    jsr get_tile
    cpx #PELLET
@@ -275,8 +275,7 @@ player_tick:
    ldx @xpos
    ldy @ypos
    jsr eat_powerpellet
-   ;bra @check_collision
-   bra @check_animate
+   bra @check_collision
 @eat_key:
    ldx @xpos
    ldy @ypos
@@ -456,201 +455,58 @@ add_score:  ; A: points to add
    bne @vram_loop
    rts
 
-.macro IS_COLLIDING  ; sets Carry bit if colliding
-      sec
-      lda @p_xpos
-      sbc @s_xpos
-      sta @s_xpos
-      lda @p_xpos+1
-      sbc @s_xpos+1
-      beq :+
-      bmi :+
-      bra :+++
-   :  lda @s_xpos
-      clc
-      adc #4
-      bmi :+
-      cmp #9
-      bpl :+
-      sec
-      lda @p_ypos
-      sbc @s_ypos
-      sta @s_ypos
-      lda @p_ypos+1
-      sbc @s_ypos+1
-      beq :+
-      bmi :+
-      bra :++
-   :  lda @s_ypos
-      clc
-      adc #4
-      bmi :+
-      cmp #9
-      bpl :+
-      sec
-      bra :++
-   :  clc
-   :  nop
-.endmacro
-
 check_collision:
    bra @start
-@vars:
 @p_xpos: .word 0
 @p_ypos: .word 0
-@s_addr: .word 0
 @s_xpos: .word 0
 @s_ypos: .word 0
-@eaten:  .byte 0
-@sprattr_addr_low: .byte 0
-@loopcount: .byte 0
+@index: .byte 0
 @start:
-   stz @eaten
-   stz VERA_ctrl
-   lda #(^VRAM_sprattr | $10)
-   sta VERA_addr_bank
-   lda #>VRAM_sprattr
-   sta VERA_addr_high
-   lda #(PLAYER_idx * 8)
-   sta VERA_addr_low
-   lda VERA_data ; ignore
-   lda VERA_data ; ignore
-   lda VERA_data
-   sta @p_xpos
-   lda VERA_data
-   sta @p_xpos+1
-   lda VERA_data
-   sta @p_ypos
-   lda VERA_data
-   sta @p_ypos+1
-   lda VERA_data ; ignore
-   lda VERA_data ; ignore
-   lda #(ENEMY1_idx * 8)
-   sta @sprattr_addr_low
-   stz @loopcount
-@loop:
-   inc @loopcount
-
-   lda @sprattr_addr_low
+   lda #PLAYER_idx
+   sta @index
+   SPRITE_SCREEN_POS @index, @p_xpos, @p_ypos
+   lda #ENEMY1_idx
+   sta @index
+@enemy_loop:
+   SPRITE_SCREEN_POS @index, @s_xpos, @s_ypos
    cmp #0
-   bne :+
-   brk
-:  nop
-
-   stz VERA_ctrl
-   lda #(^VRAM_sprattr | $10)
-   sta VERA_addr_bank
-   lda #>VRAM_sprattr
-   sta VERA_addr_high
-   lda @sprattr_addr_low
-   sta VERA_addr_low
-   lda VERA_data
-   sta @s_addr
-   lda VERA_data
-   sta @s_addr+1
-   lda VERA_data
-   sta @s_xpos
-   lda VERA_data
-   sta @s_xpos+1
-   lda VERA_data
-   sta @s_ypos
-   lda VERA_data
-   sta @s_ypos+1
-   lda VERA_data
-   pha           ; check later for enabled
-   lda VERA_data ; ignore
-   pla
-   and #$0C
-   clc
-   php
-   bne @check_frame
-   jmp @end_loop ; disabled
-@check_frame:
-   lda @sprattr_addr_low
-   lsr
-   lsr
-   lsr
-   tax
-   phx
+   beq @next_enemy
+   SPRITE_CHECK_BOX 4, @p_xpos, @p_ypos, @s_xpos, @s_ypos
+   cmp #0
+   beq @next_enemy
+   ldx @index
    jsr enemy_check_vuln
-   cmp #1
-   beq @check_vuln
-   plx
-   jsr enemy_check_eyes
-   cmp #1
-   bne @check_colliding
-   clc
-   jmp @end_loop
-@check_colliding:
-   IS_COLLIDING
-   bcc @end_loop
-   jsr player_die
-   plp ; clear stack
-   jmp @return ; player dead, don't bother continuing loop
-@check_vuln:
-   plp
-   IS_COLLIDING
-   php
-@end_loop:
-   plp
-   ror @eaten
-   lda @sprattr_addr_low
-   clc
-   adc #8
-
    cmp #0
-   bne :+
-   brk
-:  nop
-   
-   sta @sprattr_addr_low
-   lda @loopcount
-   cmp #4
-   beq @check_eating
-   jmp @loop
-@check_eating:
-   lsr @eaten
-   lsr @eaten
-   lsr @eaten
-   lsr @eaten
-   stz VERA_ctrl
-   lda #(^VRAM_sprattr | $10)
-   sta VERA_addr_bank
-   lda #>VRAM_sprattr
-   sta VERA_addr_high
-   lda #(FRUIT_idx * 8)
-   sta VERA_addr_low
-   lda VERA_data ; ignore
-   lda VERA_data ; ignore
-   lda VERA_data
-   sta @s_xpos
-   lda VERA_data
-   sta @s_xpos+1
-   lda VERA_data
-   sta @s_ypos
-   lda VERA_data
-   sta @s_ypos+1
-   lda VERA_data
-   pha
-   lda VERA_data ; ignore
-   pla
-   and #$0C          ; check for fruit sprite enabled
-   beq @eat_enemies
-   IS_COLLIDING
-   bcc @eat_enemies
-   jsr eat_fruit
-@eat_enemies:
-   ldx #1
-@eat_loop:
-   lsr @eaten
-   bcc @end_eat_loop
-   phx
+   beq @check_eyes
+   ldx @index
    jsr eat_enemy
-   plx
-@end_eat_loop:
-   inx
-   cpx #5
-   bne @eat_loop
+   bra @next_enemy
+@check_eyes:
+   ldx @index
+   jsr enemy_check_eyes
+   cmp #0
+   beq @die
+   bra @next_enemy
+@die:
+   jsr player_die
+   bra @return
+@next_enemy:
+   inc @index
+   lda @index
+   cmp #(ENEMY4_idx + 1)
+   beq @check_fruit
+   jmp @enemy_loop
+@check_fruit:
+   lda #FRUIT_idx
+   sta @index
+   SPRITE_SCREEN_POS @index, @s_xpos, @s_ypos
+   cmp #0
+   beq @return
+   SPRITE_CHECK_BOX 4, @p_xpos, @p_ypos, @s_xpos, @s_ypos
+   cmp #0
+   beq @return
+   jsr eat_fruit
 @return:
    rts
 
@@ -674,7 +530,7 @@ eat_enemy:  ; X: enemy sprite index
    jsr add_score
    dex
    cpx #0
-   ;bne @score
+   bne @score
    inc score_mult
    rts
 

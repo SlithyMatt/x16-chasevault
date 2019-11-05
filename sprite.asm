@@ -370,5 +370,180 @@ move_sprite_up:   ; A: sprite index
 @return:
    rts
 
+; Macro: SPRITE_SCREEN_POS
+; Input:
+;  idx_addr: address of byte containing sprite index
+;  xpos_addr: address of writable word
+;  ypos_addr: address of writable word
+; Output:
+;  A: z-depth (0=disabled)
+;  xpos_addr: address of word containing sprite X position
+;  ypos_addr: address of word containing sprite Y position
+.macro SPRITE_SCREEN_POS idx_addr, xpos_addr, ypos_addr
+   lda idx_addr
+   jsr __sprite_screen_pos
+   plx
+   stx ypos_addr+1
+   plx
+   stx ypos_addr
+   plx
+   stx xpos_addr+1
+   plx
+   stx xpos_addr
+.endmacro
+
+__sprite_screen_pos: ; Input: A: sprite index
+                     ; Output:
+                     ;  A: z-depth
+                     ;  Stack: <x,>x,<y,>y
+   bra @start
+@sp: .word 0
+@start:
+   plx
+   stx @sp
+   plx
+   stx @sp+1
+   jsr __sprattr
+   lda VERA_data  ; ignore
+   lda VERA_data  ; ignore
+   lda VERA_data
+   pha
+   lda VERA_data
+   pha
+   lda VERA_data
+   pha
+   lda VERA_data
+   pha
+   lda VERA_data
+   and #$0C
+   lsr
+   lsr
+   ldx @sp+1
+   phx
+   ldx @sp
+   phx
+   rts
+
+
+; Macro: SPRITE_CHECK_BOX
+; Input:
+;  max: Maximum pixels in either direction between positions
+;  x1_addr: address of word containing X coordinate of position 1
+;  y1_addr: address of word containing Y coordinate of position 1
+;  x2_addr: address of word containing X coordinate of position 2
+;  y2_addr: address of word containing Y coordinate of position 2
+; Output:
+;  A: 0=outside box; 1: inside box
+.macro SPRITE_CHECK_BOX max, x1_addr, y1_addr, x2_addr, y2_addr
+   lda y2_addr+1
+   pha
+   lda y2_addr
+   pha
+   lda x2_addr+1
+   pha
+   lda x2_addr
+   pha
+   lda y1_addr+1
+   pha
+   lda y1_addr
+   pha
+   lda x1_addr+1
+   pha
+   lda x1_addr
+   pha
+   lda #max
+   jsr __sprite_check_box
+.endmacro
+
+__sprite_check_box:  ; Input:
+                     ;  A: Max pixels in either direction between positions
+                     ;  Stack: >y2,<y2,>x2,<x2,>y1,<y1,>x1,<x1
+                     ; Output:
+                     ;  A: 0=outside box; 1: inside box
+   bra @start
+@max:    .byte 0
+@x1:     .word 0
+@y1:     .word 0
+@x2:     .word 0
+@y2:     .word 0
+@minx:   .word 0
+@miny:   .word 0
+@maxx:   .word 0
+@maxy:   .word 0
+@sp:     .word 0
+@start:
+   plx
+   stx @sp
+   plx
+   stx @sp+1
+   sta @max
+   ldx #0
+@pull_loop:
+   pla
+   sta @x1,x
+   inx
+   cpx #8
+   bne @pull_loop
+   sec
+   lda @x2
+   sbc @max
+   sta @minx
+   lda @x2+1
+   sbc #0
+   sta @minx+1
+   sec
+   lda @y2
+   sbc @max
+   sta @miny
+   lda @y2+1
+   sbc #0
+   sta @miny+1
+   inc @max
+   clc
+   lda @x2
+   adc @max
+   sta @maxx
+   lda @x2+1
+   adc #0
+   sta @maxx+1
+   clc
+   lda @y2
+   adc @max
+   sta @maxy
+   lda @y2+1
+   adc #0
+   sta @maxy+1
+   lda @x1
+   cmp @minx
+   lda @x1+1
+   sbc @minx+1
+   bmi @outside
+   lda @y1
+   cmp @miny
+   lda @y1+1
+   sbc @miny+1
+   bmi @outside
+   lda @maxx
+   cmp @x1
+   lda @maxx+1
+   sbc @x1+1
+   bmi @outside
+   lda @maxy
+   cmp @y1
+   lda @maxy+1
+   sbc @y1+1
+   bmi @outside
+   lda #1
+   bra @return
+@outside:
+   lda #0
+   bra @return
+@return:
+   ldx @sp+1
+   phx
+   ldx @sp
+   phx
+   rts
+
 
 .endif
