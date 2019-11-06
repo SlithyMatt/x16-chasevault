@@ -31,6 +31,14 @@ enemy3:  .byte ENEMY3_INIT
 enemy4:  .byte ENEMY4_INIT
 end_enemies:
 
+; last decision points  dir.  prev.
+enemy_dps:  ;     X  Y  took  mode
+enemy1_dp:  .byte 0, 0, 1,    0
+enemy2_dp:  .byte 0, 0, 1,    0
+enemy3_dp:  .byte 0, 0, 1,    0
+enemy4_dp:  .byte 0, 0, 1,    0
+end_enemy_dps:
+
 ENEMY1_TGT_X = 18
 ENEMY2_TGT_X = 1
 ENEMY3_TGT_X = 19
@@ -81,21 +89,21 @@ __enemy_scatter:
    sta ticks_mode_rem
    lda scatter_time+1
    sta ticks_mode_rem+1
-   lda ENEMY1_TGT_X
+   lda #ENEMY1_TGT_X
    sta target_x
-   lda ENEMY2_TGT_X
+   lda #ENEMY2_TGT_X
    sta target_x+1
-   lda ENEMY3_TGT_X
+   lda #ENEMY3_TGT_X
    sta target_x+2
-   lda ENEMY4_TGT_X
+   lda #ENEMY4_TGT_X
    sta target_x+3
-   lda ENEMY1_TGT_Y
+   lda #ENEMY1_TGT_Y
    sta target_y
-   lda ENEMY2_TGT_Y
+   lda #ENEMY2_TGT_Y
    sta target_y+1
-   lda ENEMY3_TGT_Y
+   lda #ENEMY3_TGT_Y
    sta target_y+2
-   lda ENEMY4_TGT_Y
+   lda #ENEMY4_TGT_Y
    sta target_y+3
    rts
 
@@ -164,9 +172,14 @@ enemy_tick:
    sta @sprite_idx
    lda @enemy_temp
    bit #$10
-   beq @move
+   bne @move
+   jmp @end_loop
 @move:
    jsr __enemy_move
+   plx
+   lda enemies,x
+   sta @enemy_temp
+   phx
 @set_frame:
    lda @enemy_temp
    bit #$08
@@ -248,10 +261,12 @@ __enemy_mode_tick:
    lda chase_time+1
    sta ticks_mode_rem+1
    jsr __enemy_chase_targets
+   jsr __enemy_reverse
+   bra @return
 @scatter:
    jsr __enemy_scatter
-@return:
    jsr __enemy_reverse
+@return:
    rts
 
 __enemy_chase_targets:
@@ -343,7 +358,78 @@ __enemy_move:  ; X: enemy offset (0-3)
    stx @last_x
    sty @last_y
    cmp #0
-   beq @calc_dir
+   beq @check_current
+   jmp @continue
+@check_current:
+   stz @blocked
+   lda @last_dir
+   ldx @last_x
+   ldy @last_y
+   bit #$02
+   bne @check_vertical
+   bit #$01
+   bne @check_west
+   cpx #ENEMY_MAX_X
+   beq @east_blocked
+   inx
+   lda #1
+   jsr get_tile
+   cpx #BLANK
+   beq @continue
+   cpx #HBAR
+   bpl @continue
+@east_blocked:
+   lda @blocked
+   ora #$01
+   sta @blocked
+   bra @calc_dir
+@check_west:
+   cpx #ENEMY_MIN_X
+   beq @west_blocked
+   dex
+   lda #1
+   jsr get_tile
+   cpx #BLANK
+   beq @continue
+   cpx #HBAR
+   bpl @continue
+@west_blocked:
+   lda @blocked
+   ora #$02
+   sta @blocked
+   bra @calc_dir
+@check_vertical:
+   bit #$01
+   bne @check_up
+   cpy #ENEMY_MAX_Y
+   beq @south_blocked
+   iny
+   lda #1
+   jsr get_tile
+   cpx #BLANK
+   beq @continue
+   cpx #HBAR
+   bpl @continue
+@south_blocked:
+   lda @blocked
+   ora #$04
+   sta @blocked
+   bra @calc_dir
+@check_up:
+   cpy #ENEMY_MIN_Y
+   beq @north_blocked
+   dey
+   lda #1
+   jsr get_tile
+   cpx #BLANK
+   beq @continue
+   cpx #HBAR
+   bpl @continue
+@north_blocked:
+   lda @blocked
+   ora #$08
+   sta @blocked
+   bra @calc_dir
 @continue:
    lda @last_dir  ; continue in last direction until fully into next tile
    asl
@@ -351,7 +437,6 @@ __enemy_move:  ; X: enemy offset (0-3)
    lda @index
    jmp (@jmptable,x)
 @calc_dir:
-   stz @blocked
    sec
    lda @target_x
    sbc @last_x
@@ -369,6 +454,15 @@ __enemy_move:  ; X: enemy offset (0-3)
    cmp @diff_y
    bmi @se_south
 @se_east:
+   lda @blocked
+   cmp #$0D
+   beq @se_east_deadend
+   lda @last_dir
+   cmp #$01
+   beq @se_south
+   lda @blocked
+   bit #$01
+   bne @se_east_check_south
    ldx @last_x
    cpx #ENEMY_MAX_X
    beq @se_east_blocked
@@ -383,11 +477,26 @@ __enemy_move:  ; X: enemy offset (0-3)
    cpx #HBAR
    bmi @se_east_blocked
    jmp @set_right
+@se_east_deadend:
+   jmp @set_left
 @se_east_blocked:
    lda @blocked
    ora #$01
    sta @blocked
+@se_east_check_south:
+   bit #$04
+   beq @se_south
+   jmp @se_south_check_east
 @se_south:
+   lda @blocked
+   cmp #$07
+   beq @se_south_deadend
+   lda @last_dir
+   cmp #$03
+   beq @se_east
+   lda @blocked
+   bit #$04
+   bne @se_south_check_east
    ldy @last_y
    cpy #ENEMY_MAX_Y
    beq @se_south_blocked
@@ -402,16 +511,20 @@ __enemy_move:  ; X: enemy offset (0-3)
    cpx #HBAR
    bmi @se_south_blocked
    jmp @set_down
+@se_south_deadend:
+   jmp @set_up
 @se_south_blocked:
    lda @blocked
    ora #$04
    sta @blocked
-   and #$01
+@se_south_check_east:
+   bit #$01
    beq @se_east
+   lda @last_dir
+   cmp #$02
+   beq @sw_west
+   jmp @ne_north
 @southwest:
-   lda @blocked
-   and #$04
-   bne @sw_west
    lda @diff_x
    bpl @sw_south
    sec
@@ -420,6 +533,15 @@ __enemy_move:  ; X: enemy offset (0-3)
    cmp @diff_y
    bpl @sw_west
 @sw_south:
+   lda @blocked
+   cmp #$07
+   beq @sw_south_deadend
+   lda @last_dir
+   cmp #$03
+   beq @sw_west
+   lda @blocked
+   bit #$04
+   bne @sw_south_check_west
    ldy @last_y
    cpy #ENEMY_MAX_Y
    beq @sw_south_blocked
@@ -434,11 +556,23 @@ __enemy_move:  ; X: enemy offset (0-3)
    cpx #HBAR
    bmi @sw_south_blocked
    jmp @set_down
+@sw_south_deadend:
+   jmp @set_up
 @sw_south_blocked:
    lda @blocked
    ora #$04
    sta @blocked
+@sw_south_check_west:
+   bit #$02
+   beq @sw_west
+   jmp @sw_west_check_south
 @sw_west:
+   lda @blocked
+   cmp #$0E
+   beq @sw_west_deadend
+   lda @blocked
+   bit #$02
+   bne @sw_west_check_south
    ldx @last_x
    cpx #ENEMY_MIN_X
    beq @sw_west_blocked
@@ -453,19 +587,24 @@ __enemy_move:  ; X: enemy offset (0-3)
    cpx #HBAR
    bmi @sw_west_blocked
    jmp @set_left
+@sw_west_deadend:
+   jmp @set_right
 @sw_west_blocked:
    lda @blocked
    ora #$02
    sta @blocked
-   and #$04
+@sw_west_check_south:
+   bit #$04
    beq @sw_south
+   lda @last_dir
+   cmp #$02
+   beq @se_east
+   jmp @ne_north
 @north:
    lda @diff_x
-   bmi @northwest
+   bpl @northeast
+   jmp @northwest
 @northeast:
-   lda @blocked
-   and #$01
-   bne @ne_north
    lda @diff_y
    bpl @ne_east
    sec
@@ -474,6 +613,15 @@ __enemy_move:  ; X: enemy offset (0-3)
    cmp @diff_x
    bmi @ne_east
 @ne_north:
+   lda @blocked
+   cmp #$0B
+   beq @ne_north_deadend
+   lda @last_dir
+   cmp #$02
+   beq @ne_east
+   lda @blocked
+   bit #$08
+   bne @ne_north_check_east
    ldy @last_y
    cpy #ENEMY_MIN_Y
    beq @ne_north_blocked
@@ -488,17 +636,26 @@ __enemy_move:  ; X: enemy offset (0-3)
    cpx #HBAR
    bmi @ne_north_blocked
    jmp @set_up
+@ne_north_deadend:
+   jmp @set_down
 @ne_north_blocked:
    lda @blocked
    ora #$08
    sta @blocked
-   and #$01
+@ne_north_check_east:
+   bit #$01
    beq @ne_east
-   lda @blocked
-   and #$02
-   beq @nw_west
-   jmp @se_south
+   jmp @ne_east_check_north
 @ne_east:
+   lda @blocked
+   cmp #$0D
+   beq @ne_east_deadend
+   lda @last_dir
+   cmp #$01
+   beq @ne_north
+   lda @blocked
+   bit #$01
+   bne @ne_east_check_north
    ldx @last_x
    cpx #ENEMY_MAX_X
    beq @ne_east_blocked
@@ -509,6 +666,8 @@ __enemy_move:  ; X: enemy offset (0-3)
    cpx #BLANK
    bne @ne_east_check_wall
    jmp @set_right
+@ne_east_deadend:
+   jmp @set_left
 @ne_east_check_wall:
    cpx #HBAR
    bmi @ne_east_blocked
@@ -517,17 +676,27 @@ __enemy_move:  ; X: enemy offset (0-3)
    lda @blocked
    ora #$01
    sta @blocked
-   and #$08
+@ne_east_check_north:
+   bit #$08
    beq @ne_north
-   lda @blocked
-   and #$02
-   beq @nw_west
-   jmp @se_south
+   lda @last_dir
+   cmp #$00
+   beq @se_south
+   jmp @nw_north
 @northwest:
    lda @diff_x
    cmp @diff_y
    bmi @nw_north
 @nw_west:
+   lda @blocked
+   cmp #$0E
+   beq @nw_west_deadend
+   lda @last_dir
+   cmp #$00
+   beq @nw_north
+   lda @blocked
+   bit #$02
+   bne @nw_west_check_north
    ldx @last_x
    cpx #ENEMY_MIN_X
    beq @nw_west_blocked
@@ -542,19 +711,31 @@ __enemy_move:  ; X: enemy offset (0-3)
    cpx #HBAR
    bmi @nw_west_blocked
    jmp @set_left
+@nw_west_deadend:
+   jmp @set_right
 @nw_west_blocked:
    lda @blocked
    ora #$02
    sta @blocked
-   and #$08
+@nw_west_check_north:
+   bit #$08
    beq @nw_north
-   lda @blocked
-   and #$04
-   bne @east_last_ditch
+   lda @last_dir
+   cmp #$03
+   beq @ne_east
    jmp @sw_south
 @east_last_ditch:
    jmp @ne_east
 @nw_north:
+   lda @blocked
+   cmp #$0B
+   beq @nw_north_deadend
+   lda @last_dir
+   cmp #$02
+   beq @nw_west
+   lda @blocked
+   bit #$08
+   bne @nw_north_check_west
    ldy @last_y
    cpy #ENEMY_MIN_Y
    beq @nw_north_blocked
@@ -569,15 +750,18 @@ __enemy_move:  ; X: enemy offset (0-3)
    cpx #HBAR
    bmi @nw_north_blocked
    jmp @set_up
+@nw_north_deadend:
+   jmp @set_down
 @nw_north_blocked:
    lda @blocked
    ora #$08
    sta @blocked
-   and #$02
+@nw_north_check_west:
+   bit #$02
    beq @nw_west
-   lda @blocked
-   and #$04
-   bne @east_last_ditch
+   lda @last_dir
+   cmp #$03
+   beq @ne_east
    jmp @sw_south
 @set_right:
    lda #0
