@@ -2,6 +2,7 @@
 PLAYER_INC = 1
 
 .include "x16.inc"
+.include "tiles.inc"
 .include "sprite.asm"
 .include "timer.asm"
 .include "joystick.asm"
@@ -9,12 +10,6 @@ PLAYER_INC = 1
 .include "debug.asm"
 .include "loadvram.asm"
 .include "superimpose.asm"
-
-HLOCK          = $00B
-VLOCK          = $00C
-PELLET         = $00D
-POWER_PELLET   = $00E
-KEY            = $010
 
 ; sprite indices
 PLAYER_idx     = 1
@@ -33,7 +28,6 @@ SCOREBOARD_Y   = 1
 
 TICK_MOVEMENT  = 1
 
-
 ; --------- Global Variables ---------
 
 player:     .byte 0 ; 7-4 (TBD) | 3:2 - direction | 1 - movable | 0 - animated
@@ -44,6 +38,9 @@ score:      .dword 0    ; BCD
 pellets:    .byte 101
 keys:       .byte 0
 score_mult: .byte 1
+
+release_e3: .byte 71 ; pellets remaining to release enemy 3
+release_e4: .byte 33 ; pellets remaining to release enemy 4
 
 ; player animation
 player_frames_h:  .byte 2,2,1,0,0,1,1,2
@@ -122,10 +119,10 @@ player_tick:
    lda #PLAYER_idx
    jmp (@jmptable,x)
 @jmptable:
-   .word @move_right
-   .word @move_left
-   .word @move_down
-   .word @move_up
+.word @move_right
+.word @move_left
+.word @move_down
+.word @move_up
 @move_right:
    ldx #TICK_MOVEMENT
    jsr move_sprite_right
@@ -157,13 +154,19 @@ player_tick:
    jsr get_tile
    cpx #PELLET
    bne @check_powerpellet
+   lda @overlap
+   bne @check_north
    jmp @eat_pellet
 @check_powerpellet:
    cpx #POWER_PELLET
    bne @check_key
+   lda @overlap
+   bne @check_north
    jmp @eat_powerpellet
 @check_key:
    cpx #KEY
+   bne @check_north
+   lda @overlap
    bne @check_north
    jmp @eat_key
 @check_north:
@@ -331,6 +334,7 @@ eat_pellet: ; Input:
    dec pellets
    lda #10
    jsr add_score
+   jsr check_pellet_count
    rts
 
 eat_powerpellet:  ; Input:
@@ -352,6 +356,25 @@ eat_powerpellet:  ; Input:
    jsr make_vulnerable
    lda #1
    sta score_mult
+   jsr check_pellet_count
+   rts
+
+check_pellet_count:
+   lda pellets
+   cmp #0
+   bne @check_e3
+   ; TODO: handle level-up
+@check_e3:
+   cmp release_e3
+   bne @check_e4
+   ldx #ENEMY3_idx
+   jsr enemy_release
+@check_e4:
+   cmp release_e4
+   bne @return
+   ldx #ENEMY4_idx
+   jsr enemy_release
+@return:
    rts
 
 eat_key: ; Input:
@@ -543,6 +566,14 @@ eat_enemy:  ; X: enemy sprite index
 
 player_die:
    jsr player_stop
+   ldx #ENEMY1_idx
+   jsr enemy_stop
+   ldx #ENEMY2_idx
+   jsr enemy_stop
+   ldx #ENEMY3_idx
+   jsr enemy_stop
+   ldx #ENEMY4_idx
+   jsr enemy_stop
    stz player_index_d
    SET_TIMER 5, @animation
    lda player
@@ -589,6 +620,11 @@ regenerate:
    adc #$30
    sta VERA_data
    SET_TIMER 60, readygo
+   jsr enemy_reset
+   lda #105 ; default scatter time = 7 seconds TODO: change with level
+   ldx #<1200  ; default chase time = 20 seconds TODO: change with level
+   ldy #>1200
+   jsr enemy_set_mode_times
    rts
 readygo:
    SUPERIMPOSE "ready?", 7, 9
@@ -605,6 +641,10 @@ readygo:
 @gooff:
    SUPERIMPOSE_RESTORE
    jsr player_move
+   ldx #ENEMY1_idx   ; release first two enemies immediately
+   jsr enemy_release
+   ldx #ENEMY2_idx
+   jsr enemy_release
    jmp timer_done
 
 game_over:
