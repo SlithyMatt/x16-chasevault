@@ -154,20 +154,20 @@ player_tick:
    jsr get_tile
    cpx #PELLET
    bne @check_powerpellet
-   lda @overlap
-   bne @check_north
+   lda tile_collision
+   beq @check_north
    jmp @eat_pellet
 @check_powerpellet:
    cpx #POWER_PELLET
    bne @check_key
-   lda @overlap
-   bne @check_north
+   lda tile_collision
+   beq @check_north
    jmp @eat_powerpellet
 @check_key:
    cpx #KEY
    bne @check_north
-   lda @overlap
-   bne @check_north
+   lda tile_collision
+   beq @check_north
    jmp @eat_key
 @check_north:
    lda player
@@ -185,6 +185,8 @@ player_tick:
    beq @check_east
    cpx #HLOCK
    bmi @adjust_down
+   cpx #HOME_FENCE
+   beq @adjust_down
    cpx #PELLET
    bpl @check_east
    lda keys
@@ -210,6 +212,8 @@ player_tick:
    beq @check_south
    cpx #HLOCK
    bmi @adjust_left
+   cpx #HOME_FENCE
+   beq @adjust_left
    cpx #PELLET
    bpl @check_south
    lda keys
@@ -235,6 +239,8 @@ player_tick:
    beq @check_west
    cpx #HLOCK
    bmi @adjust_up
+   cpx #HOME_FENCE
+   beq @adjust_up
    cpx #PELLET
    bpl @check_west
    lda keys
@@ -260,6 +266,10 @@ player_tick:
    beq @check_collision
    cpx #HLOCK
    bmi @adjust_right
+   cpx #HOME_FENCE
+   bne @check_west_pellet
+   jmp @adjust_right
+@check_west_pellet:
    cpx #PELLET
    bpl @check_collision
    lda keys
@@ -362,17 +372,19 @@ eat_powerpellet:  ; Input:
 check_pellet_count:
    lda pellets
    cmp #0
-   bne @check_e3
-   ; TODO: handle level-up
-@check_e3:
-   cmp release_e3
    bne @check_e4
-   ldx #ENEMY3_idx
-   jsr enemy_release
+   ; TODO: handle level-up
 @check_e4:
+   lda pellets
    cmp release_e4
-   bne @return
+   bpl @check_e3
    ldx #ENEMY4_idx
+   jsr enemy_release
+@check_e3:
+   lda pellets
+   cmp release_e3
+   bpl @return
+   ldx #ENEMY3_idx
    jsr enemy_release
 @return:
    rts

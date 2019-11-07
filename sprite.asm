@@ -52,6 +52,7 @@ sprite_frame:     ; A: frame
    sta VERA_data
    rts
 
+tile_collision: .byte 0
 
 sprite_getpos: ; Input:
                ; A: sprite index
@@ -60,8 +61,8 @@ sprite_getpos: ; Input:
                ; A: tile overlap (n:ne:e:se:s:sw:w:nw)
                ; X: tile x
                ; Y: tile y
+               ; tile_collision: 1 if sprite collided, 0 otherwise
    bra @start
-@vars:
 @xpos:         .word 0
 @ypos:         .word 0
 @halfwidth:    .byte 4
@@ -72,11 +73,8 @@ sprite_getpos: ; Input:
 @start:
    cpx #1
    php
-   ldx #(@start-@vars-1)
-@init:
-   stz @vars,x
-   dex
-   bpl @init
+   stz tile_collision
+   stz @overlap
    ldx #4
    stx @halfwidth
    stx @halfheight
@@ -225,6 +223,25 @@ sprite_getpos: ; Input:
    ora #$01
    sta @overlap   ; overlaps NW
 @return:
+   dec @halfwidth
+   dec @halfwidth
+   dec @halfwidth
+   dec @halfheight
+   dec @halfheight
+   dec @halfheight
+   txa
+   sec
+   sbc @xpos+1
+   cmp @halfwidth
+   bpl @pull_output
+   tya
+   sec
+   sbc @ypos+1
+   cmp @halfheight
+   bpl @pull_output
+   lda #1
+   sta tile_collision
+@pull_output:
    lda @overlap
    ply
    plx
