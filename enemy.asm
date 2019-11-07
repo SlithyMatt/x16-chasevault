@@ -173,7 +173,7 @@ enemy_tick:
    lda @enemy_temp
    bit #$10
    bne @move
-   jmp @end_loop
+   jmp @set_frame
 @move:
    jsr __enemy_move
    plx
@@ -358,73 +358,81 @@ __enemy_move:  ; X: enemy offset (0-3)
    stx @last_x
    sty @last_y
    cmp #0
-   beq @check_current
+   beq @check_east
    jmp @continue
-@check_current:
+@check_east:
    stz @blocked
    lda @last_dir
+   cmp #$01
+   beq @east_blocked
    ldx @last_x
    ldy @last_y
-   bit #$02
-   bne @check_vertical
-   bit #$01
-   bne @check_west
    cpx #ENEMY_MAX_X
    beq @east_blocked
    inx
    lda #1
    jsr get_tile
    cpx #BLANK
-   beq @continue
-   cpx #HBAR
-   bpl @continue
+   beq @check_west
+   cpx #PELLET
+   bpl @check_west
 @east_blocked:
    lda @blocked
    ora #$01
    sta @blocked
-   bra @calc_dir
 @check_west:
+   lda @last_dir
+   cmp #$00
+   beq @west_blocked
+   ldx @last_x
    cpx #ENEMY_MIN_X
    beq @west_blocked
    dex
+   ldy @last_y
    lda #1
    jsr get_tile
    cpx #BLANK
-   beq @continue
-   cpx #HBAR
-   bpl @continue
+   beq @check_south
+   cpx #PELLET
+   bpl @check_south
 @west_blocked:
    lda @blocked
    ora #$02
    sta @blocked
-   bra @calc_dir
-@check_vertical:
-   bit #$01
-   bne @check_up
+@check_south:
+   lda @last_dir
+   cmp #$03
+   beq @south_blocked
+   ldx @last_x
+   ldy @last_y
    cpy #ENEMY_MAX_Y
    beq @south_blocked
    iny
    lda #1
    jsr get_tile
    cpx #BLANK
-   beq @continue
-   cpx #HBAR
-   bpl @continue
+   beq @check_north
+   cpx #PELLET
+   bpl @check_north
 @south_blocked:
    lda @blocked
    ora #$04
    sta @blocked
-   bra @calc_dir
-@check_up:
+@check_north:
+   lda @last_dir
+   cmp #$02
+   beq @north_blocked
+   ldy @last_y
    cpy #ENEMY_MIN_Y
    beq @north_blocked
    dey
+   ldx @last_x
    lda #1
    jsr get_tile
    cpx #BLANK
-   beq @continue
-   cpx #HBAR
-   bpl @continue
+   beq @calc_dir
+   cpx #PELLET
+   bpl @calc_dir
 @north_blocked:
    lda @blocked
    ora #$08
@@ -449,82 +457,32 @@ __enemy_move:  ; X: enemy offset (0-3)
    jmp @north
 @check_sw:
    lda @diff_x
-   bmi @southwest
+   bpl @southeast
+   jmp @southwest
 @southeast:
+   lda @blocked
+   and #$05
+   cmp #$05
+   beq @se_check_north
    cmp @diff_y
    bmi @se_south
 @se_east:
    lda @blocked
-   cmp #$0D
-   beq @se_east_deadend
-   lda @last_dir
-   cmp #$01
-   beq @se_south
-   lda @blocked
    bit #$01
-   bne @se_east_check_south
-   ldx @last_x
-   cpx #ENEMY_MAX_X
-   beq @se_east_blocked
-   inx
-   ldy @last_y
-   lda #1
-   jsr get_tile
-   cpx #BLANK
-   bne @se_east_check_wall
+   bne @se_south
    jmp @set_right
-@se_east_check_wall:
-   cpx #HBAR
-   bmi @se_east_blocked
-   jmp @set_right
-@se_east_deadend:
-   jmp @set_left
-@se_east_blocked:
-   lda @blocked
-   ora #$01
-   sta @blocked
-@se_east_check_south:
-   bit #$04
-   beq @se_south
-   jmp @se_south_check_east
 @se_south:
    lda @blocked
-   cmp #$07
-   beq @se_south_deadend
-   lda @last_dir
-   cmp #$03
-   beq @se_east
-   lda @blocked
    bit #$04
-   bne @se_south_check_east
-   ldy @last_y
-   cpy #ENEMY_MAX_Y
-   beq @se_south_blocked
-   iny
-   ldx @last_x
-   lda #1
-   jsr get_tile
-   cpx #BLANK
-   bne @se_south_check_wall
+   bne @se_east
    jmp @set_down
-@se_south_check_wall:
-   cpx #HBAR
-   bmi @se_south_blocked
-   jmp @set_down
-@se_south_deadend:
-   jmp @set_up
-@se_south_blocked:
-   lda @blocked
-   ora #$04
-   sta @blocked
-@se_south_check_east:
-   bit #$01
-   beq @se_east
-   lda @last_dir
-   cmp #$02
-   beq @sw_west
-   jmp @ne_north
+@se_check_north:
+   jmp @nw_north
 @southwest:
+   lda @blocked
+   and #$06
+   cmp #$06
+   beq @sw_check_north
    lda @diff_x
    bpl @sw_south
    sec
@@ -534,77 +492,25 @@ __enemy_move:  ; X: enemy offset (0-3)
    bpl @sw_west
 @sw_south:
    lda @blocked
-   cmp #$07
-   beq @sw_south_deadend
-   lda @last_dir
-   cmp #$03
-   beq @sw_west
-   lda @blocked
    bit #$04
-   bne @sw_south_check_west
-   ldy @last_y
-   cpy #ENEMY_MAX_Y
-   beq @sw_south_blocked
-   iny
-   ldx @last_x
-   lda #1
-   jsr get_tile
-   cpx #BLANK
-   bne @sw_south_check_wall
+   bne @sw_west
    jmp @set_down
-@sw_south_check_wall:
-   cpx #HBAR
-   bmi @sw_south_blocked
-   jmp @set_down
-@sw_south_deadend:
-   jmp @set_up
-@sw_south_blocked:
-   lda @blocked
-   ora #$04
-   sta @blocked
-@sw_south_check_west:
-   bit #$02
-   beq @sw_west
-   jmp @sw_west_check_south
 @sw_west:
    lda @blocked
-   cmp #$0E
-   beq @sw_west_deadend
-   lda @blocked
    bit #$02
-   bne @sw_west_check_south
-   ldx @last_x
-   cpx #ENEMY_MIN_X
-   beq @sw_west_blocked
-   dex
-   ldy @last_y
-   lda #1
-   jsr get_tile
-   cpx #BLANK
-   bne @sw_west_check_wall
+   bne @sw_south
    jmp @set_left
-@sw_west_check_wall:
-   cpx #HBAR
-   bmi @sw_west_blocked
-   jmp @set_left
-@sw_west_deadend:
-   jmp @set_right
-@sw_west_blocked:
-   lda @blocked
-   ora #$02
-   sta @blocked
-@sw_west_check_south:
-   bit #$04
-   beq @sw_south
-   lda @last_dir
-   cmp #$02
-   beq @se_east
+@sw_check_north:
    jmp @ne_north
 @north:
    lda @diff_x
    bpl @northeast
    jmp @northwest
 @northeast:
+   lda @blocked
+   and #$09
+   cmp #$09
+   beq @ne_check_west
    lda @diff_y
    bpl @ne_east
    sec
@@ -614,155 +520,36 @@ __enemy_move:  ; X: enemy offset (0-3)
    bmi @ne_east
 @ne_north:
    lda @blocked
-   cmp #$0B
-   beq @ne_north_deadend
-   lda @last_dir
-   cmp #$02
-   beq @ne_east
-   lda @blocked
    bit #$08
-   bne @ne_north_check_east
-   ldy @last_y
-   cpy #ENEMY_MIN_Y
-   beq @ne_north_blocked
-   dey
-   ldx @last_x
-   lda #1
-   jsr get_tile
-   cpx #BLANK
-   bne @ne_north_check_wall
+   bne @ne_east
    jmp @set_up
-@ne_north_check_wall:
-   cpx #HBAR
-   bmi @ne_north_blocked
-   jmp @set_up
-@ne_north_deadend:
-   jmp @set_down
-@ne_north_blocked:
-   lda @blocked
-   ora #$08
-   sta @blocked
-@ne_north_check_east:
-   bit #$01
-   beq @ne_east
-   jmp @ne_east_check_north
 @ne_east:
    lda @blocked
-   cmp #$0D
-   beq @ne_east_deadend
-   lda @last_dir
-   cmp #$01
-   beq @ne_north
-   lda @blocked
    bit #$01
-   bne @ne_east_check_north
-   ldx @last_x
-   cpx #ENEMY_MAX_X
-   beq @ne_east_blocked
-   inx
-   ldy @last_y
-   lda #1
-   jsr get_tile
-   cpx #BLANK
-   bne @ne_east_check_wall
+   bne @ne_north
    jmp @set_right
-@ne_east_deadend:
-   jmp @set_left
-@ne_east_check_wall:
-   cpx #HBAR
-   bmi @ne_east_blocked
-   jmp @set_right
-@ne_east_blocked:
-   lda @blocked
-   ora #$01
-   sta @blocked
-@ne_east_check_north:
-   bit #$08
-   beq @ne_north
-   lda @last_dir
-   cmp #$00
-   beq @se_south
-   jmp @nw_north
+@ne_check_west:
+   jmp @sw_west
 @northwest:
+   lda @blocked
+   and #$0A
+   cmp #$0A
+   beq @nw_check_south
    lda @diff_x
    cmp @diff_y
    bmi @nw_north
 @nw_west:
    lda @blocked
-   cmp #$0E
-   beq @nw_west_deadend
-   lda @last_dir
-   cmp #$00
-   beq @nw_north
-   lda @blocked
    bit #$02
-   bne @nw_west_check_north
-   ldx @last_x
-   cpx #ENEMY_MIN_X
-   beq @nw_west_blocked
-   dex
-   ldy @last_y
-   lda #1
-   jsr get_tile
-   cpx #BLANK
-   bne @nw_west_check_wall
+   bne @nw_north
    jmp @set_left
-@nw_west_check_wall:
-   cpx #HBAR
-   bmi @nw_west_blocked
-   jmp @set_left
-@nw_west_deadend:
-   jmp @set_right
-@nw_west_blocked:
-   lda @blocked
-   ora #$02
-   sta @blocked
-@nw_west_check_north:
-   bit #$08
-   beq @nw_north
-   lda @last_dir
-   cmp #$03
-   beq @ne_east
-   jmp @sw_south
-@east_last_ditch:
-   jmp @ne_east
 @nw_north:
    lda @blocked
-   cmp #$0B
-   beq @nw_north_deadend
-   lda @last_dir
-   cmp #$02
-   beq @nw_west
-   lda @blocked
    bit #$08
-   bne @nw_north_check_west
-   ldy @last_y
-   cpy #ENEMY_MIN_Y
-   beq @nw_north_blocked
-   dey
-   ldx @last_x
-   lda #1
-   jsr get_tile
-   cpx #BLANK
-   bne @nw_north_check_wall
+   bne @nw_west
    jmp @set_up
-@nw_north_check_wall:
-   cpx #HBAR
-   bmi @nw_north_blocked
-   jmp @set_up
-@nw_north_deadend:
-   jmp @set_down
-@nw_north_blocked:
-   lda @blocked
-   ora #$08
-   sta @blocked
-@nw_north_check_west:
-   bit #$02
-   beq @nw_west
-   lda @last_dir
-   cmp #$03
-   beq @ne_east
-   jmp @sw_south
+@nw_check_south:
+   jmp @se_south
 @set_right:
    lda #0
    bra @set
