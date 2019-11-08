@@ -2,14 +2,11 @@
 ENEMY_INC = 1
 
 .include "tiles.inc"
+.include "globals.asm"
 .include "sprite.asm"
 .include "debug.asm"
 .include "joystick.asm"
 .include "tilelib.asm"
-
-.ifndef PLAYER_IDX
-PLAYER_IDX = 1
-.endif
 
 enemy_map: .byte 0,0,0,1,2,3
 
@@ -153,11 +150,14 @@ enemy_tick:
    lda ticks_vuln_rem+1
    sbc #0
    sta ticks_vuln_rem+1
-   bra @start_loop
+   bra @mode_tick
 @enemy_temp: .byte 0
 @sprite_idx: .byte 0
 @mode_tick:
    jsr __enemy_mode_tick
+   lda chase
+   beq @start_loop
+   jsr __enemy_chase_targets
 @start_loop:
    ldx #0
 @loop:
@@ -242,7 +242,7 @@ __enemy_mode_tick:
    bne @dec_ticks
    lda ticks_mode_rem
    beq @change_mode
-   @dec_ticks:
+@dec_ticks:
    sec
    lda ticks_mode_rem
    sbc #1
@@ -260,7 +260,6 @@ __enemy_mode_tick:
    sta ticks_mode_rem
    lda chase_time+1
    sta ticks_mode_rem+1
-   jsr __enemy_chase_targets
    jsr __enemy_reverse
    bra @return
 @scatter:
@@ -271,36 +270,185 @@ __enemy_mode_tick:
 
 __enemy_chase_targets:
 bra @start
-@enemy:     .byte 0
-@target_x:  .byte 0
-@target_y:  .byte 0
-@index:     .byte 0
-@player_x:  .byte 0
-@player_y:  .byte 0
+@player_x:     .byte 0
+@player_y:     .byte 0
+@player_dir:   .byte 0
+@ref_x:        .byte 0
+@ref_y:        .byte 0
 @start:
-   ldx #0
-@loop:
-   phx
-   lda enemies,x
-   sta @enemy
-   and #$E0
-   lsr
-   lsr
-   lsr
-   lsr
-   lsr
-   sta @index
    lda #PLAYER_idx
    ldx #1
    jsr sprite_getpos
    stx @player_x
    sty @player_y
-   ; TODO calc target position
-@end_loop:
-   plx
-   inx
-   cpx #(end_enemies-enemies)
-   bne @loop
+   lda #$0C
+   and player
+   lsr
+   lsr
+   sta @player_dir
+   ; ENEMY1: target = player tile
+   stx target_x
+   sty target_y
+   ; ENEMY2: target = 4 tiles ahead of player
+   lda @player_dir
+   cmp #DIR_RIGHT
+   bne @e2_check_left
+   lda @player_x
+   clc
+   adc #2
+   sta target_x+2 ; Sneak in the start of enemy 3 targeting
+   adc #2
+   sta target_x+1
+   lda @player_y
+   sta target_y+1
+   sta target_y+2
+   jmp @enemy3
+@e2_check_left:
+   lda @player_dir
+   cmp #DIR_LEFT
+   bne @e2_check_down
+   lda @player_x
+   sec
+   sbc #2
+   sta target_x+2
+   sbc #2
+   bpl @e2_left_set_x
+   lda #0
+   sta target_x+2
+@e2_left_set_x:
+   sta target_x+1
+   lda @player_y
+   sta target_y+1
+   sta target_y+2
+   jmp @enemy3
+@e2_check_down:
+   lda @player_dir
+   cmp #DIR_DOWN
+   bne @e2_up
+   lda @player_x
+   sta target_x+1
+   sta target_x+2
+   lda @player_y
+   clc
+   adc #2
+   sta target_y+2
+   adc #2
+   sta target_y+1
+   jmp @enemy3
+@e2_up:
+   lda @player_x
+   sta target_x+1
+   sta target_x+2
+   lda @player_y
+   sec
+   sbc #2
+   sta target_y+2
+   sbc #2
+   bpl @e2_up_set_y
+   lda #0
+   sta target_y+2
+@e2_up_set_y:
+   sta target_y+1
+   ; ENEMY 3 : double the vector to half the offset of enemy 2's target
+@enemy3:
+   lda #ENEMY1_idx
+   ldx #1
+   jsr sprite_getpos
+   stx @ref_x
+   sty @ref_y
+   lda target_x+2
+   sec
+   sbc @ref_x
+   sta target_x+2
+   clc
+   adc target_x+2
+   clc
+   adc @ref_x
+   bpl @e3_set_x
+   lda #0
+@e3_set_x:
+   sta target_x+2
+   lda target_y+2
+   sec
+   sbc @ref_y
+   sta target_y+2
+   clc
+   adc target_y+2
+   clc
+   adc @ref_y
+   bpl @e3_set_y
+   lda #0
+@e3_set_y:
+   sta target_y+2
+   ; ENEMY 4: same as enemy 1 unless < 8 tiles away from player, then scatter
+   lda #ENEMY4_idx
+   ldx #1
+   jsr sprite_getpos
+   stx @ref_x
+   sty @ref_y
+   lda @player_x
+   sec
+   sbc @ref_x
+   sta @ref_x
+   bpl @e4_check_x
+   lda #0
+   sec
+   sbc @ref_x
+   sta @ref_x
+@e4_check_x:
+   cmp #8
+   bmi @e4_calc_y
+   jmp @e4_chase
+@e4_calc_y:
+   lda @player_y
+   sec
+   sbc @ref_y
+   sta @ref_y
+   bpl @e4_check_y
+   lda #0
+   sec
+   sbc @ref_y
+   sta @ref_y
+@e4_check_y:
+   cmp #8
+   bmi @e4_calc_x2
+   jmp @e4_chase
+@e4_calc_x2:
+   lda @ref_x
+   tax
+   clc
+@e4_x2_loop:
+   cpx #0
+   beq @e4_calc_y2
+   adc @ref_x
+   dex
+   bra @e4_x2_loop
+@e4_calc_y2:
+   sta @ref_x
+   lda @ref_y
+   tax
+   clc
+@e4_y2_loop:
+   cpx #0
+   beq @e4_calc_hyp
+   adc @ref_y
+   dex
+   bra @e4_y2_loop
+@e4_calc_hyp:
+   adc @ref_x
+   cmp #64
+   bpl @e4_chase
+   lda #ENEMY4_TGT_X
+   sta target_x+3
+   lda #ENEMY4_TGT_Y
+   sta target_y+3
+   bra @return
+@e4_chase:
+   lda target_x
+   sta target_x+3
+   lda target_y
+   sta target_y+3
+@return:
    rts
 
 __enemy_reverse:
@@ -335,6 +483,10 @@ __enemy_move:  ; X: enemy offset (0-3)
 @index:     .byte 0
 @last_dir:  .byte 0
 @blocked:   .byte 0  ; bit 3: N, bit 2: S, bit 1: W, bit 0: E
+@EAST_BLOCKED = $01
+@WEST_BLOCKED = $02
+@SOUTH_BLOCKED = $04
+@NORTH_BLOCKED = $08
 @start:
    stx @offset
    lda enemies,x
@@ -363,7 +515,7 @@ __enemy_move:  ; X: enemy offset (0-3)
 @check_east:
    stz @blocked
    lda @last_dir
-   cmp #$01
+   cmp #DIR_LEFT
    beq @east_blocked
    ldx @last_x
    ldy @last_y
@@ -378,11 +530,11 @@ __enemy_move:  ; X: enemy offset (0-3)
    bpl @check_west
 @east_blocked:
    lda @blocked
-   ora #$01
+   ora #@EAST_BLOCKED
    sta @blocked
 @check_west:
    lda @last_dir
-   cmp #$00
+   cmp #DIR_RIGHT
    beq @west_blocked
    ldx @last_x
    cpx #ENEMY_MIN_X
@@ -397,11 +549,11 @@ __enemy_move:  ; X: enemy offset (0-3)
    bpl @check_south
 @west_blocked:
    lda @blocked
-   ora #$02
+   ora #@WEST_BLOCKED
    sta @blocked
 @check_south:
    lda @last_dir
-   cmp #$03
+   cmp #DIR_UP
    beq @south_blocked
    ldx @last_x
    ldy @last_y
@@ -416,11 +568,11 @@ __enemy_move:  ; X: enemy offset (0-3)
    bpl @check_north
 @south_blocked:
    lda @blocked
-   ora #$04
+   ora #@SOUTH_BLOCKED
    sta @blocked
 @check_north:
    lda @last_dir
-   cmp #$02
+   cmp #DIR_DOWN
    beq @north_blocked
    ldy @last_y
    cpy #ENEMY_MIN_Y
@@ -435,7 +587,7 @@ __enemy_move:  ; X: enemy offset (0-3)
    bpl @calc_dir
 @north_blocked:
    lda @blocked
-   ora #$08
+   ora #@NORTH_BLOCKED
    sta @blocked
    bra @calc_dir
 @continue:
@@ -468,12 +620,12 @@ __enemy_move:  ; X: enemy offset (0-3)
    bmi @se_south
 @se_east:
    lda @blocked
-   bit #$01
+   bit #@EAST_BLOCKED
    bne @se_south
    jmp @set_right
 @se_south:
    lda @blocked
-   bit #$04
+   bit #@SOUTH_BLOCKED
    bne @se_east
    jmp @set_down
 @se_check_north:
@@ -492,12 +644,12 @@ __enemy_move:  ; X: enemy offset (0-3)
    bpl @sw_west
 @sw_south:
    lda @blocked
-   bit #$04
+   bit #@SOUTH_BLOCKED
    bne @sw_west
    jmp @set_down
 @sw_west:
    lda @blocked
-   bit #$02
+   bit #@WEST_BLOCKED
    bne @sw_south
    jmp @set_left
 @sw_check_north:
@@ -520,12 +672,12 @@ __enemy_move:  ; X: enemy offset (0-3)
    bmi @ne_east
 @ne_north:
    lda @blocked
-   bit #$08
+   bit #@NORTH_BLOCKED
    bne @ne_east
    jmp @set_up
 @ne_east:
    lda @blocked
-   bit #$01
+   bit #@EAST_BLOCKED
    bne @ne_north
    jmp @set_right
 @ne_check_west:
@@ -540,12 +692,12 @@ __enemy_move:  ; X: enemy offset (0-3)
    bmi @nw_north
 @nw_west:
    lda @blocked
-   bit #$02
+   bit #@WEST_BLOCKED
    bne @nw_north
    jmp @set_left
 @nw_north:
    lda @blocked
-   bit #$08
+   bit #@NORTH_BLOCKED
    bne @nw_west
    jmp @set_up
 @nw_check_south:
