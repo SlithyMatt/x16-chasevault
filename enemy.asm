@@ -7,6 +7,7 @@ ENEMY_INC = 1
 .include "debug.asm"
 .include "joystick.asm"
 .include "tilelib.asm"
+.include "timer.asm"
 
 enemy_map: .byte 0,0,0,1,2,3
 
@@ -28,14 +29,6 @@ enemy3:  .byte ENEMY3_INIT
 enemy4:  .byte ENEMY4_INIT
 end_enemies:
 
-; last decision points  dir.  prev.
-enemy_dps:  ;     X  Y  took  mode
-enemy1_dp:  .byte 0, 0, 1,    0
-enemy2_dp:  .byte 0, 0, 1,    0
-enemy3_dp:  .byte 0, 0, 1,    0
-enemy4_dp:  .byte 0, 0, 1,    0
-end_enemy_dps:
-
 ENEMY1_TGT_X = 18
 ENEMY2_TGT_X = 1
 ENEMY3_TGT_X = 19
@@ -44,6 +37,9 @@ ENEMY1_TGT_Y = 0
 ENEMY2_TGT_Y = 0
 ENEMY3_TGT_Y = 14
 ENEMY4_TGT_Y = 14
+
+BOX_X = 9
+BOX_Y = 7
 
 ENEMY_MIN_X  = 1
 ENEMY_MIN_Y  = 3
@@ -150,14 +146,16 @@ enemy_tick:
    lda ticks_vuln_rem+1
    sbc #0
    sta ticks_vuln_rem+1
-   bra @mode_tick
+   bra @start_loop
 @enemy_temp: .byte 0
 @sprite_idx: .byte 0
 @mode_tick:
    jsr __enemy_mode_tick
    lda chase
-   beq @start_loop
+   beq @check_eyes_mode
    jsr __enemy_chase_targets
+@check_eyes_mode:
+   ;jsr __enemy_eyes_targets
 @start_loop:
    ldx #0
 @loop:
@@ -451,6 +449,42 @@ bra @start
 @return:
    rts
 
+__enemy_eyes_targets:
+   ldy #0
+@loop:
+   lda enemies,y
+   bit #$04
+   beq @next
+   and #$E0
+   lsr
+   lsr
+   lsr
+   lsr
+   lsr
+   ldx #1
+   phy
+   jsr sprite_getpos
+   tya
+   ply
+   cmp #BOX_Y
+   bne @set_target
+   cpx #BOX_X
+   bne @set_target
+   lda enemies,y
+   and #$FB
+   sta enemies,y
+   bra @next
+@set_target:
+   lda #BOX_X
+   sta target_x,y
+   lda #BOX_Y
+   sta target_y,y
+@next:
+   iny
+   cpy #(end_enemies-enemies)
+   bne @loop
+   rts
+
 __enemy_reverse:
    ldx #0
 @loop:
@@ -482,6 +516,8 @@ __enemy_move:  ; X: enemy offset (0-3)
 @diff_y:    .byte 0
 @index:     .byte 0
 @last_dir:  .byte 0
+@available: .byte 0,0,0,0
+@rand:      .byte 0
 @blocked:   .byte 0  ; bit 3: N, bit 2: S, bit 1: W, bit 0: E
 @EAST_BLOCKED = $01
 @WEST_BLOCKED = $02
@@ -597,6 +633,38 @@ __enemy_move:  ; X: enemy offset (0-3)
    lda @index
    jmp (@jmptable,x)
 @calc_dir:
+   jmp @go_target    ; TODO: fix random direction
+   lda @enemy
+   bit #$08
+   beq @go_target
+   lda @blocked      ; vulnerable, take a random available direction
+   eor #$0F
+   ldx #0
+   ldy #0
+@avail_loop:
+   lsr
+   bcc @next_avail
+   txa
+   sta @available,y
+   iny
+@next_avail:
+   inx
+   cpx #4
+   bne @avail_loop
+   lda frame_num
+   and #$03
+   sta @rand
+@scope_rand:
+   cpy @rand
+   bpl @set_rand
+   dec @rand
+   bra @scope_rand
+@set_rand:
+   ldx @rand
+   lda @available,x
+   sta @last_dir
+   jmp @continue
+@go_target:
    sec
    lda @target_x
    sbc @last_x

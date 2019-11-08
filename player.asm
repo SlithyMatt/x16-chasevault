@@ -343,7 +343,7 @@ check_pellet_count:
    lda pellets
    cmp #0
    bne @check_e4
-   ; TODO: handle level-up
+   jsr next_level
 @check_e4:
    lda pellets
    cmp release_e4
@@ -635,7 +635,10 @@ game_over:
    jmp timer_done
    lda #1
 
-
+next_level:
+   inc level
+   
+   rts
 
 
 .endif
