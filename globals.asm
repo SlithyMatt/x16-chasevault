@@ -3,6 +3,13 @@ GLOBALS_INC = 1
 
 ; ------------ Constants ------------
 
+
+VRAM_TILEMAP   = $04000 ; 128x128
+VRAM_SPRITES   = $0E000 ; 64 4bpp 16x16 frames
+VRAM_TILES     = $10000 ; 424 4bpp 16x16 (may also be used as sprite frames)
+VRAM_BITMAP    = $16A00 ; 4bpp 320x240
+
+
 ; sprite indices
 PLAYER_idx     = 1
 ENEMY1_idx     = 2
@@ -32,7 +39,7 @@ player:     .byte 0 ; 7-4 (TBD) | 3:2 - direction | 1 - movable | 0 - animated
 lives:      .byte 4
 level:      .byte 1
 score:      .dword 0    ; BCD
-pellets:    .byte 101
+pellets:    .byte 102
 keys:       .byte 0
 
 score_mult: .byte 1

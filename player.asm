@@ -88,6 +88,14 @@ player_tick:
    tax
    lda #PLAYER_idx
    jmp (@jmptable,x)
+   nop ; TODO - figure out alignment
+   nop
+   nop
+   nop
+   nop
+   nop
+   nop
+   nop
 @jmptable:
 .word @move_right
 .word @move_left
@@ -344,6 +352,7 @@ check_pellet_count:
    cmp #0
    bne @check_e4
    jsr next_level
+   bra @return
 @check_e4:
    lda pellets
    cmp release_e4
@@ -637,7 +646,8 @@ game_over:
 
 next_level:
    inc level
-   
+   jsr enemy_clear
+
    rts
 
 

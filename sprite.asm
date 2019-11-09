@@ -4,10 +4,7 @@ SPRITE_INC = 1
 .include "x16.inc"
 .include "tilelib.asm"
 .include "debug.asm"
-
-.ifndef VRAM_SPRITES
-VRAM_SPRITES = $0E000
-.endif
+.include "globals.asm"
 
 __sprattr:  ; A: sprite index
    stz VERA_ctrl
@@ -542,6 +539,19 @@ __sprite_check_box:  ; Input:
    lda #0
    bra @return
 @return:
+   rts
+
+sprite_disable:   ; A: sprite index
+   jsr __sprattr
+   lda #<(VRAM_TILES >> 5)
+   sta VERA_data  ; set to black tile
+   lda #>(VRAM_TILES >> 5)
+   sta VERA_data
+   stz VERA_data  ; reset to 0,0
+   stz VERA_data
+   stz VERA_data
+   stz VERA_data
+   stz VERA_data  ; disable
    rts
 
 

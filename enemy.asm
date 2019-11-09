@@ -9,6 +9,8 @@ ENEMY_INC = 1
 .include "tilelib.asm"
 .include "timer.asm"
 
+enemies_cleared: .byte 0
+
 enemy_map: .byte 0,0,0,1,2,3
 
 ENEMY1_INIT = $41
@@ -58,11 +60,33 @@ reverse_dir:   .byte $1, $0, $3, $2
 
 ticks_vuln_rem:   .word 0
 chase:            .byte 0     ; 0=scatter mode, 1=chase mode
-ticks_mode_rem:   .word 420   ; ticks remaining until switch between chase and scatter
-scatter_time:     .word 420
-chase_time:       .word 1200
+ticks_mode_rem:   .word 240   ; ticks remaining until switch between chase and scatter
+scatter_time:     .word 240
+chase_time:       .word 420
+
+enemy_clear:
+   lda #1
+   sta enemies_cleared
+   ldx #ENEMY1_idx
+   jsr enemy_stop
+   ldx #ENEMY2_idx
+   jsr enemy_stop
+   ldx #ENEMY3_idx
+   jsr enemy_stop
+   ldx #ENEMY4_idx
+   jsr enemy_stop
+   lda #ENEMY1_idx
+   jsr sprite_disable
+   lda #ENEMY2_idx
+   jsr sprite_disable
+   lda #ENEMY3_idx
+   jsr sprite_disable
+   lda #ENEMY4_idx
+   jsr sprite_disable
+   rts
 
 enemy_reset:
+   stz enemies_cleared
    stz ticks_vuln_rem
    stz ticks_vuln_rem+1
    lda #ENEMY1_INIT
@@ -129,10 +153,15 @@ make_vulnerable: ; A: 15ths of seconds (0 to 17 seconds)
    inx
    cpx #(end_enemies-enemies)
    bne @loop
+   jsr __enemy_scatter
    rts
 
 enemy_tick:
-   ;DEBUG_BYTE ticks_vuln_rem,0,0
+   lda enemies_cleared
+   cmp #0
+   beq @start
+   jmp @return
+@start:
    lda ticks_vuln_rem+1
    cmp #0
    bne @dec_ticks
@@ -146,7 +175,7 @@ enemy_tick:
    lda ticks_vuln_rem+1
    sbc #0
    sta ticks_vuln_rem+1
-   bra @start_loop
+   bra @check_eyes_mode
 @enemy_temp: .byte 0
 @sprite_idx: .byte 0
 @mode_tick:
@@ -155,7 +184,7 @@ enemy_tick:
    beq @check_eyes_mode
    jsr __enemy_chase_targets
 @check_eyes_mode:
-   ;jsr __enemy_eyes_targets
+   jsr __enemy_eyes_targets
 @start_loop:
    ldx #0
 @loop:
@@ -260,6 +289,7 @@ __enemy_mode_tick:
    sta ticks_mode_rem+1
    jsr __enemy_reverse
    bra @return
+   nop
 @scatter:
    jsr __enemy_scatter
    jsr __enemy_reverse
@@ -482,7 +512,7 @@ __enemy_eyes_targets:
 @next:
    iny
    cpy #(end_enemies-enemies)
-   bne @loop
+   bmi @loop
    rts
 
 __enemy_reverse:
@@ -600,8 +630,15 @@ __enemy_move:  ; X: enemy offset (0-3)
    jsr get_tile
    cpx #BLANK
    beq @check_north
+   cpx #HOME_FENCE
+   beq @check_eyes_fence
    cpx #PELLET
    bpl @check_north
+   bra @south_blocked
+@check_eyes_fence:
+   lda @enemy
+   bit #$04
+   bne @check_north
 @south_blocked:
    lda @blocked
    ora #@SOUTH_BLOCKED
@@ -633,38 +670,6 @@ __enemy_move:  ; X: enemy offset (0-3)
    lda @index
    jmp (@jmptable,x)
 @calc_dir:
-   jmp @go_target    ; TODO: fix random direction
-   lda @enemy
-   bit #$08
-   beq @go_target
-   lda @blocked      ; vulnerable, take a random available direction
-   eor #$0F
-   ldx #0
-   ldy #0
-@avail_loop:
-   lsr
-   bcc @next_avail
-   txa
-   sta @available,y
-   iny
-@next_avail:
-   inx
-   cpx #4
-   bne @avail_loop
-   lda frame_num
-   and #$03
-   sta @rand
-@scope_rand:
-   cpy @rand
-   bpl @set_rand
-   dec @rand
-   bra @scope_rand
-@set_rand:
-   ldx @rand
-   lda @available,x
-   sta @last_dir
-   jmp @continue
-@go_target:
    sec
    lda @target_x
    sbc @last_x
@@ -789,6 +794,14 @@ __enemy_move:  ; X: enemy offset (0-3)
    ldx @offset
    sta enemies,x
    jmp @continue
+   nop   ; TODO figure out alignment
+   nop
+   nop
+   nop
+   nop
+   nop
+   nop
+   nop
 @jmptable:
 .word @move_right
 .word @move_left
