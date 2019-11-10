@@ -27,18 +27,7 @@ game_tick:        ; called after every VSYNC detected (60 Hz)
    jsr player_tick
    jsr enemy_tick
    ; TODO add other tick handlers
-
-   lda pellets
-   bne @end
-   jsr complete_level
 @end:
-   rts
-
-
-complete_level:
-   ; TODO remove remaining barriers
-   ; TODO announce
-   ; TODO add score
    rts
 
 

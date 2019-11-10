@@ -555,6 +555,22 @@ __enemy_move:  ; X: enemy offset (0-3)
 @NORTH_BLOCKED = $08
 @start:
    stx @offset
+   lda #<@move_right    ; copy jump table to zero page
+   sta ZP_PTR_1
+   lda #>@move_right
+   sta ZP_PTR_1+1
+   lda #<@move_left
+   sta ZP_PTR_1+2
+   lda #>@move_left
+   sta ZP_PTR_1+3
+   lda #<@move_down
+   sta ZP_PTR_1+4
+   lda #>@move_down
+   sta ZP_PTR_1+5
+   lda #<@move_up
+   sta ZP_PTR_1+6
+   lda #>@move_up
+   sta ZP_PTR_1+7
    lda enemies,x
    sta @enemy
    and #$03
@@ -668,7 +684,7 @@ __enemy_move:  ; X: enemy offset (0-3)
    asl
    tax
    lda @index
-   jmp (@jmptable,x)
+   jmp (ZP_PTR_1,x)
 @calc_dir:
    sec
    lda @target_x
@@ -794,19 +810,6 @@ __enemy_move:  ; X: enemy offset (0-3)
    ldx @offset
    sta enemies,x
    jmp @continue
-   nop   ; TODO figure out alignment
-   nop
-   nop
-   nop
-   nop
-   nop
-   nop
-   nop
-@jmptable:
-.word @move_right
-.word @move_left
-.word @move_down
-.word @move_up
 @move_right:
    ldx #TICK_MOVEMENT
    jsr move_sprite_right

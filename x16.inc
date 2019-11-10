@@ -12,6 +12,8 @@ JOY2					= $02BF
 ; Zero-Page userspace
 ZP_PTR_1 = $00
 ZP_PTR_2 = $02
+ZP_PTR_3 = $04
+ZP_PTR_4 = $06
 
 ; I/O Registers
 VERA_addr_low     = $9F20

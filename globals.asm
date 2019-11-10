@@ -22,9 +22,6 @@ ACTIVE_ENEMY_L = $0E400
 ACTIVE_ENEMY_H = $0E600
 VULN_ENEMY     = $0E680
 
-SCOREBOARD_X   = 10
-SCOREBOARD_Y   = 1
-
 TICK_MOVEMENT  = 1
 
 DIR_RIGHT   = 0
@@ -37,7 +34,7 @@ DIR_UP      = 3
 player:     .byte 0 ; 7-4 (TBD) | 3:2 - direction | 1 - movable | 0 - animated
 ;                                 0:R,1:L,2:D,3:U
 lives:      .byte 4
-level:      .byte 1
+level:      .byte 1     ; BCD
 score:      .dword 0    ; BCD
 pellets:    .byte 102
 keys:       .byte 0

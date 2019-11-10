@@ -11,6 +11,16 @@ PLAYER_INC = 1
 .include "loadvram.asm"
 .include "superimpose.asm"
 .include "globals.asm"
+.include "levels.asm"
+
+SCOREBOARD_X   = 10
+SCOREBOARD_Y   = 1
+
+LEVEL_X  = 10
+LEVEL_Y  = 0
+
+KEYS_X   = 6
+KEYS_Y   = 14
 
 ; player animation
 player_frames_h:  .byte 2,2,1,0,0,1,1,2
@@ -47,6 +57,22 @@ player_freeze:
 
 player_tick:
 @start:
+   lda #<@move_right    ; copy jump table to zero page
+   sta ZP_PTR_1
+   lda #>@move_right
+   sta ZP_PTR_1+1
+   lda #<@move_left
+   sta ZP_PTR_1+2
+   lda #>@move_left
+   sta ZP_PTR_1+3
+   lda #<@move_down
+   sta ZP_PTR_1+4
+   lda #>@move_down
+   sta ZP_PTR_1+5
+   lda #<@move_up
+   sta ZP_PTR_1+6
+   lda #>@move_up
+   sta ZP_PTR_1+7
    lda player
    bit #$02             ; check for movable
    bne @check_right
@@ -87,20 +113,7 @@ player_tick:
    lsr
    tax
    lda #PLAYER_idx
-   jmp (@jmptable,x)
-   nop ; TODO - figure out alignment
-   nop
-   nop
-   nop
-   nop
-   nop
-   nop
-   nop
-@jmptable:
-.word @move_right
-.word @move_left
-.word @move_down
-.word @move_up
+   jmp (ZP_PTR_1,x)
 @move_right:
    ldx #TICK_MOVEMENT
    jsr move_sprite_right
@@ -383,7 +396,18 @@ eat_key: ; Input:
    inc keys
    lda #200
    jsr add_score
-   ; TODO - update key count on display
+   lda #1
+   ldx #KEYS_X
+   ldy #KEYS_Y
+   jsr xy2vaddr
+   stz VERA_ctrl
+   ora #$10
+   sta VERA_addr_bank
+   stx VERA_addr_low
+   sty VERA_addr_high
+   lda keys
+   ora #$30
+   sta VERA_data
    rts
 
 add_score:  ; A: points to add
@@ -552,6 +576,53 @@ eat_enemy:  ; X: enemy sprite index
    inc score_mult
    rts
 
+clear_bars:
+   lda level
+   asl
+   tax
+   lda level_table,x
+   sta ZP_PTR_1
+   lda level_table+1,x
+   sta ZP_PTR_1+1
+   ldy #1
+   lda (ZP_PTR_1),y
+   tax               ; X = number of bars
+   iny
+   bra @loop
+@xpos: .byte 0
+@ypos: .byte 0
+@loop:
+   cpx #0
+   beq @return
+   lda (ZP_PTR_1),y
+   sta @xpos
+   iny
+   lda (ZP_PTR_1),y
+   sta @ypos
+   iny
+   dex
+   phx
+   phy
+   lda #1
+   ldx @xpos
+   ldy @ypos
+   jsr xy2vaddr
+   stz VERA_ctrl
+   ora #$10
+   sta VERA_addr_bank
+   stx VERA_addr_low
+   sty VERA_addr_high
+   lda #<BLANK
+   sta VERA_data
+   lda #>BLANK
+   sta VERA_data
+   ply
+   plx
+   bra @loop
+@return:
+   rts
+
+
 
 ; --------- Timer Handlers ---------
 
@@ -642,13 +713,47 @@ game_over:
    SUPERIMPOSE "game over", 5, 9
    ; TODO: prompt for continue/exit
    jmp timer_done
-   lda #1
 
 next_level:
-   inc level
    jsr enemy_clear
-
+   jsr player_stop
+   SET_TIMER 15, @level_up
    rts
+@level_up:
+   SUPERIMPOSE "level up!", 5, 9
+   SET_TIMER 30, @update_level
+   jmp timer_done
+@update_level:
+   jsr clear_bars
+   sed
+   clc
+   lda level
+   adc #1
+   sta level
+   cld
+   SUPERIMPOSE_RESTORE
+   lda #1
+   ldx #LEVEL_X
+   ldy #LEVEL_Y
+   jsr xy2vaddr
+   stz VERA_ctrl
+   ora #$20
+   sta VERA_addr_bank
+   stx VERA_addr_low
+   sty VERA_addr_high
+   lda level
+   lsr
+   lsr
+   lsr
+   lsr
+   ora #$30
+   sta VERA_data
+   lda level
+   and #$0F
+   ora #$30
+   sta VERA_data
+   jsr player_move
+   jmp timer_done
 
 
 .endif

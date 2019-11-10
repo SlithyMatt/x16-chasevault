@@ -28,12 +28,12 @@ DEBUG_INC = 1
    phx
    phy
    lda addr
-   .ifnblank x
+   .ifnblank xpos
       ldx #xpos
    .else
       ldx #0
    .endif
-   .ifnblank y
+   .ifnblank ypos
       ldy #ypos
    .else
       ldy #2
