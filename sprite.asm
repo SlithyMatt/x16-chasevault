@@ -554,5 +554,19 @@ sprite_disable:   ; A: sprite index
    stz VERA_data  ; disable
    rts
 
+sprite_set_po: ;  A: sprite index
+               ;  X: palette offset
+   jsr __sprattr
+   lda VERA_data ; ignore
+   lda VERA_data ; ignore
+   lda VERA_data ; ignore
+   lda VERA_data ; ignore
+   lda VERA_data ; ignore
+   lda VERA_data ; ignore
+   lda VERA_data ; ignore
+   txa
+   ora #$50
+   sta VERA_data
+   rts
 
 .endif

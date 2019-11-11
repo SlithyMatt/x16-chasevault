@@ -1,6 +1,11 @@
 .ifndef LEVELS_INC
 LEVELS_INC = 1
 
+LEVEL_X  = 10
+LEVEL_Y  = 0
+
+.include "globals.asm"
+
 level_table:   ; BCD-indexed table of level data structures
    .word 0
    .word level1, level2, level3, level4, level5, level6, level7, level8, level9
@@ -19,46 +24,64 @@ level_table:   ; BCD-indexed table of level data structures
 
 level1:
    .byte 102   ; number of pellets
+   .byte 9     ; east neighbor
+   .byte 2     ; south neighbor
    .byte 2     ; number of bars
    .byte 9,11, 18,8  ; x,y coordinates of each bar tile
 
 level2:
    .byte 102   ; number of pellets
+   .byte 10
+   .byte 3
    .byte 2     ; number of bars
    .byte 9,11, 18,8  ; x,y coordinates of each bar tile
 
 level3:
    .byte 102   ; number of pellets
+   .byte 11
+   .byte 4
    .byte 2     ; number of bars
    .byte 9,11, 18,8  ; x,y coordinates of each bar tile
 
 level4:
    .byte 102   ; number of pellets
+   .byte 12
+   .byte 5
    .byte 2     ; number of bars
    .byte 9,11, 18,8  ; x,y coordinates of each bar tile
 
 level5:
    .byte 102   ; number of pellets
+   .byte 13
+   .byte 6
    .byte 2     ; number of bars
    .byte 9,11, 18,8  ; x,y coordinates of each bar tile
 
 level6:
    .byte 102   ; number of pellets
+   .byte 14
+   .byte 7
    .byte 2     ; number of bars
    .byte 9,11, 18,8  ; x,y coordinates of each bar tile
 
 level7:
    .byte 102   ; number of pellets
+   .byte 15
+   .byte 8
    .byte 2     ; number of bars
    .byte 9,11, 18,8  ; x,y coordinates of each bar tile
 
 level8:
    .byte 102   ; number of pellets
+   .byte 16
+   .byte 0
    .byte 2     ; number of bars
    .byte 9,11, 18,8  ; x,y coordinates of each bar tile
 
 level9:
    .byte 102   ; number of pellets
+   .byte 17
+   .byte 10
    .byte 2     ; number of bars
    .byte 9,11, 18,8  ; x,y coordinates of each bar tile
 

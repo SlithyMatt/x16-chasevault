@@ -16,9 +16,6 @@ PLAYER_INC = 1
 SCOREBOARD_X   = 10
 SCOREBOARD_Y   = 1
 
-LEVEL_X  = 10
-LEVEL_Y  = 0
-
 KEYS_X   = 6
 KEYS_Y   = 14
 
@@ -720,38 +717,11 @@ next_level:
    SET_TIMER 15, @level_up
    rts
 @level_up:
-   SUPERIMPOSE "level up!", 5, 9
+   SUPERIMPOSE "complete!", 5, 9
    SET_TIMER 30, @update_level
    jmp timer_done
 @update_level:
    jsr clear_bars
-   sed
-   clc
-   lda level
-   adc #1
-   sta level
-   cld
-   SUPERIMPOSE_RESTORE
-   lda #1
-   ldx #LEVEL_X
-   ldy #LEVEL_Y
-   jsr xy2vaddr
-   stz VERA_ctrl
-   ora #$20
-   sta VERA_addr_bank
-   stx VERA_addr_low
-   sty VERA_addr_high
-   lda level
-   lsr
-   lsr
-   lsr
-   lsr
-   ora #$30
-   sta VERA_data
-   lda level
-   and #$0F
-   ora #$30
-   sta VERA_data
    jsr player_move
    jmp timer_done
 
