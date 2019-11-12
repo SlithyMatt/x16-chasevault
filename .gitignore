@@ -1,0 +1,8 @@
+*.bin
+*.BIN
+*.prg
+*.PRG
+*.list
+*.o
+*.exe
+font.txt
