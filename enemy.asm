@@ -606,6 +606,8 @@ __enemy_move:  ; X: enemy offset (0-3)
    inx
    lda #1
    jsr get_tile
+   cpx #HOME_FENCE
+   beq @east_blocked
    cpx #BLANK
    beq @check_west
    cpx #PELLET
@@ -625,6 +627,8 @@ __enemy_move:  ; X: enemy offset (0-3)
    ldy @last_y
    lda #1
    jsr get_tile
+   cpx #HOME_FENCE
+   beq @west_blocked
    cpx #BLANK
    beq @check_south
    cpx #PELLET

@@ -173,13 +173,17 @@ player_tick:
    beq @check_east
    cpx #HLOCK
    bmi @adjust_down
+   beq @hlock_north
    cpx #HOME_FENCE
    beq @adjust_down
    cpx #PELLET
    bpl @check_east
-   lda keys
+   bra @adjust_down
+@hlock_north:
+   ldx @xpos
+   ldy @ypos
+   jsr check_hlock
    beq @adjust_down
-   ; TODO: handle key unlock
    bra @check_east
 @adjust_down:
    lda #PLAYER_idx
@@ -198,15 +202,19 @@ player_tick:
    jsr get_tile
    cpx #0
    beq @check_south
-   cpx #HLOCK
+   cpx #VLOCK
    bmi @adjust_left
+   beq @vlock_east
    cpx #HOME_FENCE
    beq @adjust_left
    cpx #PELLET
    bpl @check_south
-   lda keys
+   bra @adjust_left
+@vlock_east:
+   ldx @xpos
+   ldy @ypos
+   jsr check_vlock
    beq @adjust_left
-   ; TODO: handle key unlock
    bra @check_south
 @adjust_left:
    lda #PLAYER_idx
@@ -225,15 +233,19 @@ player_tick:
    jsr get_tile
    cpx #0
    beq @check_west
-   cpx #HLOCK
+   cpx #VLOCK
    bmi @adjust_up
+   beq @vlock_south
    cpx #HOME_FENCE
    beq @adjust_up
    cpx #PELLET
    bpl @check_west
-   lda keys
+   bra @adjust_up
+@vlock_south:
+   ldx @xpos
+   ldy @ypos
+   jsr check_vlock
    beq @adjust_up
-   ; TODO: handle key unlock
    bra @check_west
 @adjust_up:
    lda #PLAYER_idx
@@ -252,18 +264,21 @@ player_tick:
    jsr get_tile
    cpx #0
    beq @check_collision
-   cpx #HLOCK
+   cpx #VLOCK
    bmi @adjust_right
+   beq @vlock_west
    cpx #HOME_FENCE
    bne @check_west_pellet
    jmp @adjust_right
+@vlock_west:
+   ldx @xpos
+   ldy @ypos
+   jsr check_vlock
+   beq @adjust_right
+   jmp @check_collision
 @check_west_pellet:
    cpx #PELLET
    bpl @check_collision
-   lda keys
-   beq @adjust_right
-   ; TODO: handle key unlock
-   bra @check_collision
 @adjust_right:
    lda #PLAYER_idx
    jmp @move_right
@@ -405,6 +420,24 @@ eat_key: ; Input:
    lda keys
    ora #$30
    sta VERA_data
+   rts
+
+check_hlock:   ; Input:
+               ;  X: tile x
+               ;  Y: tile y
+               ; Output:
+               ;  Z: cleared if unlocked, set if remaining
+   ; TODO: check key count, remove lock if key available
+   lda #0   ; TODO: replace with check
+   rts
+
+check_vlock:   ; Input:
+               ;  X: tile x
+               ;  Y: tile y
+               ; Output:
+               ;  Z: cleared if unlocked, set if remaining
+   ; TODO: check key count, remove lock if key available
+   lda #0   ; TODO: replace with check
    rts
 
 add_score:  ; A: points to add
@@ -581,7 +614,7 @@ clear_bars:
    sta ZP_PTR_1
    lda level_table+1,x
    sta ZP_PTR_1+1
-   ldy #1
+   ldy #5
    lda (ZP_PTR_1),y
    tax               ; X = number of bars
    iny
@@ -721,6 +754,7 @@ next_level:
    SET_TIMER 30, @update_level
    jmp timer_done
 @update_level:
+   SUPERIMPOSE_RESTORE
    jsr clear_bars
    jsr player_move
    jmp timer_done

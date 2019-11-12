@@ -7,16 +7,12 @@
 .segment "CODE"
    jmp start
 
-VRAM_TILEMAP   = $04000 ; 128x128
-VRAM_SPRITES   = $0E000 ; 64 4bpp 16x16 frames
-VRAM_TILES     = $10000 ; 424 4bpp 16x16 (may also be used as sprite frames)
-VRAM_BITMAP    = $16A00 ; 4bpp 320x240
-
 .include "filenames.asm"
 .include "loadbank.asm"
 .include "loadvram.asm"
 .include "player.asm"
 .include "game.asm"
+.include "globals.asm"
 
 start:
    ; move text to layer 0 (TODO: replace with bitmap)
