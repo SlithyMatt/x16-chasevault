@@ -183,6 +183,7 @@ player_tick:
 @hlock_north:
    ldx @xpos
    ldy @ypos
+   dey
    jsr check_hlock
    beq @adjust_down
    bra @check_east
@@ -213,6 +214,7 @@ player_tick:
    bra @adjust_left
 @vlock_east:
    ldx @xpos
+   inx
    ldy @ypos
    jsr check_vlock
    beq @adjust_left
@@ -234,18 +236,19 @@ player_tick:
    jsr get_tile
    cpx #0
    beq @check_west
-   cpx #VLOCK
+   cpx #HLOCK
    bmi @adjust_up
-   beq @vlock_south
+   beq @hlock_south
    cpx #HOME_FENCE
    beq @adjust_up
    cpx #PELLET
    bpl @check_west
    bra @adjust_up
-@vlock_south:
+@hlock_south:
    ldx @xpos
    ldy @ypos
-   jsr check_vlock
+   iny
+   jsr check_hlock
    beq @adjust_up
    bra @check_west
 @adjust_up:
@@ -273,6 +276,7 @@ player_tick:
    jmp @adjust_right
 @vlock_west:
    ldx @xpos
+   dex
    ldy @ypos
    jsr check_vlock
    beq @adjust_right
@@ -400,11 +404,9 @@ eat_key: ; Input:
    lda #1
    jsr xy2vaddr
    stz VERA_ctrl
-   ora #$10
    sta VERA_addr_bank
    stx VERA_addr_low
    sty VERA_addr_high
-   stz VERA_data
    stz VERA_data
    inc keys
    lda #200
@@ -434,6 +436,13 @@ check_hlock:   ; Input:
 @start:
    stx @lock_x
    sty @lock_y
+   lda #1
+   jsr xy2vaddr
+   stz VERA_ctrl
+   sta VERA_addr_bank
+   stx VERA_addr_low
+   sty VERA_addr_high
+   stz VERA_data
    lda keys
    cmp #0
    beq @return
@@ -462,6 +471,13 @@ check_vlock:   ; Input:
 @start:
    stx @lock_x
    sty @lock_y
+   lda #1
+   jsr xy2vaddr
+   stz VERA_ctrl
+   sta VERA_addr_bank
+   stx VERA_addr_low
+   sty VERA_addr_high
+   stz VERA_data
    lda keys
    cmp #0
    beq @return

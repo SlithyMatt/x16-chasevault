@@ -95,9 +95,12 @@ make_wall_stub:   ; Input:
                   ;  A: 0=right, 1=left, 2=down, 3=up
                   ;  X: tile x
                   ;  Y: tile y
-   clc
-   ror
-   ror
+   asl
+   asl
+   asl
+   asl
+   asl
+   asl
    sta __wallstub_dir
    jsr xy2vaddr
    phx
