@@ -12,6 +12,7 @@ PLAYER_INC = 1
 .include "superimpose.asm"
 .include "globals.asm"
 .include "levels.asm"
+.include "wallstub.asm"
 
 SCOREBOARD_X   = 10
 SCOREBOARD_Y   = 1
@@ -413,7 +414,6 @@ eat_key: ; Input:
    ldy #KEYS_Y
    jsr xy2vaddr
    stz VERA_ctrl
-   ora #$10
    sta VERA_addr_bank
    stx VERA_addr_low
    sty VERA_addr_high
@@ -427,8 +427,28 @@ check_hlock:   ; Input:
                ;  Y: tile y
                ; Output:
                ;  Z: cleared if unlocked, set if remaining
-   ; TODO: check key count, remove lock if key available
-   lda #0   ; TODO: replace with check
+   bra @start
+@lock_x: .byte 0
+@lock_y: .byte 0
+@tile: .word 0
+@start:
+   stx @lock_x
+   sty @lock_y
+   lda keys
+   cmp #0
+   beq @return
+   jsr use_key
+   ldx @lock_x
+   dex
+   ldy @lock_y
+   lda #0
+   jsr make_wall_stub
+   inx
+   inx
+   lda #1
+   jsr make_wall_stub
+   lda #1
+@return:
    rts
 
 check_vlock:   ; Input:
@@ -436,8 +456,42 @@ check_vlock:   ; Input:
                ;  Y: tile y
                ; Output:
                ;  Z: cleared if unlocked, set if remaining
-   ; TODO: check key count, remove lock if key available
-   lda #0   ; TODO: replace with check
+   bra @start
+@lock_x: .byte 0
+@lock_y: .byte 0
+@start:
+   stx @lock_x
+   sty @lock_y
+   lda keys
+   cmp #0
+   beq @return
+   jsr use_key
+   ldx @lock_x
+   ldy @lock_y
+   dey
+   lda #2
+   jsr make_wall_stub
+   iny
+   iny
+   lda #3
+   jsr make_wall_stub
+   lda #1
+@return:
+   rts
+
+use_key:
+   dec keys
+   lda #1
+   ldx #KEYS_X
+   ldy #KEYS_Y
+   jsr xy2vaddr
+   stz VERA_ctrl
+   sta VERA_addr_bank
+   stx VERA_addr_low
+   sty VERA_addr_high
+   lda keys
+   ora #$30
+   sta VERA_data
    rts
 
 add_score:  ; A: points to add
