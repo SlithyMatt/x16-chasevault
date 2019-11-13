@@ -95,6 +95,11 @@ make_wall_stub:   ; Input:
                   ;  A: 0=right, 1=left, 2=down, 3=up
                   ;  X: tile x
                   ;  Y: tile y
+   bra @start
+@bank: .byte 0
+@high: .byte 0
+@low:  .byte 0
+@start:
    asl
    asl
    asl
@@ -103,11 +108,13 @@ make_wall_stub:   ; Input:
    asl
    sta __wallstub_dir
    jsr xy2vaddr
-   phx
    stz VERA_ctrl
    ora #$10
+   sta @bank
    sta VERA_addr_bank
+   stx @low
    stx VERA_addr_low
+   sty @high
    sty VERA_addr_high
    lda VERA_data
    sta __wallstub_tile
@@ -128,8 +135,11 @@ make_wall_stub:   ; Input:
    lda __wallstub_table+1,x
    ora __wallstub_po
    sta __wallstub_tile+1
-   plx
+   lda @bank
+   sta VERA_addr_bank
+   ldx @low
    stx VERA_addr_low
+   ldy @high
    sty VERA_addr_high
    lda __wallstub_tile
    sta VERA_data
