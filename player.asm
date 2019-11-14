@@ -21,9 +21,9 @@ LIVES_Y = 14
 KEYS_X   = 6
 KEYS_Y   = 14
 
-OFF_WEST_X = $FF
+OFF_WEST_X = 0
 OFF_EAST_X = 20
-OFF_NORTH_Y = $FF
+OFF_NORTH_Y = 0
 OFF_SOUTH_Y = 15
 
 ; player animation
@@ -144,6 +144,7 @@ player_tick:
    sta @overlap
    stx @xpos
    sty @ypos
+   ;CORNER_DEBUG
    jsr check_off
    beq @check_pellet
    jmp @return ; off screen, go to next level

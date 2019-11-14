@@ -550,7 +550,6 @@ level_east:
 
 level_west:
    LOAD_LEVEL_PARAM WEST_NEIGHBOR
-   lda (ZP_PTR_1),y
    sta level
    jsr level_transition
    lda #EAST_ENTRANCE_X
@@ -561,7 +560,6 @@ level_west:
 
 level_south:
    LOAD_LEVEL_PARAM SOUTH_NEIGHBOR
-   lda (ZP_PTR_1),y
    sta level
    jsr level_transition
    lda #NORTH_ENTRANCE_X
@@ -572,7 +570,6 @@ level_south:
 
 level_north:
    LOAD_LEVEL_PARAM NORTH_NEIGHBOR
-   lda (ZP_PTR_1),y
    sta level
    jsr level_transition
    lda #SOUTH_ENTRANCE_X
