@@ -202,7 +202,7 @@ player_tick:
    inx
    ldy @ypos
    jsr get_tile
-   cpx #0
+   cpx #BLANK
    beq @check_south
    cpx #VLOCK
    bmi @adjust_left
@@ -234,7 +234,7 @@ player_tick:
    ldy @ypos
    iny
    jsr get_tile
-   cpx #0
+   cpx #BLANK
    beq @check_west
    cpx #HLOCK
    bmi @adjust_up
@@ -266,7 +266,7 @@ player_tick:
    dex
    ldy @ypos
    jsr get_tile
-   cpx #0
+   cpx #BLANK
    beq @check_collision
    cpx #VLOCK
    bmi @adjust_right
@@ -434,6 +434,9 @@ check_hlock:   ; Input:
 @lock_y: .byte 0
 @tile: .word 0
 @start:
+   lda keys
+   cmp #0
+   beq @return
    stx @lock_x
    sty @lock_y
    lda #1
@@ -443,17 +446,15 @@ check_hlock:   ; Input:
    stx VERA_addr_low
    sty VERA_addr_high
    stz VERA_data
-   lda keys
-   cmp #0
-   beq @return
    jsr use_key
    ldx @lock_x
    dex
    ldy @lock_y
    lda #0
    jsr make_wall_stub
+   ldx @lock_x
    inx
-   inx
+   ldy @lock_y
    lda #1
    jsr make_wall_stub
    lda #1
@@ -469,6 +470,9 @@ check_vlock:   ; Input:
 @lock_x: .byte 0
 @lock_y: .byte 0
 @start:
+   lda keys
+   cmp #0
+   beq @return
    stx @lock_x
    sty @lock_y
    lda #1
@@ -478,16 +482,14 @@ check_vlock:   ; Input:
    stx VERA_addr_low
    sty VERA_addr_high
    stz VERA_data
-   lda keys
-   cmp #0
-   beq @return
    jsr use_key
    ldx @lock_x
    ldy @lock_y
    dey
    lda #2
    jsr make_wall_stub
-   iny
+   ldx @lock_x
+   ldy @lock_y
    iny
    lda #3
    jsr make_wall_stub
