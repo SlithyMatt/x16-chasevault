@@ -14,9 +14,10 @@ PLAYER_INC = 1
 .include "levels.asm"
 .include "wallstub.asm"
 
-SCOREBOARD_X   = 10
+SCOREBOARD_X   = 11
 SCOREBOARD_Y   = 1
-
+LIVES_X = 2
+LIVES_Y = 14
 KEYS_X   = 6
 KEYS_Y   = 14
 
@@ -358,6 +359,7 @@ player_tick:
    jsr sprite_setpos
    jsr player_move
    jsr enemy_reset
+   jsr refresh_status
 @return:
    rts
 
@@ -737,6 +739,27 @@ check_off:  ; Input:
 @return:
    rts
 
+refresh_status:
+   lda #0
+   jsr add_score
+   lda #1
+   ldx #LIVES_X
+   ldy #LIVES_Y
+   jsr xy2vaddr
+   stz VERA_ctrl
+   ora #$40
+   sta VERA_addr_bank
+   stx VERA_addr_low
+   sty VERA_addr_high
+   lda lives
+   ora #$30
+   sta VERA_data
+   lda keys
+   ora #$30
+   sta VERA_data
+   rts
+
+
 ; --------- Timer Handlers ---------
 
 player_die:
@@ -782,18 +805,7 @@ regenerate:
    ldx #<(VRAM_sprattr>>4)
    ldy #<spriteattr_fn
    jsr loadvram            ; reset sprites
-   lda #1
-   ldx #2
-   ldy #14
-   jsr xy2vaddr
-   stz VERA_ctrl
-   sta VERA_addr_bank
-   stx VERA_addr_low
-   sty VERA_addr_high
-   lda lives
-   clc
-   adc #$30
-   sta VERA_data
+   jsr refresh_status
    SET_TIMER 60, readygo
    jsr enemy_reset
    lda #105 ; default scatter time = 7 seconds TODO: change with level

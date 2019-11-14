@@ -68,7 +68,7 @@ level2:
    .word 0
    .word 240
    .byte 3     ; number of bars
-   .byte 9,11, 18,8, 9,2
+   .byte 9,12, 18,8, 9,2
 
 level3:
    .byte 102   ; number of pellets
@@ -582,7 +582,10 @@ level_north:
    rts
 
 level_transition:
-   LOAD_LEVEL_PARAM NEW_LEVEL
+   LOAD_LEVEL_PARAM NUM_PELLETS
+   sta pellets
+   iny
+   lda (ZP_PTR_1),y ; new level?
    beq @req_move
    lda #0
    sta (ZP_PTR_1),y
