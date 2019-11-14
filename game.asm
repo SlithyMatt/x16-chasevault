@@ -7,6 +7,7 @@ GAME_INC = 1
 .include "joystick.asm"
 .include "superimpose.asm"
 .include "debug.asm"
+.include "levels.asm"
 
 init_game:
    lda #0
@@ -26,6 +27,7 @@ game_tick:        ; called after every VSYNC detected (60 Hz)
    jsr joystick_tick
    jsr player_tick
    jsr enemy_tick
+   jsr level_tick
    ; TODO add other tick handlers
 @end:
    rts

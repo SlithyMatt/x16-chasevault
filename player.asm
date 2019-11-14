@@ -20,6 +20,11 @@ SCOREBOARD_Y   = 1
 KEYS_X   = 6
 KEYS_Y   = 14
 
+OFF_WEST_X = $FF
+OFF_EAST_X = 20
+OFF_NORTH_Y = $FF
+OFF_SOUTH_Y = 15
+
 ; player animation
 player_frames_h:  .byte 2,2,1,0,0,1,1,2
 player_frames_v:  .byte 4,4,3,0,0,3,3,4
@@ -138,7 +143,10 @@ player_tick:
    sta @overlap
    stx @xpos
    sty @ypos
-   ;CORNER_DEBUG
+   jsr check_off
+   beq @check_pellet
+   jmp @return ; off screen, go to next level
+@check_pellet:
    lda #1
    jsr get_tile
    cpx #PELLET
@@ -306,7 +314,7 @@ player_tick:
 @check_animate:
    lda player
    and #$01
-   beq @done_animate
+   beq @check_regenerate
    lda frame_num
    and #$1C
    lsr
@@ -333,8 +341,24 @@ player_tick:
    pla
    ldx #PLAYER_idx
    jsr sprite_frame
-@done_animate:
-   ; TODO: other maintenance
+@check_regenerate:
+   lda regenerate_req
+   beq @check_move_req
+   stz regenerate_req
+   jsr regenerate
+   bra @return
+@check_move_req:
+   lda move_req
+   beq @return
+   stz move_req
+   lda #PLAYER_idx
+   ora #$80
+   ldx move_x
+   ldy move_y
+   jsr sprite_setpos
+   jsr player_move
+   jsr enemy_reset
+@return:
    rts
 
 eat_pellet: ; Input:
@@ -450,12 +474,12 @@ check_hlock:   ; Input:
    ldx @lock_x
    dex
    ldy @lock_y
-   lda #0
+   lda #DIR_RIGHT
    jsr make_wall_stub
    ldx @lock_x
    inx
    ldy @lock_y
-   lda #1
+   lda #DIR_LEFT
    jsr make_wall_stub
    lda #1
 @return:
@@ -486,12 +510,12 @@ check_vlock:   ; Input:
    ldx @lock_x
    ldy @lock_y
    dey
-   lda #2
+   lda #DIR_DOWN
    jsr make_wall_stub
    ldx @lock_x
    ldy @lock_y
    iny
-   lda #3
+   lda #DIR_UP
    jsr make_wall_stub
    lda #1
 @return:
@@ -678,53 +702,40 @@ eat_enemy:  ; X: enemy sprite index
    inc score_mult
    rts
 
-clear_bars:
-   lda level
-   asl
-   tax
-   lda level_table,x
-   sta ZP_PTR_1
-   lda level_table+1,x
-   sta ZP_PTR_1+1
-   ldy #5
-   lda (ZP_PTR_1),y
-   tax               ; X = number of bars
-   iny
-   bra @loop
-@xpos: .byte 0
-@ypos: .byte 0
-@loop:
-   cpx #0
-   beq @return
-   lda (ZP_PTR_1),y
-   sta @xpos
-   iny
-   lda (ZP_PTR_1),y
-   sta @ypos
-   iny
-   dex
-   phx
-   phy
+check_off:  ; Input:
+            ;  X: sprite tile X
+            ;  Y: sprite tile Y
+            ; Output:
+            ;  Z: 0=still on screen; 1=off screen
+   cpx #OFF_EAST_X
+   bne @check_west
+   jsr level_east
+   bra @disable
+@check_west:
+   cpx #OFF_WEST_X
+   bne @check_south
+   jsr level_west
+   bra @disable
+@check_south:
+   cpy #OFF_SOUTH_Y
+   bne @check_north
+   jsr level_south
+   bra @disable
+@check_north:
+   cpy #OFF_NORTH_Y
+   bne @on_screen
+   jsr level_north
+@disable:
+   jsr player_stop
+   lda #PLAYER_idx
+   jsr sprite_disable
+   jsr enemy_clear
    lda #1
-   ldx @xpos
-   ldy @ypos
-   jsr xy2vaddr
-   stz VERA_ctrl
-   ora #$10
-   sta VERA_addr_bank
-   stx VERA_addr_low
-   sty VERA_addr_high
-   lda #<BLANK
-   sta VERA_data
-   lda #>BLANK
-   sta VERA_data
-   ply
-   plx
-   bra @loop
+   bra @return
+@on_screen:
+   lda #0
 @return:
    rts
-
-
 
 ; --------- Timer Handlers ---------
 

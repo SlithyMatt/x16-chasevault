@@ -569,4 +569,10 @@ sprite_set_po: ;  A: sprite index
    sta VERA_data
    rts
 
+sprite_setpos: ; A: Bit 7: tile layer, Bits 6-0: sprite index
+               ; X: tile x
+               ; Y: tile y
+   ; TODO: implement
+   rts
+
 .endif

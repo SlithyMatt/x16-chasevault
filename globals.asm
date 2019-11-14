@@ -44,4 +44,9 @@ score_mult: .byte 1
 release_e3: .byte 71 ; pellets remaining to release enemy 3
 release_e4: .byte 33 ; pellets remaining to release enemy 4
 
+regenerate_req:   .byte 0
+move_req:         .byte 0
+move_x:           .byte 0
+move_y:           .byte 0
+
 .endif
