@@ -359,7 +359,6 @@ player_tick:
    ldy move_y
    jsr sprite_setpos
    jsr player_move
-   jsr enemy_reset
    jsr refresh_status
 @return:
    rts

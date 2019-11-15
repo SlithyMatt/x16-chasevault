@@ -547,10 +547,10 @@ sprite_disable:   ; A: sprite index
    sta VERA_data  ; set to black tile
    lda #>(VRAM_TILES >> 5)
    sta VERA_data
-   stz VERA_data  ; reset to 0,0
-   stz VERA_data
-   stz VERA_data
-   stz VERA_data
+   lda VERA_data  ; leave position alone
+   lda VERA_data
+   lda VERA_data
+   lda VERA_data
    stz VERA_data  ; disable
    rts
 
@@ -572,7 +572,60 @@ sprite_set_po: ;  A: sprite index
 sprite_setpos: ; A: Bit 7: tile layer, Bits 6-0: sprite index
                ; X: tile x
                ; Y: tile y
-   ; TODO: implement
+   bra @start
+@xpos: .word 0
+@ypos: .word 0
+@start:
+   pha
+   stx @xpos
+   asl @xpos
+   rol @xpos+1
+   asl @xpos
+   rol @xpos+1
+   asl @xpos
+   rol @xpos+1
+   sty @ypos
+   asl @ypos
+   rol @ypos+1
+   asl @ypos
+   rol @ypos+1
+   asl @ypos
+   rol @ypos+1
+   stz VERA_ctrl
+   and #$80
+   bne @layer1
+   VERA_SET_ADDR VRAM_layer0, 1
+   bra @get_regs
+@layer1:
+   VERA_SET_ADDR VRAM_layer1, 1
+@get_regs:
+   lda VERA_data ; ignore
+   lda VERA_data
+   pha
+   bit #$20
+   beq @check_tilew
+   asl @ypos
+   rol @ypos+1
+@check_tilew:
+   pla
+   bit #$10
+   beq @move_sprite
+   asl @xpos
+   rol @xpos+1
+@move_sprite:
+   pla
+   and #$7F
+   jsr __sprattr
+   lda VERA_data ; ignore
+   lda VERA_data
+   lda @xpos
+   sta VERA_data
+   lda @xpos+1
+   sta VERA_data
+   lda @ypos
+   sta VERA_data
+   lda @ypos+1
+   sta VERA_data
    rts
 
 .endif

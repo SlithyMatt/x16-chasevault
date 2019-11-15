@@ -9,12 +9,12 @@ LEVEL_X  = 10
 LEVEL_Y  = 0
 
 NORTH_ENTRANCE_X = 9
-NORTH_ENTRANCE_Y = 0
+NORTH_ENTRANCE_Y = 1
 EAST_ENTRANCE_X = 19
 EAST_ENTRANCE_Y = 8
 SOUTH_ENTRANCE_X = 9
 SOUTH_ENTRANCE_Y = 14
-WEST_ENTRANCE_X = 0
+WEST_ENTRANCE_X = 1
 WEST_ENTRANCE_Y = 8
 
 HSCROLL_STEP = 5
@@ -30,19 +30,16 @@ LEVEL_HSCROLL = 6
 LEVEL_VSCROLL = 8
 NUM_BARS = 10
 
-level_table:   ; BCD-indexed table of level data structures
+level_table:   ; table of level data structures
    .word 0
-   .word level1, level2, level3, level4, level5, level6, level7, level8, level9
-   .word $a,$b,$c,$d,$e,$f
+   .word level1,  level2,  level3,  level4
+   .word level5,  level6,  level7,  level8,  level9
    .word level10, level11, level12, level13, level14
    .word level15, level16, level17, level18, level19
-   .word $1a,$1b,$1c,$1d,$1e,$1f
    .word level20, level21, level22, level23, level24
    .word level25, level26, level27, level28, level29
-   .word $2a,$2b,$2c,$2d,$2e,$2f
    .word level30, level31, level32, level33, level34
    .word level35, level36, level37, level38, level39
-   .word $3a,$3b,$3c,$3d,$3e,$3f
    .word level40, level41, level42, level43, level44
    .word level45, level46, level47, level48, level49
 
@@ -429,7 +426,7 @@ level_tick:
    bra @scroll_right
 @check_h_eq:
    lda @level_hscroll
-   bne @scroll_left
+   bne @scroll_right
    sec
    lda @level_vscroll
    sbc @vscroll
