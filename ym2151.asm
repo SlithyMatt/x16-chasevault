@@ -3,8 +3,8 @@ YM2151_INC = 1
 
 .include "x16.inc"
 
-YM_addr_bank   = ^VRAM_audio
-YM_addr_high   = >VRAM_audio
+YM_reg         = $9FE0
+YM_data        = $9FE1
 
 YM_TEST        = $01
 YM_LFO_RESET   = $02
