@@ -27,9 +27,10 @@ OFF_NORTH_Y = 0
 OFF_SOUTH_Y = 15
 
 ; player animation
-player_frames_h:  .byte 2,2,1,0,0,1,1,2
-player_frames_v:  .byte 4,4,3,0,0,3,3,4
-player_frames_d:  .byte 0,0,3,3,3,4,4,4,5,5,5,6,6,7,7,17
+player_frames_h:  .byte 1,2,1,0,3,4,3,0
+player_frames_v:  .byte  6, 7, 6, 5, 6, 7, 6, 5
+player_frames_vf: .byte $0,$0,$0,$0,$1,$1,$1,$0
+player_frames_d:  .byte 0,0,3,3,4,4,8,8,9,9,10,10,10,10,17,17
 player_index_d:   .byte 0
 
 ; --------- Subroutines ---------
@@ -334,10 +335,17 @@ player_tick:
    ldy #0
    lda player
    and #$0C
-   cmp #$0C
+   cmp #$00
    beq @loadframe
    lsr
    lsr
+   bit #$02
+   beq @flip_left
+   and #$01
+   asl
+   eor #$02
+   ora player_frames_vf,x
+@flip_left:
    tay
 @loadframe:
    pla
