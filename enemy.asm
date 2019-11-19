@@ -51,10 +51,10 @@ ENEMY_MAX_Y  = 12
 target_x:   .byte ENEMY1_TGT_X, ENEMY2_TGT_X, ENEMY3_TGT_X, ENEMY4_TGT_X
 target_y:   .byte ENEMY1_TGT_Y, ENEMY2_TGT_Y, ENEMY3_TGT_Y, ENEMY4_TGT_Y
 
-body_frames:   .byte  9, 11, 10, 12
-vuln_frame:    .byte 13
-eye_frames:    .byte 14, 14, 15, 15
-eye_flips:     .byte $0, $1, $2, $0
+body_frames:   .byte 11, 11, 12, 12
+vuln_frames:   .byte 13, 13, 14, 14
+eye_frames:    .byte 15, 15, 16, 16
+enemy_flips:   .byte $0, $1, $0, $2
 
 reverse_dir:   .byte $1, $0, $3, $2
 
@@ -228,9 +228,12 @@ enemy_tick:
    bit #$08
    bne @normal    ; flash to normal frame every 8 ticks for last 1.5 seconds
 @vulnerable:
-   lda vuln_frame
+   lda @enemy_temp
+   and #$03
+   tax
+   lda vuln_frames,x
+   ldy enemy_flips,x
    ldx @sprite_idx
-   ldy #0
    jsr sprite_frame
    jmp @end_loop
 @check_eyes:
@@ -240,7 +243,7 @@ enemy_tick:
    and #$03
    tax
    lda eye_frames,x
-   ldy eye_flips,x
+   ldy enemy_flips,x
    ldx @sprite_idx
    jsr sprite_frame
    jmp @end_loop
@@ -249,8 +252,8 @@ enemy_tick:
    and #$03
    tax
    lda body_frames,x
+   ldy enemy_flips,x
    ldx @sprite_idx
-   ldy #0
    jsr sprite_frame
 @end_loop:
    plx
