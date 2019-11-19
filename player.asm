@@ -30,7 +30,7 @@ OFF_SOUTH_Y = 15
 player_frames_h:  .byte 1,2,1,0,3,4,3,0
 player_frames_v:  .byte  6, 7, 6, 5, 6, 7, 6, 5
 player_frames_vf: .byte $0,$0,$0,$0,$1,$1,$1,$0
-player_frames_d:  .byte 0,0,3,3,4,4,8,8,9,9,10,10,10,10,17,17
+player_frames_d:  .byte 0,0,3,3,4,4,8,8,9,9,10,10,10,10,20,20
 player_index_d:   .byte 0
 player_start_frame:  .byte  0, 0, 5, 5
 player_start_flip:   .byte $0,$1,$2,$0
