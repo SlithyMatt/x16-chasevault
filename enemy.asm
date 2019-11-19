@@ -31,6 +31,12 @@ enemy3:  .byte ENEMY3_INIT
 enemy4:  .byte ENEMY4_INIT
 end_enemies:
 
+ENEMY_SPRITE_IDX  = $E0
+ENEMY_MOVING      = $10
+ENEMY_VULNERABLE  = $08
+ENEMY_EYES_ONLY   = $04
+ENEMY_DIRECTION   = $03
+
 ENEMY1_TGT_X = 18
 ENEMY2_TGT_X = 1
 ENEMY3_TGT_X = 19
@@ -60,9 +66,9 @@ reverse_dir:   .byte $1, $0, $3, $2
 
 ticks_vuln_rem:   .word 0
 chase:            .byte 0     ; 0=scatter mode, 1=chase mode
-ticks_mode_rem:   .word 240   ; ticks remaining until switch between chase and scatter
-scatter_time:     .word 240
-chase_time:       .word 420
+ticks_mode_rem:   .word 300   ; ticks remaining until switch between chase and scatter
+scatter_time:     .word 300
+chase_time:       .word 900
 
 enemy_clear:
    lda #1
@@ -97,15 +103,19 @@ enemy_reset:
    sta enemy3
    lda #ENEMY4_INIT
    sta enemy4
+   lda #1
    jsr __enemy_scatter
    rts
 
-__enemy_scatter:
+__enemy_scatter:  ; A: 1=reset mode timer, 0=continue mode
+   cmp #0
+   beq @update_targets
    stz chase
    lda scatter_time
    sta ticks_mode_rem
    lda scatter_time+1
    sta ticks_mode_rem+1
+@update_targets:
    lda #ENEMY1_TGT_X
    sta target_x
    lda #ENEMY2_TGT_X
@@ -128,6 +138,7 @@ enemy_set_mode_times:   ; Input:
                         ; A: scatter time, 15ths of seconds (0 to 17 seconds)
                         ; X/Y: chase time, ticks (0 to 1091-14/15 seconds)
    sta scatter_time
+   stz scatter_time+1
    asl scatter_time
    rol scatter_time+1
    asl scatter_time
@@ -145,15 +156,17 @@ make_vulnerable: ; A: 15ths of seconds (0 to 17 seconds)
    ldx #0
 @loop:
    lda enemies,x
-   bit #$04
+   bit #ENEMY_EYES_ONLY
    bne @end_loop
-   ora #$08
+   ora #ENEMY_VULNERABLE
    sta enemies,x
 @end_loop:
    inx
    cpx #(end_enemies-enemies)
    bne @loop
+   lda #0
    jsr __enemy_scatter
+   jsr __enemy_reverse
    rts
 
 enemy_tick:
@@ -198,7 +211,7 @@ enemy_tick:
    lsr
    sta @sprite_idx
    lda @enemy_temp
-   bit #$10
+   bit #ENEMY_MOVING
    bne @move
    jmp @set_frame
 @move:
@@ -209,7 +222,7 @@ enemy_tick:
    phx
 @set_frame:
    lda @enemy_temp
-   bit #$08
+   bit #ENEMY_VULNERABLE
    beq @check_eyes
    lda ticks_vuln_rem+1
    bne @check_ending
@@ -225,11 +238,11 @@ enemy_tick:
    lda ticks_vuln_rem
    cmp #90
    bcs @vulnerable
-   bit #$08
+   bit #ENEMY_VULNERABLE
    bne @normal    ; flash to normal frame every 8 ticks for last 1.5 seconds
 @vulnerable:
    lda @enemy_temp
-   and #$03
+   and #ENEMY_DIRECTION
    tax
    lda vuln_frames,x
    ldy enemy_flips,x
@@ -238,9 +251,9 @@ enemy_tick:
    jmp @end_loop
 @check_eyes:
    lda @enemy_temp
-   bit #$04
+   bit #ENEMY_EYES_ONLY
    beq @normal
-   and #$03
+   and #ENEMY_DIRECTION
    tax
    lda eye_frames,x
    ldy enemy_flips,x
@@ -249,7 +262,7 @@ enemy_tick:
    jmp @end_loop
 @normal:
    lda @enemy_temp
-   and #$03
+   and #ENEMY_DIRECTION
    tax
    lda body_frames,x
    ldy enemy_flips,x
@@ -267,6 +280,9 @@ enemy_tick:
    rts
 
 __enemy_mode_tick:
+   lda enemy1
+   bit #ENEMY_MOVING
+   beq @return
    lda ticks_mode_rem+1
    cmp #0
    bne @dec_ticks
@@ -294,13 +310,14 @@ __enemy_mode_tick:
    bra @return
    nop
 @scatter:
+   lda #1
    jsr __enemy_scatter
    jsr __enemy_reverse
 @return:
    rts
 
 __enemy_chase_targets:
-bra @start
+   bra @start
 @player_x:     .byte 0
 @player_y:     .byte 0
 @player_dir:   .byte 0
@@ -486,9 +503,9 @@ __enemy_eyes_targets:
    ldy #0
 @loop:
    lda enemies,y
-   bit #$04
+   bit #ENEMY_EYES_ONLY
    beq @next
-   and #$E0
+   and #ENEMY_SPRITE_IDX
    lsr
    lsr
    lsr
@@ -522,7 +539,7 @@ __enemy_reverse:
    ldx #0
 @loop:
    lda enemies,x
-   and #$03
+   and #ENEMY_DIRECTION
    tay
    lda reverse_dir,y
    tay
@@ -576,13 +593,13 @@ __enemy_move:  ; X: enemy offset (0-3)
    sta ZP_PTR_1+7
    lda enemies,x
    sta @enemy
-   and #$03
+   and #ENEMY_DIRECTION
    sta @last_dir
    lda target_x,x
    sta @target_x
    lda target_y,x
    sta @target_y
-   lda #$E0
+   lda #ENEMY_SPRITE_IDX
    and @enemy
    lsr
    lsr
@@ -660,7 +677,7 @@ __enemy_move:  ; X: enemy offset (0-3)
    bra @south_blocked
 @check_eyes_fence:
    lda @enemy
-   bit #$04
+   bit #ENEMY_EYES_ONLY
    bne @check_north
 @south_blocked:
    lda @blocked
@@ -839,7 +856,7 @@ enemy_check_vuln: ; Input: X: sprite index
                   ; Output: A: 0=not vulnerable, 1=vulnerable
    ldy enemy_map,x
    lda enemies,y
-   and #$08
+   and #ENEMY_VULNERABLE
    lsr
    lsr
    lsr
@@ -849,7 +866,7 @@ enemy_check_eyes: ; Input: X: sprite index
                   ; Output: A: 0=full body, 1=eyes only
    ldy enemy_map,x
    lda enemies,y
-   and #$04
+   and #ENEMY_EYES_ONLY
    lsr
    lsr
    rts
@@ -857,7 +874,7 @@ enemy_check_eyes: ; Input: X: sprite index
 enemy_release: ; X: sprite index
    ldy enemy_map,x
    lda enemies,y
-   ora #$10
+   ora #ENEMY_MOVING
    sta enemies,y
    rts
 
@@ -872,7 +889,7 @@ enemy_eaten: ; X: sprite index
    ldy enemy_map,x
    lda enemies,y
    and #$F7
-   ora #$04
+   ora #ENEMY_EYES_ONLY
    sta enemies,y
    rts
 

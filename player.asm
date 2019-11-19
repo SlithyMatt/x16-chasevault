@@ -32,7 +32,8 @@ player_frames_v:  .byte  6, 7, 6, 5, 6, 7, 6, 5
 player_frames_vf: .byte $0,$0,$0,$0,$1,$1,$1,$0
 player_frames_d:  .byte 0,0,3,3,4,4,8,8,9,9,10,10,10,10,17,17
 player_index_d:   .byte 0
-
+player_start_frame:  .byte  0, 0, 5, 5
+player_start_flip:   .byte $0,$1,$2,$0
 ; --------- Subroutines ---------
 
 player_move:
@@ -367,6 +368,18 @@ player_tick:
    ldy move_y
    jsr sprite_setpos
    jsr player_move
+   lda player
+   and #$0C
+   lsr
+   lsr
+   tay
+   lda player_start_frame,y
+   phy
+   plx
+   ldy player_start_flip,x
+   ldx #PLAYER_idx
+   jsr sprite_frame
+   nop
    jsr refresh_status
 @return:
    rts
@@ -816,9 +829,9 @@ regenerate:
    jsr refresh_status
    SET_TIMER 60, readygo
    jsr enemy_reset
-   lda #105 ; default scatter time = 7 seconds TODO: change with level
-   ldx #<1200  ; default chase time = 20 seconds TODO: change with level
-   ldy #>1200
+   lda #75 ; default scatter time = 5 seconds TODO: change with level
+   ldx #<900  ; default chase time = 15 seconds TODO: change with level
+   ldy #>900
    jsr enemy_set_mode_times
    rts
 readygo:
