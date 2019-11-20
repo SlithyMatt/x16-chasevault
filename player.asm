@@ -28,9 +28,10 @@ OFF_SOUTH_Y = 15
 
 ; player animation
 player_frames_h:  .byte 1,2,1,0,3,4,3,0
-player_frames_v:  .byte  6, 7, 6, 5, 6, 7, 6, 5
+player_frames_up: .byte  9,10, 9, 8, 9,10, 9, 8
+player_frames_dn: .byte  6, 7, 6, 5, 6, 7, 6, 5
 player_frames_vf: .byte $0,$0,$0,$0,$1,$1,$1,$0
-player_frames_d:  .byte 0,0,3,3,4,4,8,8,9,9,10,10,10,10,20,20
+player_frames_d:  .byte 0,0,3,3,4,4,11,11,12,12,13,13,13,13,20,20
 player_index_d:   .byte 0
 player_start_frame:  .byte  0, 0, 5, 5
 player_start_flip:   .byte $0,$1,$2,$0
@@ -325,12 +326,17 @@ player_tick:
    lsr
    tax
    lda player
-   and #$08
+   bit #$08
    bne @vertical
    lda player_frames_h,x
    bra @check_flip
 @vertical:
-   lda player_frames_v,x
+   bit #$04
+   bne @up
+   lda player_frames_dn,x
+   bra @check_flip
+@up:
+   lda player_frames_up,x
 @check_flip:
    pha
    ldy #0
@@ -342,10 +348,7 @@ player_tick:
    lsr
    bit #$02
    beq @flip_left
-   and #$01
-   asl
-   eor #$02
-   ora player_frames_vf,x
+   lda player_frames_vf,x
 @flip_left:
    tay
 @loadframe:
