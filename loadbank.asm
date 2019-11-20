@@ -103,7 +103,7 @@ bank2vram:  ; A = RAM bank,
    sta ZP_PTR_2+1
 @loop:
    lda (ZP_PTR_1)    ; load from banked RAM
-   sta VERA_data     ; store to next VRAM address
+   sta VERA_data0     ; store to next VRAM address
    clc
    lda #1
    adc ZP_PTR_1

@@ -82,10 +82,10 @@ make_wall_stub:   ; Input:
    stx VERA_addr_low
    sty @high
    sty VERA_addr_high
-   lda VERA_data
+   lda VERA_data0
    dec
    sta __wallstub_tile
-   lda VERA_data
+   lda VERA_data0
    sta __wallstub_tile+1
    and #$F0
    sta __wallstub_po
@@ -108,9 +108,9 @@ make_wall_stub:   ; Input:
    ldy @high
    sty VERA_addr_high
    lda __wallstub_tile
-   sta VERA_data
+   sta VERA_data0
    lda __wallstub_tile+1
-   sta VERA_data
+   sta VERA_data0
    rts
 
 .endif

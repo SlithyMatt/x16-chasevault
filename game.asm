@@ -56,22 +56,23 @@ check_input:
    stz VERA_ctrl
    VERA_SET_ADDR VRAM_layer1, 1  ; configure VRAM layer 1
    lda #$60                      ; 4bpp tiles
-   sta VERA_data
+   sta VERA_data0
    lda #$3A                      ; 128x128 map of 16x16 tiles
-   sta VERA_data
+   sta VERA_data0
    lda #((VRAM_TILEMAP >> 2) & $FF)
-   sta VERA_data
+   sta VERA_data0
    lda #((VRAM_TILEMAP >> 10) & $FF)
-   sta VERA_data
+   sta VERA_data0
    ; setup game parameters and initialize states
    jsr init_game
    VERA_SET_ADDR VRAM_sprreg, 0  ; enable sprites
    lda #$01
-   sta VERA_data
+   sta VERA_data0
    VERA_SET_ADDR VRAM_layer1, 0  ; enable VRAM layer 1
    lda #$01
-   ora VERA_data
-   sta VERA_data
+   ora VERA_data0
+   sta VERA_data0
+   jsr level_backup
    stz start_prompt
    bra check_input_return
 @check_pause:

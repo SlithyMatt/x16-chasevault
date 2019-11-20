@@ -28,41 +28,41 @@ start:
    VERA_SET_ADDR VRAM_layer1, 1
    ldx #10
 @copy_loop:
-   lda VERA_data2
-   sta VERA_data
+   lda VERA_data1
+   sta VERA_data0
    dex
    bne @copy_loop
    stz VERA_ctrl
    VERA_SET_ADDR VRAM_layer0, 0  ; disable VRAM layer 0
    lda #$FE
-   and VERA_data
-   sta VERA_data
+   and VERA_data0
+   sta VERA_data0
 
    ; Setup tiles on layer 1
    stz VERA_ctrl
    VERA_SET_ADDR VRAM_layer1, 1  ; configure VRAM layer 1
    lda #$60                      ; 4bpp tiles
-   sta VERA_data
+   sta VERA_data0
    lda #$3A                      ; 128x128 map of 16x16 tiles
-   sta VERA_data
+   sta VERA_data0
    lda #((VRAM_TILEMAP >> 2) & $FF)
-   sta VERA_data
+   sta VERA_data0
    lda #((VRAM_TILEMAP >> 10) & $FF)
-   sta VERA_data
+   sta VERA_data0
    lda #((VRAM_TILES >> 2) & $FF)
-   sta VERA_data
+   sta VERA_data0
    lda #((VRAM_TILES >> 10) & $FF)
-   sta VERA_data
+   sta VERA_data0
    lda #$00                      ; initial scroll position on screen 0
-   sta VERA_data
-   sta VERA_data
-   sta VERA_data
-   sta VERA_data
+   sta VERA_data0
+   sta VERA_data0
+   sta VERA_data0
+   sta VERA_data0
 
    VERA_SET_ADDR VRAM_hscale, 1  ; set display to 2x scale
    lda #64
-   sta VERA_data
-   sta VERA_data
+   sta VERA_data0
+   sta VERA_data0
 
 
    ; load VRAM data from binaries
@@ -89,8 +89,8 @@ start:
 
    VERA_SET_ADDR VRAM_layer1, 0  ; enable VRAM layer 1
    lda #$01
-   ora VERA_data
-   sta VERA_data
+   ora VERA_data0
+   sta VERA_data0
 
    ; setup interrupts
    jsr init_irq
@@ -100,7 +100,7 @@ start:
    ldx #<16384
    ldy #>16384
 @map_loop:
-   stz VERA_data
+   stz VERA_data0
    dex
    bne @map_loop
    dey

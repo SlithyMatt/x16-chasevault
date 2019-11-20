@@ -35,22 +35,22 @@ xy2vaddr:   ; Input:
    stz VERA_ctrl
    VERA_SET_ADDR VRAM_layer1, 1
 @readlayer:
-   lda VERA_data ; ignore CTRL0
-   lda VERA_data
+   lda VERA_data0 ; ignore CTRL0
+   lda VERA_data0
    sta @ctrl1
-   lda VERA_data
+   lda VERA_data0
    sta @map
-   lda VERA_data
+   lda VERA_data0
    sta @map+1
-   lda VERA_data ; ignore TILE_BASE
-   lda VERA_data
-   lda VERA_data
+   lda VERA_data0 ; ignore TILE_BASE
+   lda VERA_data0
+   lda VERA_data0
    sta @xoff
-   lda VERA_data
+   lda VERA_data0
    sta @xoff+1
-   lda VERA_data
+   lda VERA_data0
    sta @yoff
-   lda VERA_data
+   lda VERA_data0
    sta @yoff+1
    lda @ctrl1
    and #$10
@@ -176,17 +176,17 @@ pix2tilexy: ; Input:
    stz VERA_ctrl
    VERA_SET_ADDR VRAM_layer1, 1
 @readlayer:
-   lda VERA_data ; ignore CTRL0
-   lda VERA_data
+   lda VERA_data0 ; ignore CTRL0
+   lda VERA_data0
    sta @ctrl1
-   lda VERA_data ; ignore MAP_BASE
-   lda VERA_data
-   lda VERA_data ; ignore TILE_BASE
-   lda VERA_data
-   lda VERA_data
+   lda VERA_data0 ; ignore MAP_BASE
+   lda VERA_data0
+   lda VERA_data0 ; ignore TILE_BASE
+   lda VERA_data0
+   lda VERA_data0
    sta @xoff
-   lda VERA_data
-   lda VERA_data
+   lda VERA_data0
+   lda VERA_data0
    sta @yoff
 @gettw:
    lda @ctrl1
@@ -298,8 +298,8 @@ get_tile:   ; Input:
    sta VERA_addr_bank
    stx VERA_addr_low
    sty VERA_addr_high
-   ldx VERA_data
-   ldy VERA_data
+   ldx VERA_data0
+   ldy VERA_data0
    pla
    rts
 

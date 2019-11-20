@@ -395,13 +395,13 @@ level_tick:
    sta VERA_addr_high
    lda #(^VRAM_layer1 | $10)
    sta VERA_addr_bank
-   lda VERA_data
+   lda VERA_data0
    sta @hscroll
-   lda VERA_data
+   lda VERA_data0
    sta @hscroll+1
-   lda VERA_data
+   lda VERA_data0
    sta @vscroll
-   lda VERA_data
+   lda VERA_data0
    sta @vscroll+1
    LOAD_LEVEL_PARAM LEVEL_HSCROLL
    sta @level_hscroll
@@ -487,13 +487,13 @@ level_tick:
    lda #(^VRAM_layer1 | $10)
    sta VERA_addr_bank
    lda @hscroll
-   sta VERA_data
+   sta VERA_data0
    lda @hscroll+1
-   sta VERA_data
+   sta VERA_data0
    lda @vscroll
-   sta VERA_data
+   sta VERA_data0
    lda @vscroll+1
-   sta VERA_data
+   sta VERA_data0
 @return:
    rts
 
@@ -526,9 +526,9 @@ clear_bars:
    stx VERA_addr_low
    sty VERA_addr_high
    lda #<BLANK
-   sta VERA_data
+   sta VERA_data0
    lda #>BLANK
-   sta VERA_data
+   sta VERA_data0
    ply
    plx
    bra @loop
@@ -576,7 +576,113 @@ level_north:
    rts
 
 level_restore:
-   ; TODO: reload initial state of level
+   bra @start
+@hscroll: .word 0
+@vscroll: .word 0
+@source: .byte 0,0,0
+@dest:   .byte 0,0,0
+@start:
+   LOAD_LEVEL_PARAM NUM_PELLETS
+   sta pellets
+   LOAD_LEVEL_PARAM LEVEL_HSCROLL
+   sta @hscroll
+   iny
+   lda (ZP_PTR_1),y
+   sta @hscroll+1
+   iny
+   lda (ZP_PTR_1),y
+   sta @vscroll
+   iny
+   lda (ZP_PTR_1),y
+   sta @vscroll+1
+   ; dest VRAM = VRAM_TILEMAP + hscroll/8 + 16*vscroll
+   lsr @hscroll+1
+   ror @hscroll
+   lsr @hscroll+1
+   ror @hscroll
+   lsr @hscroll+1
+   ror @hscroll
+   asl @vscroll
+   rol @vscroll+1
+   asl @vscroll
+   rol @vscroll+1
+   asl @vscroll
+   rol @vscroll+1
+   asl @vscroll
+   rol @vscroll+1
+   clc
+   lda #<VRAM_TILEMAP
+   adc @hscroll
+   sta @dest
+   lda #>VRAM_TILEMAP
+   adc @hscroll+1
+   sta @dest+1
+   lda #(^VRAM_TILEMAP | $10)
+   adc #0
+   sta @dest+2
+   clc
+   lda @dest
+   adc @vscroll
+   sta @dest
+   lda @dest+1
+   adc @vscroll+1
+   sta @dest+1
+   lda @dest+2
+   adc #0
+   sta @dest+2
+   ; source = start screen, to reuse as backup buffer
+   lda #<VRAM_STARTSCRN
+   sta @source
+   lda #>VRAM_STARTSCRN
+   sta @source+1
+   lda #(^VRAM_STARTSCRN | $10)
+   sta @source+2
+   ldy #15
+@row_loop:
+   ; set VERA port 1 to dest
+   lda #1
+   sta VERA_ctrl
+   lda @dest
+   sta VERA_addr_low
+   lda @dest+1
+   sta VERA_addr_high
+   lda @dest+2
+   sta VERA_addr_bank
+   ; set VERA port 0 to source
+   stz VERA_ctrl
+   lda @source
+   sta VERA_addr_low
+   lda @source+1
+   sta VERA_addr_high
+   lda @source+2
+   sta VERA_addr_bank
+   ldx #40
+@cell_loop:
+   lda VERA_data0
+   sta VERA_data1
+   dex
+   bne @cell_loop
+   dey
+   beq @return
+   clc
+   lda @source
+   adc #$80
+   sta @source
+   lda @source+1
+   adc #0
+   sta @source+1
+   lda @source+2
+   adc #0
+   sta @source+2
+   clc
+   lda @dest+1
+   adc #1
+   sta @dest+1
+   lda @dest+2
+   adc #0
+   sta @dest+2
+   jmp @row_loop
+@return:
    rts
 
 level_transition:
@@ -597,12 +703,122 @@ level_transition:
    sta __level_changing
    rts
 @regenerate:
+   jsr level_backup
    lda #1
    sta regenerate_req
    jmp timer_done
 @move:
+   jsr level_backup
    lda #1
    sta move_req
    jmp timer_done
+
+level_backup:
+   bra @start
+@hscroll: .word 0
+@vscroll: .word 0
+@source: .byte 0,0,0
+@dest:   .byte 0,0,0
+@start:
+   LOAD_LEVEL_PARAM LEVEL_HSCROLL
+   sta @hscroll
+   iny
+   lda (ZP_PTR_1),y
+   sta @hscroll+1
+   iny
+   lda (ZP_PTR_1),y
+   sta @vscroll
+   iny
+   lda (ZP_PTR_1),y
+   sta @vscroll+1
+   ; source VRAM = VRAM_TILEMAP + hscroll/8 + 16*vscroll
+   lsr @hscroll+1
+   ror @hscroll
+   lsr @hscroll+1
+   ror @hscroll
+   lsr @hscroll+1
+   ror @hscroll
+   asl @vscroll
+   rol @vscroll+1
+   asl @vscroll
+   rol @vscroll+1
+   asl @vscroll
+   rol @vscroll+1
+   asl @vscroll
+   rol @vscroll+1
+   clc
+   lda #<VRAM_TILEMAP
+   adc @hscroll
+   sta @source
+   lda #>VRAM_TILEMAP
+   adc @hscroll+1
+   sta @source+1
+   lda #(^VRAM_TILEMAP | $10)
+   adc #0
+   sta @source+2
+   clc
+   lda @source
+   adc @vscroll
+   sta @source
+   lda @source+1
+   adc @vscroll+1
+   sta @source+1
+   lda @source+2
+   adc #0
+   sta @source+2
+   ; dest = start screen, to reuse as backup buffer
+   lda #<VRAM_STARTSCRN
+   sta @dest
+   lda #>VRAM_STARTSCRN
+   sta @dest+1
+   lda #(^VRAM_STARTSCRN | $10)
+   sta @dest+2
+   ldy #15
+@row_loop:
+   ; set VERA port 1 to dest
+   lda #1
+   sta VERA_ctrl
+   lda @dest
+   sta VERA_addr_low
+   lda @dest+1
+   sta VERA_addr_high
+   lda @dest+2
+   sta VERA_addr_bank
+   ; set VERA port 0 to source
+   stz VERA_ctrl
+   lda @source
+   sta VERA_addr_low
+   lda @source+1
+   sta VERA_addr_high
+   lda @source+2
+   sta VERA_addr_bank
+   ldx #40
+@cell_loop:
+   lda VERA_data0
+   sta VERA_data1
+   dex
+   bne @cell_loop
+   dey
+   beq @return
+   clc
+   lda @source+1
+   adc #1
+   sta @source+1
+   lda @source+2
+   adc #0
+   sta @source+2
+   clc
+   lda @dest
+   adc #$80
+   sta @dest
+   lda @dest+1
+   adc #0
+   sta @dest+1
+   lda @dest+2
+   adc #0
+   sta @dest+2
+   jmp @row_loop
+@return:
+   rts
 
 .endif

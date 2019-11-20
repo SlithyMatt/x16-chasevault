@@ -78,8 +78,8 @@ debug:   ; A: value to display
    adc #7
 @tile1:
    adc #$30
-   sta VERA_data
-   stz VERA_data
+   sta VERA_data0
+   stz VERA_data0
    txa
    and #$0F
    cmp #$0A
@@ -88,8 +88,8 @@ debug:   ; A: value to display
    adc #7
 @tile2:
    adc #$30
-   sta VERA_data
-   stz VERA_data
+   sta VERA_data0
+   stz VERA_data0
    rts
 
 .endif

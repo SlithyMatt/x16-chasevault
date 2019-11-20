@@ -397,8 +397,8 @@ eat_pellet: ; Input:
    sta VERA_addr_bank
    stx VERA_addr_low
    sty VERA_addr_high
-   stz VERA_data
-   stz VERA_data
+   stz VERA_data0
+   stz VERA_data0
    dec pellets
    lda #10
    jsr add_score
@@ -415,8 +415,8 @@ eat_powerpellet:  ; Input:
    sta VERA_addr_bank
    stx VERA_addr_low
    sty VERA_addr_high
-   stz VERA_data
-   stz VERA_data
+   stz VERA_data0
+   stz VERA_data0
    dec pellets
    lda #100
    jsr add_score
@@ -457,7 +457,7 @@ eat_key: ; Input:
    sta VERA_addr_bank
    stx VERA_addr_low
    sty VERA_addr_high
-   stz VERA_data
+   stz VERA_data0
    inc keys
    lda #200
    jsr add_score
@@ -471,7 +471,7 @@ eat_key: ; Input:
    sty VERA_addr_high
    lda keys
    ora #$30
-   sta VERA_data
+   sta VERA_data0
    rts
 
 check_hlock:   ; Input:
@@ -495,7 +495,7 @@ check_hlock:   ; Input:
    sta VERA_addr_bank
    stx VERA_addr_low
    sty VERA_addr_high
-   stz VERA_data
+   stz VERA_data0
    jsr use_key
    ldx @lock_x
    dex
@@ -531,7 +531,7 @@ check_vlock:   ; Input:
    sta VERA_addr_bank
    stx VERA_addr_low
    sty VERA_addr_high
-   stz VERA_data
+   stz VERA_data0
    jsr use_key
    ldx @lock_x
    ldy @lock_y
@@ -559,7 +559,7 @@ use_key:
    sty VERA_addr_high
    lda keys
    ora #$30
-   sta VERA_data
+   sta VERA_data0
    rts
 
 add_score:  ; A: points to add
@@ -638,7 +638,7 @@ add_score:  ; A: points to add
    ldx #0
 @vram_loop:
    lda @score_tiles,x
-   sta VERA_data
+   sta VERA_data0
    inx
    cpx #8
    bne @vram_loop
@@ -777,10 +777,10 @@ refresh_status:
    sty VERA_addr_high
    lda lives
    ora #$30
-   sta VERA_data
+   sta VERA_data0
    lda keys
    ora #$30
-   sta VERA_data
+   sta VERA_data0
    rts
 
 
@@ -874,7 +874,7 @@ continue:
    jsr level_restore
    lda #4
    sta lives
-   jsr regenerate
+   SET_TIMER 1, regenerate
    rts
 
 next_level:

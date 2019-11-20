@@ -36,17 +36,17 @@ sprite_frame:     ; A: frame
    pla
    clc
    adc #<(VRAM_SPRITES >> 5)
-   sta VERA_data
+   sta VERA_data0
    lda #0
    adc #>(VRAM_SPRITES >> 5)
-   sta VERA_data
-   lda VERA_data
-   lda VERA_data
-   lda VERA_data
-   lda VERA_data
+   sta VERA_data0
+   lda VERA_data0
+   lda VERA_data0
+   lda VERA_data0
+   lda VERA_data0
    tya
    ora #$0C
-   sta VERA_data
+   sta VERA_data0
    rts
 
 tile_collision: .byte 0
@@ -76,18 +76,18 @@ sprite_getpos: ; Input:
    stx @halfwidth
    stx @halfheight
    jsr __sprattr
-   lda VERA_data ; ignore
-   lda VERA_data ; ignore
-   lda VERA_data
+   lda VERA_data0 ; ignore
+   lda VERA_data0 ; ignore
+   lda VERA_data0
    sta @xpos
-   lda VERA_data
+   lda VERA_data0
    sta @xpos+1
-   lda VERA_data
+   lda VERA_data0
    sta @ypos
-   lda VERA_data
+   lda VERA_data0
    sta @ypos+1
-   lda VERA_data ; ignore
-   lda VERA_data
+   lda VERA_data0 ; ignore
+   lda VERA_data0
    bit #$10
    beq @check_high_width
    asl @halfwidth
@@ -252,11 +252,11 @@ move_sprite_right:   ; A: sprite index
    pha
    phx
    jsr __sprattr
-   lda VERA_data
-   lda VERA_data
-   lda VERA_data
+   lda VERA_data0
+   lda VERA_data0
+   lda VERA_data0
    sta @xpos
-   lda VERA_data
+   lda VERA_data0
    sta @xpos+1
    plx
    txa
@@ -268,12 +268,12 @@ move_sprite_right:   ; A: sprite index
    sta @xpos+1
    pla
    jsr __sprattr
-   lda VERA_data
-   lda VERA_data
+   lda VERA_data0
+   lda VERA_data0
    lda @xpos
-   sta VERA_data
+   sta VERA_data0
    lda @xpos+1
-   sta VERA_data
+   sta VERA_data0
    rts
 
 move_sprite_left:    ; A: sprite index
@@ -285,11 +285,11 @@ move_sprite_left:    ; A: sprite index
    pha
    stx @pixels
    jsr __sprattr
-   lda VERA_data
-   lda VERA_data
-   lda VERA_data
+   lda VERA_data0
+   lda VERA_data0
+   lda VERA_data0
    sta @xpos
-   lda VERA_data
+   lda VERA_data0
    sta @xpos+1
    lda @xpos
    sec
@@ -301,12 +301,12 @@ move_sprite_left:    ; A: sprite index
    sta @xpos+1
    pla
    jsr __sprattr
-   lda VERA_data
-   lda VERA_data
+   lda VERA_data0
+   lda VERA_data0
    lda @xpos
-   sta VERA_data
+   sta VERA_data0
    lda @xpos+1
-   sta VERA_data
+   sta VERA_data0
 @return:
    rts
 
@@ -318,13 +318,13 @@ move_sprite_down:   ; A: sprite index
    pha
    phx
    jsr __sprattr
-   lda VERA_data
-   lda VERA_data
-   lda VERA_data
-   lda VERA_data
-   lda VERA_data
+   lda VERA_data0
+   lda VERA_data0
+   lda VERA_data0
+   lda VERA_data0
+   lda VERA_data0
    sta @ypos
-   lda VERA_data
+   lda VERA_data0
    sta @ypos+1
    plx
    txa
@@ -336,14 +336,14 @@ move_sprite_down:   ; A: sprite index
    sta @ypos+1
    pla
    jsr __sprattr
-   lda VERA_data
-   lda VERA_data
-   lda VERA_data
-   lda VERA_data
+   lda VERA_data0
+   lda VERA_data0
+   lda VERA_data0
+   lda VERA_data0
    lda @ypos
-   sta VERA_data
+   sta VERA_data0
    lda @ypos+1
-   sta VERA_data
+   sta VERA_data0
    rts
 
 move_sprite_up:   ; A: sprite index
@@ -355,13 +355,13 @@ move_sprite_up:   ; A: sprite index
    pha
    stx @pixels
    jsr __sprattr
-   lda VERA_data
-   lda VERA_data
-   lda VERA_data
-   lda VERA_data
-   lda VERA_data
+   lda VERA_data0
+   lda VERA_data0
+   lda VERA_data0
+   lda VERA_data0
+   lda VERA_data0
    sta @ypos
-   lda VERA_data
+   lda VERA_data0
    sta @ypos+1
    lda @ypos
    sec
@@ -373,14 +373,14 @@ move_sprite_up:   ; A: sprite index
    sta @ypos+1
    pla
    jsr __sprattr
-   lda VERA_data
-   lda VERA_data
-   lda VERA_data
-   lda VERA_data
+   lda VERA_data0
+   lda VERA_data0
+   lda VERA_data0
+   lda VERA_data0
    lda @ypos
-   sta VERA_data
+   sta VERA_data0
    lda @ypos+1
-   sta VERA_data
+   sta VERA_data0
 @return:
    rts
 
@@ -415,17 +415,17 @@ __sprite_screen_pos: ; Input: A: sprite index
                      ;  __sprite_sp_x: sprite X position
                      ;  __sprite_sp_y: sprite Y position
    jsr __sprattr
-   lda VERA_data  ; ignore
-   lda VERA_data  ; ignore
-   lda VERA_data
+   lda VERA_data0  ; ignore
+   lda VERA_data0  ; ignore
+   lda VERA_data0
    sta __sprite_sp_x
-   lda VERA_data
+   lda VERA_data0
    sta __sprite_sp_x+1
-   lda VERA_data
+   lda VERA_data0
    sta __sprite_sp_y
-   lda VERA_data
+   lda VERA_data0
    sta __sprite_sp_y+1
-   lda VERA_data
+   lda VERA_data0
    and #$0C
    lsr
    lsr
@@ -544,29 +544,29 @@ __sprite_check_box:  ; Input:
 sprite_disable:   ; A: sprite index
    jsr __sprattr
    lda #<(VRAM_TILES >> 5)
-   sta VERA_data  ; set to black tile
+   sta VERA_data0  ; set to black tile
    lda #>(VRAM_TILES >> 5)
-   sta VERA_data
-   lda VERA_data  ; leave position alone
-   lda VERA_data
-   lda VERA_data
-   lda VERA_data
-   stz VERA_data  ; disable
+   sta VERA_data0
+   lda VERA_data0  ; leave position alone
+   lda VERA_data0
+   lda VERA_data0
+   lda VERA_data0
+   stz VERA_data0  ; disable
    rts
 
 sprite_set_po: ;  A: sprite index
                ;  X: palette offset
    jsr __sprattr
-   lda VERA_data ; ignore
-   lda VERA_data ; ignore
-   lda VERA_data ; ignore
-   lda VERA_data ; ignore
-   lda VERA_data ; ignore
-   lda VERA_data ; ignore
-   lda VERA_data ; ignore
+   lda VERA_data0 ; ignore
+   lda VERA_data0 ; ignore
+   lda VERA_data0 ; ignore
+   lda VERA_data0 ; ignore
+   lda VERA_data0 ; ignore
+   lda VERA_data0 ; ignore
+   lda VERA_data0 ; ignore
    txa
    ora #$50
-   sta VERA_data
+   sta VERA_data0
    rts
 
 sprite_setpos: ; A: Bit 7: tile layer, Bits 6-0: sprite index
@@ -599,8 +599,8 @@ sprite_setpos: ; A: Bit 7: tile layer, Bits 6-0: sprite index
 @layer1:
    VERA_SET_ADDR VRAM_layer1, 1
 @get_regs:
-   lda VERA_data ; ignore
-   lda VERA_data
+   lda VERA_data0 ; ignore
+   lda VERA_data0
    pha
    bit #$20
    beq @check_tilew
@@ -616,16 +616,16 @@ sprite_setpos: ; A: Bit 7: tile layer, Bits 6-0: sprite index
    pla
    and #$7F
    jsr __sprattr
-   lda VERA_data ; ignore
-   lda VERA_data
+   lda VERA_data0 ; ignore
+   lda VERA_data0
    lda @xpos
-   sta VERA_data
+   sta VERA_data0
    lda @xpos+1
-   sta VERA_data
+   sta VERA_data0
    lda @ypos
-   sta VERA_data
+   sta VERA_data0
    lda @ypos+1
-   sta VERA_data
+   sta VERA_data0
    rts
 
 .endif

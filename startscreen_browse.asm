@@ -27,41 +27,41 @@ start:
    VERA_SET_ADDR VRAM_layer1, 1
    ldx #10
 @copy_loop:
-   lda VERA_data2
-   sta VERA_data
+   lda VERA_data1
+   sta VERA_data0
    dex
    bne @copy_loop
    stz VERA_ctrl
    VERA_SET_ADDR VRAM_layer0, 0  ; disable VRAM layer 0
    lda #$FE
-   and VERA_data
-   sta VERA_data
+   and VERA_data0
+   sta VERA_data0
 
    ; Setup tiles on layer 1
    stz VERA_ctrl
    VERA_SET_ADDR VRAM_layer1, 1  ; configure VRAM layer 1
    lda #$60                      ; 4bpp tiles
-   sta VERA_data
+   sta VERA_data0
    lda #$31                      ; 64x32 map of 16x16 tiles
-   sta VERA_data
+   sta VERA_data0
    lda #((VRAM_STARTSCRN >> 2) & $FF)
-   sta VERA_data
+   sta VERA_data0
    lda #((VRAM_STARTSCRN >> 10) & $FF)
-   sta VERA_data
+   sta VERA_data0
    lda #((VRAM_TILES >> 2) & $FF)
-   sta VERA_data
+   sta VERA_data0
    lda #((VRAM_TILES >> 10) & $FF)
-   sta VERA_data
+   sta VERA_data0
    lda #$00                      ; initial scroll position on screen 0
-   sta VERA_data
-   sta VERA_data
-   sta VERA_data
-   sta VERA_data
+   sta VERA_data0
+   sta VERA_data0
+   sta VERA_data0
+   sta VERA_data0
 
    VERA_SET_ADDR VRAM_hscale, 1  ; set display to 2x scale
    lda #64
-   sta VERA_data
-   sta VERA_data
+   sta VERA_data0
+   sta VERA_data0
 
    ; load VRAM data from binaries
    lda #>(VRAM_TILEMAP>>4)
@@ -87,8 +87,8 @@ start:
 
    VERA_SET_ADDR VRAM_layer1, 0  ; enable VRAM layer 1
    lda #$01
-   ora VERA_data
-   sta VERA_data
+   ora VERA_data0
+   sta VERA_data0
 
    ; setup interrupts
    jsr init_irq
@@ -145,20 +145,20 @@ mainloop:
    sta vscroll+1
 @set_scroll:
    VERA_SET_ADDR VRAM_layer1, 1
-   lda VERA_data ; ignore
-   lda VERA_data
-   lda VERA_data
-   lda VERA_data
-   lda VERA_data
-   lda VERA_data
+   lda VERA_data0 ; ignore
+   lda VERA_data0
+   lda VERA_data0
+   lda VERA_data0
+   lda VERA_data0
+   lda VERA_data0
    lda hscroll
-   sta VERA_data
+   sta VERA_data0
    lda hscroll+1
-   sta VERA_data
+   sta VERA_data0
    lda vscroll
-   sta VERA_data
+   sta VERA_data0
    lda vscroll+1
-   sta VERA_data
+   sta VERA_data0
 
    stz vsync_trig
    jmp mainloop  ; loop forever

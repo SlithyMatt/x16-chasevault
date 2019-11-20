@@ -100,7 +100,7 @@ __superimpose: ; A: string length (max = 20)
 @readloop:              ; store tiles to clipboard
    txa
    beq @write
-   lda VERA_data
+   lda VERA_data0
    sta (ZP_PTR_1),y
    iny
    dex
@@ -120,9 +120,9 @@ __superimpose: ; A: string length (max = 20)
    txa
    beq @end
    lda (ZP_PTR_1),y
-   sta VERA_data        ; store character tile
+   sta VERA_data0        ; store character tile
    lda #0
-   sta VERA_data        ; store tile control (PO 0, no flip)
+   sta VERA_data0        ; store tile control (PO 0, no flip)
    iny
    dex
    jmp @writeloop
@@ -138,7 +138,7 @@ __superimpose_restore:  ; A: string length (max = 20)
    txa
    beq @end
    lda (ZP_PTR_1),y
-   sta VERA_data
+   sta VERA_data0
    iny
    dex
    jmp @loop
