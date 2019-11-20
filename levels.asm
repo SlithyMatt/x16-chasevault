@@ -575,7 +575,12 @@ level_north:
    sta move_y
    rts
 
+level_restore:
+   ; TODO: reload initial state of level
+   rts
+
 level_transition:
+   ; TODO: backup level tilemap
    LOAD_LEVEL_PARAM NUM_PELLETS
    sta pellets
    iny

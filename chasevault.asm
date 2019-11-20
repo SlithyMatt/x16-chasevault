@@ -39,11 +39,11 @@ start:
    VERA_SET_ADDR VRAM_layer1, 1  ; configure VRAM layer 1
    lda #$60                      ; 4bpp tiles
    sta VERA_data
-   lda #$3A                      ; 128x128 map of 16x16 tiles
+   lda #$31                      ; 64x32 map of 16x16 tiles
    sta VERA_data
-   lda #((VRAM_TILEMAP >> 2) & $FF)
+   lda #((VRAM_STARTSCRN >> 2) & $FF)
    sta VERA_data
-   lda #((VRAM_TILEMAP >> 10) & $FF)
+   lda #((VRAM_STARTSCRN >> 10) & $FF)
    sta VERA_data
    lda #((VRAM_TILES >> 2) & $FF)
    sta VERA_data
@@ -87,16 +87,9 @@ start:
 
    ; TODO: load screen 0 bitmap from banked RAM into layer 0
 
-   ; setup game parameters and initialize states
-   jsr init_game
-
    VERA_SET_ADDR VRAM_layer1, 0  ; enable VRAM layer 1
    lda #$01
    ora VERA_data
-   sta VERA_data
-
-   VERA_SET_ADDR VRAM_sprreg, 0  ; enable sprites
-   lda #$01
    sta VERA_data
 
    ; setup interrupts

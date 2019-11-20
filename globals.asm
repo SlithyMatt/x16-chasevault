@@ -5,6 +5,7 @@ GLOBALS_INC = 1
 
 
 VRAM_TILEMAP   = $04000 ; 128x128
+VRAM_STARTSCRN = $0B800 ; 64x32
 VRAM_SPRITES   = $0E000 ; 64 4bpp 16x16 frames
 VRAM_TILES     = $10000 ; 424 4bpp 16x16 (may also be used as sprite frames)
 VRAM_BITMAP    = $16A00 ; 4bpp 320x240
@@ -48,5 +49,8 @@ regenerate_req:   .byte 0
 move_req:         .byte 0
 move_x:           .byte 0
 move_y:           .byte 0
+start_prompt:     .byte 1
+paused:           .byte 0
+continue_prompt:  .byte 0
 
 .endif

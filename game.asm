@@ -25,12 +25,65 @@ game_tick:        ; called after every VSYNC detected (60 Hz)
 @tick:
    jsr timer_tick
    jsr joystick_tick
+   jsr check_input
+   lda start_prompt
+   ora paused
+   ora continue_prompt
+   bne @return
+@play:
    jsr player_tick
    jsr enemy_tick
    jsr level_tick
    ; TODO add other tick handlers
-@end:
+@return:
    rts
 
+check_input:
+   lda joystick1_start
+   bne @check_start
+   jmp check_input_return
+@check_start:
+   lda start_prompt
+   beq @check_pause
+   ; Setup level map on layer 1
+   stz VERA_ctrl
+   VERA_SET_ADDR VRAM_layer1, 1  ; configure VRAM layer 1
+   lda #$60                      ; 4bpp tiles
+   sta VERA_data
+   lda #$3A                      ; 128x128 map of 16x16 tiles
+   sta VERA_data
+   lda #((VRAM_TILEMAP >> 2) & $FF)
+   sta VERA_data
+   lda #((VRAM_TILEMAP >> 10) & $FF)
+   sta VERA_data
+   ; setup game parameters and initialize states
+   jsr init_game
+   VERA_SET_ADDR VRAM_sprreg, 0  ; enable sprites
+   lda #$01
+   sta VERA_data
+   VERA_SET_ADDR VRAM_layer1, 0  ; enable VRAM layer 1
+   lda #$01
+   ora VERA_data
+   sta VERA_data
+   stz start_prompt
+   bra check_input_return
+@check_pause:
+   lda paused
+   beq @check_continue
+   ;SUPERIMPOSE_RESTORE
+   stz paused
+   bra check_input_return
+@check_continue:
+   lda continue_prompt
+   beq @pause
+   jsr continue
+   bra check_input_return
+@pause:
+   ; TODO: impose timing restrictions on pausing
+   lda #1
+   ;sta paused
+   ;SUPERIMPOSE "paused", 7, 9
+check_input_return:
+   rts
 
 .endif

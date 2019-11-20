@@ -860,8 +860,22 @@ readygo:
 
 game_over:
    SUPERIMPOSE "game over", 5, 9
-   ; TODO: prompt for continue/exit
+   SET_TIMER 60, @continue
    jmp timer_done
+@continue:
+   SUPERIMPOSE_RESTORE
+   SUPERIMPOSE "continue?", 5, 9
+   lda #1
+   sta continue_prompt
+   jmp timer_done
+
+continue:
+   SUPERIMPOSE_RESTORE
+   jsr level_restore
+   lda #4
+   sta lives
+   jsr regenerate
+   rts
 
 next_level:
    jsr enemy_clear
