@@ -40,9 +40,16 @@ game_tick:        ; called after every VSYNC detected (60 Hz)
 
 check_input:
    lda joystick1_start
+   and new_start
    bne @check_start
+   lda joystick1_start
+   bne @start_still_pressed
+   lda #1
+   sta new_start
+@start_still_pressed:
    jmp check_input_return
 @check_start:
+   stz new_start
    lda start_prompt
    beq @check_pause
    ; Setup level map on layer 1
@@ -70,19 +77,22 @@ check_input:
 @check_pause:
    lda paused
    beq @check_continue
-   ;SUPERIMPOSE_RESTORE
+   SUPERIMPOSE_RESTORE
    stz paused
    bra check_input_return
 @check_continue:
    lda continue_prompt
    beq @pause
    jsr continue
+   stz continue_prompt
    bra check_input_return
 @pause:
-   ; TODO: impose timing restrictions on pausing
+   lda player
+   bit #$02
+   beq check_input_return
    lda #1
-   ;sta paused
-   ;SUPERIMPOSE "paused", 7, 9
+   sta paused
+   SUPERIMPOSE "paused", 7, 9
 check_input_return:
    rts
 
