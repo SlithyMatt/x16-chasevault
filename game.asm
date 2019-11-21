@@ -73,6 +73,8 @@ check_input:
    ora VERA_data0
    sta VERA_data0
    jsr level_backup
+   lda #15
+   jsr set_bg_palette
    stz start_prompt
    bra check_input_return
 @check_pause:

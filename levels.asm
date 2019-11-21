@@ -360,6 +360,9 @@ level49:
 
 __level_changing: .byte 0
 
+__level_fade_out: .byte 0
+__level_fade_in:  .byte 0
+
 .macro LOAD_LEVEL_PARAM param ; Input:
                               ;  param: param offset
                               ; Output:
@@ -388,6 +391,18 @@ level_tick:
    bne @scroll
    jmp @return
 @scroll:
+   lda frame_num
+   cmp __level_fade_out
+   bne @check_fade_in
+   lda #7   ; fade to black
+   jsr set_bg_palette
+   bra @load_curr_scroll
+@check_fade_in:
+   cmp __level_fade_in
+   bne @load_curr_scroll
+   lda #14  ; start fade-in
+   jsr set_bg_palette
+@load_curr_scroll:
    stz VERA_ctrl
    lda #<(VRAM_layer1+6)
    sta VERA_addr_low
@@ -441,6 +456,8 @@ level_tick:
    lda @level_vscroll
    bne @scroll_down
    stz __level_changing
+   lda #15
+   jsr set_bg_palette
    bra @return
 @scroll_left:
    sec
@@ -686,7 +703,27 @@ level_restore:
    rts
 
 level_transition:
-   ; TODO: backup level tilemap
+   ; start fade of background
+   lda #14
+   jsr set_bg_palette
+   ; set fade out and in frame numbers
+   clc
+   lda frame_num
+   adc #15
+   cmp #60
+   bmi @set_fade_in
+   sec
+   sbc #60
+@set_fade_in:
+   sta __level_fade_out
+   clc
+   adc #30
+   cmp #60
+   bmi @load_params
+   sec
+   sbc #60
+@load_params:
+   sta __level_fade_in
    LOAD_LEVEL_PARAM NUM_PELLETS
    sta pellets
    iny
@@ -819,6 +856,14 @@ level_backup:
    sta @dest+2
    jmp @row_loop
 @return:
+   rts
+
+set_bg_palette: ; A: palette offset
+   pha
+   stz VERA_ctrl
+   VERA_SET_ADDR $F2007, 0
+   pla
+   sta VERA_data0
    rts
 
 .endif
