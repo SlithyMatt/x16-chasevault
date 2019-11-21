@@ -22,9 +22,9 @@ KEYS_X   = 6
 KEYS_Y   = 14
 
 OFF_WEST_X = 0
-OFF_EAST_X = 20
+OFF_EAST_X = 19
 OFF_NORTH_Y = 0
-OFF_SOUTH_Y = 15
+OFF_SOUTH_Y = 14
 
 ; player animation
 player_frames_h:  .byte 1,2,1,0,3,4,3,0
@@ -729,10 +729,13 @@ eat_enemy:  ; X: enemy sprite index
    rts
 
 check_off:  ; Input:
+            ;  A: overlap
             ;  X: sprite tile X
             ;  Y: sprite tile Y
             ; Output:
             ;  Z: 0=still on screen; 1=off screen
+   cmp #0
+   bne @on_screen
    cpx #OFF_EAST_X
    bne @check_west
    jsr level_east

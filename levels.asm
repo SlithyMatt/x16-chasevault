@@ -140,7 +140,7 @@ level8:
    .byte 9,11, 18,8
 
 level9:
-   .byte 102   ; number of pellets
+   .byte 100   ; number of pellets
    .byte 1
    .byte 17
    .byte 1
@@ -148,8 +148,8 @@ level9:
    .byte 0
    .word 320
    .word 0
-   .byte 2     ; number of bars
-   .byte 9,11, 18,8
+   .byte 3     ; number of bars
+   .byte 0,8, 9,12, 18,8
 
 level10:
    .byte 102   ; number of pellets
