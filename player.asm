@@ -31,10 +31,10 @@ player_frames_h:  .byte 1,2,1,0,3,4,3,0
 player_frames_up: .byte  9,10, 9, 8, 9,10, 9, 8
 player_frames_dn: .byte  6, 7, 6, 5, 6, 7, 6, 5
 player_frames_vf: .byte $0,$0,$0,$0,$1,$1,$1,$0
-player_frames_d:  .byte 0,0,3,3,4,4,11,11,12,12,13,13,13,13,20,20
+player_frames_d:  .byte 0,0,3,3,4,4,11,11,12,12,13,13,13,13,22,22
 player_index_d:   .byte 0
-player_start_frame:  .byte  0, 0, 5, 5
-player_start_flip:   .byte $0,$1,$2,$0
+player_start_frame:  .byte  0, 0, 5, 8
+player_start_flip:   .byte $0,$1,$0,$0
 ; --------- Subroutines ---------
 
 player_move:
