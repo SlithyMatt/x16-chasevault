@@ -1,5 +1,6 @@
 *.bin
 *.BIN
+!*.B*.BIN
 *.prg
 *.PRG
 *.list

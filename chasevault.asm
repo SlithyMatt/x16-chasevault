@@ -81,12 +81,58 @@ start:
    ldy #<palette_fn
    jsr loadvram
 
-   ; TODO: store bitmap binaries to banked RAM
+   ; store bitmap binaries to banked RAM
+   jsr loadbank
 
-   ; TODO: configure layer 0 for background bitmaps
+   ; configure layer 0 for background bitmaps
+   stz VERA_ctrl
+   VERA_SET_ADDR VRAM_layer0, 1  ; configure VRAM layer 0
+   lda #$60
+   sta VERA_data0 ; 4bpp bitmap
+   stz VERA_data0 ; 320x240
+   stz VERA_data0
+   stz VERA_data0
+   lda #<(VRAM_BITMAP >> 2)
+   sta VERA_data0
+   lda #>(VRAM_BITMAP >> 2)
+   sta VERA_data0
+   stz VERA_data0
+   lda #15
+   sta VERA_data0 ; Palette offset = 15
+   stz VERA_data0
+   stz VERA_data0
 
-   ; TODO: load screen 0 bitmap from banked RAM into layer 0
+   ; load screen 0 bitmap from banked RAM into layer 0
+   stz VERA_ctrl
+   VERA_SET_ADDR VRAM_BITMAP, 1
+   lda #0
+   ldx #0
+   ldy #0
+   jsr bank2vram
+   lda #1
+   ldx #0
+   ldy #0
+   jsr bank2vram
+   lda #2
+   ldx #0
+   ldy #0
+   jsr bank2vram
+   lda #3
+   ldx #0
+   ldy #0
+   jsr bank2vram
+   lda #4
+   ldx #0
+   ldy #$B0
+   jsr bank2vram
 
+   stz VERA_ctrl
+   VERA_SET_ADDR VRAM_layer0, 0  ; enable VRAM layer 0
+   lda #$01
+   ora VERA_data0
+   ;sta VERA_data0
+
+   stz VERA_ctrl
    VERA_SET_ADDR VRAM_layer1, 0  ; enable VRAM layer 1
    lda #$01
    ora VERA_data0

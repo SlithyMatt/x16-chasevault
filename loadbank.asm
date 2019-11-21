@@ -1,4 +1,5 @@
 .include "x16.inc"
+.include "filenames.asm"
 
 loadbank:
    lda #0
