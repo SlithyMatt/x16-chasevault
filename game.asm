@@ -8,6 +8,7 @@ GAME_INC = 1
 .include "superimpose.asm"
 .include "debug.asm"
 .include "levels.asm"
+.include "loadvram.asm"
 
 init_game:
    lda #0
@@ -51,7 +52,9 @@ check_input:
 @check_start:
    stz new_start
    lda start_prompt
-   beq @check_pause
+   bne @start_game
+   jmp @check_pause
+@start_game:
    ; Setup level map on layer 1
    stz VERA_ctrl
    VERA_SET_ADDR VRAM_layer1, 1  ; configure VRAM layer 1
@@ -73,6 +76,31 @@ check_input:
    ora VERA_data0
    sta VERA_data0
    jsr level_backup
+   ; load level 1 bitmap from banked RAM into layer 0
+   lda #7
+   jsr set_bg_palette
+   stz VERA_ctrl
+   VERA_SET_ADDR VRAM_BITMAP, 1
+   lda #0
+   ldx #0
+   ldy #0
+   jsr bank2vram
+   lda #1
+   ldx #0
+   ldy #0
+   jsr bank2vram
+   lda #2
+   ldx #0
+   ldy #0
+   jsr bank2vram
+   lda #3
+   ldx #0
+   ldy #0
+   jsr bank2vram
+   lda #4
+   ldx #0
+   ldy #$B0
+   jsr bank2vram
    lda #15
    jsr set_bg_palette
    stz start_prompt
