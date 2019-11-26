@@ -420,7 +420,7 @@ eat_powerpellet:  ; Input:
    dec pellets
    lda #100
    jsr add_score
-   lda #90 ; 6 seconds, TODO: reduce over with level upgrades
+   lda vuln_time
    jsr make_vulnerable
    lda #1
    sta score_mult

@@ -9,6 +9,7 @@ GAME_INC = 1
 .include "debug.asm"
 .include "levels.asm"
 .include "loadvram.asm"
+.include "fruit.asm"
 
 init_game:
    lda #0
@@ -34,6 +35,7 @@ game_tick:        ; called after every VSYNC detected (60 Hz)
 @play:
    jsr player_tick
    jsr enemy_tick
+   jsr fruit_tick
    jsr level_tick
    ; TODO add other tick handlers
 @return:
@@ -68,14 +70,6 @@ check_input:
    sta VERA_data0
    ; setup game parameters and initialize states
    jsr init_game
-   VERA_SET_ADDR VRAM_sprreg, 0  ; enable sprites
-   lda #$01
-   sta VERA_data0
-   VERA_SET_ADDR VRAM_layer1, 0  ; enable VRAM layer 1
-   lda #$01
-   ora VERA_data0
-   sta VERA_data0
-   jsr level_backup
    ; load level 1 bitmap from banked RAM into layer 0
    lda #7
    jsr set_bg_palette
@@ -103,6 +97,14 @@ check_input:
    jsr bank2vram
    lda #15
    jsr set_bg_palette
+   VERA_SET_ADDR VRAM_sprreg, 0  ; enable sprites
+   lda #$01
+   sta VERA_data0
+   VERA_SET_ADDR VRAM_layer1, 0  ; enable VRAM layer 1
+   lda #$01
+   ora VERA_data0
+   sta VERA_data0
+   jsr level_backup
    stz start_prompt
    bra check_input_return
 @check_pause:

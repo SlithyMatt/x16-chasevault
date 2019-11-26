@@ -44,6 +44,10 @@ score_mult: .byte 1
 
 release_e3: .byte 71 ; pellets remaining to release enemy 3
 release_e4: .byte 33 ; pellets remaining to release enemy 4
+show_fruit: .byte 51 ; pellets remaining to show fruit
+scatter_time:     .word 300
+chase_time:       .word 900
+vuln_time:        .byte 90 ; Unit: 1/15 second (6 seconds)
 
 regenerate_req:   .byte 0
 move_req:         .byte 0

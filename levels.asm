@@ -28,7 +28,13 @@ SOUTH_NEIGHBOR = 4
 NORTH_NEIGHBOR = 5
 LEVEL_HSCROLL = 6
 LEVEL_VSCROLL = 8
-NUM_BARS = 10
+L_RELEASE_E3 = 10
+L_RELEASE_E4 = 11
+L_SHOW_FRUIT = 12
+L_SCATTER    = 13
+L_CHASE      = 15
+L_VULN       = 17
+NUM_BARS = 18
 
 level_table:   ; table of level data structures
    .word 0
@@ -52,6 +58,12 @@ level1:
    .byte 0     ; north neighbor
    .word 0     ; hscroll
    .word 0     ; yscroll
+   .byte 71    ; release_e3
+   .byte 33    ; release_e4
+   .byte 51    ; show_fruit
+   .word 300   ; scatter_time
+   .word 900   ; chase_time
+   .byte 90    ; vuln_time
    .byte 2     ; number of bars
    .byte 9,11, 18,8  ; x,y coordinates of each bar tile
 
@@ -64,6 +76,12 @@ level2:
    .byte 1
    .word 0
    .word 240
+   .byte 76    ; release_e3
+   .byte 35    ; release_e4
+   .byte 54    ; show_fruit
+   .word 300   ; scatter_time
+   .word 900   ; chase_time
+   .byte 88    ; vuln_time
    .byte 3     ; number of bars
    .byte 9,12, 18,8, 9,2
 
@@ -76,6 +94,12 @@ level3:
    .byte 2
    .word 0
    .word 480
+   .byte 71    ; release_e3
+   .byte 33    ; release_e4
+   .byte 50    ; show_fruit
+   .word 300   ; scatter_time
+   .word 900   ; chase_time
+   .byte 86    ; vuln_time
    .byte 2     ; number of bars
    .byte 9,11, 18,8
 
@@ -88,6 +112,12 @@ level4:
    .byte 3
    .word 0
    .word 720
+   .byte 71    ; release_e3
+   .byte 33    ; release_e4
+   .byte 50    ; show_fruit
+   .word 300   ; scatter_time
+   .word 900   ; chase_time
+   .byte 84    ; vuln_time
    .byte 2     ; number of bars
    .byte 9,11, 18,8
 
@@ -100,6 +130,12 @@ level5:
    .byte 4
    .word 0
    .word 960
+   .byte 71    ; release_e3
+   .byte 33    ; release_e4
+   .byte 50    ; show_fruit
+   .word 300   ; scatter_time
+   .word 900   ; chase_time
+   .byte 82    ; vuln_time
    .byte 2     ; number of bars
    .byte 9,11, 18,8
 
@@ -112,6 +148,12 @@ level6:
    .byte 5
    .word 0
    .word 1200
+   .byte 71    ; release_e3
+   .byte 33    ; release_e4
+   .byte 50    ; show_fruit
+   .word 300   ; scatter_time
+   .word 900   ; chase_time
+   .byte 80    ; vuln_time
    .byte 2     ; number of bars
    .byte 9,11, 18,8
 
@@ -124,6 +166,12 @@ level7:
    .byte 6
    .word 0
    .word 1440
+   .byte 71    ; release_e3
+   .byte 33    ; release_e4
+   .byte 50    ; show_fruit
+   .word 300   ; scatter_time
+   .word 900   ; chase_time
+   .byte 78    ; vuln_time
    .byte 2     ; number of bars
    .byte 9,11, 18,8
 
@@ -136,6 +184,12 @@ level8:
    .byte 7
    .word 0
    .word 1680
+   .byte 71    ; release_e3
+   .byte 33    ; release_e4
+   .byte 50    ; show_fruit
+   .word 300   ; scatter_time
+   .word 900   ; chase_time
+   .byte 76    ; vuln_time
    .byte 2     ; number of bars
    .byte 9,11, 18,8
 
@@ -148,48 +202,138 @@ level9:
    .byte 0
    .word 320
    .word 0
+   .byte 80    ; release_e3
+   .byte 50    ; release_e4
+   .byte 60    ; show_fruit
+   .word 300   ; scatter_time
+   .word 900   ; chase_time
+   .byte 75    ; vuln_time
    .byte 3     ; number of bars
    .byte 0,8, 9,12, 18,8
 
 level10:
    .byte 102   ; number of pellets
-   .byte 1
-   .byte 18
-   .byte 2
-   .byte 11
-   .byte 9
-   .word 320
-   .word 240
+   .byte 1     ; new
+   .byte 18    ; east neighbor
+   .byte 2     ; west neighbor
+   .byte 11    ; south neighbor
+   .byte 9     ; north neighbor
+   .word 320   ; hscroll
+   .word 240   ; vscroll
+   .byte 80    ; release_e3
+   .byte 50    ; release_e4
+   .byte 60    ; show_fruit
+   .word 300   ; scatter_time
+   .word 900   ; chase_time
+   .byte 75    ; vuln_time
    .byte 2     ; number of bars
    .byte 9,11, 18,8
 
 level11:
    .byte 102   ; number of pellets
+   .byte 1     ; new
+   .byte 19    ; east neighbor
+   .byte 3     ; west neighbor
+   .byte 12    ; south neighbor
+   .byte 10    ; north neighbor
+   .word 320   ; hscroll
+   .word 480   ; vscroll
+   .byte 80    ; release_e3
+   .byte 50    ; release_e4
+   .byte 60    ; show_fruit
+   .word 300   ; scatter_time
+   .word 900   ; chase_time
+   .byte 75    ; vuln_time
    .byte 2     ; number of bars
    .byte 9,11, 18,8
 
 level12:
    .byte 102   ; number of pellets
+   .byte 1     ; new
+   .byte 20    ; east neighbor
+   .byte 4     ; west neighbor
+   .byte 13    ; south neighbor
+   .byte 11    ; north neighbor
+   .word 320   ; hscroll
+   .word 720   ; vscroll
+   .byte 80    ; release_e3
+   .byte 50    ; release_e4
+   .byte 60    ; show_fruit
+   .word 300   ; scatter_time
+   .word 900   ; chase_time
+   .byte 75    ; vuln_time
    .byte 2     ; number of bars
    .byte 9,11, 18,8
 
 level13:
    .byte 102   ; number of pellets
+   .byte 1     ; new
+   .byte 21    ; east neighbor
+   .byte 5     ; west neighbor
+   .byte 14    ; south neighbor
+   .byte 12    ; north neighbor
+   .word 320   ; hscroll
+   .word 960   ; vscroll
+   .byte 80    ; release_e3
+   .byte 50    ; release_e4
+   .byte 60    ; show_fruit
+   .word 300   ; scatter_time
+   .word 900   ; chase_time
+   .byte 75    ; vuln_time
    .byte 2     ; number of bars
    .byte 9,11, 18,8
 
 level14:
    .byte 102   ; number of pellets
+   .byte 1     ; new
+   .byte 22    ; east neighbor
+   .byte 6     ; west neighbor
+   .byte 15    ; south neighbor
+   .byte 13    ; north neighbor
+   .word 320   ; hscroll
+   .word 1200  ; vscroll
+   .byte 80    ; release_e3
+   .byte 50    ; release_e4
+   .byte 60    ; show_fruit
+   .word 300   ; scatter_time
+   .word 900   ; chase_time
+   .byte 75    ; vuln_time
    .byte 2     ; number of bars
    .byte 9,11, 18,8
 
 level15:
    .byte 102   ; number of pellets
+   .byte 1     ; new
+   .byte 23    ; east neighbor
+   .byte 7     ; west neighbor
+   .byte 16    ; south neighbor
+   .byte 14    ; north neighbor
+   .word 320   ; hscroll
+   .word 1440  ; vscroll
+   .byte 80    ; release_e3
+   .byte 50    ; release_e4
+   .byte 60    ; show_fruit
+   .word 300   ; scatter_time
+   .word 900   ; chase_time
+   .byte 75    ; vuln_time
    .byte 2     ; number of bars
    .byte 9,11, 18,8
 
 level16:
    .byte 102   ; number of pellets
+   .byte 1     ; new
+   .byte 24    ; east neighbor
+   .byte 8     ; west neighbor
+   .byte 0     ; south neighbor
+   .byte 15    ; north neighbor
+   .word 320   ; hscroll
+   .word 1680  ; vscroll
+   .byte 80    ; release_e3
+   .byte 50    ; release_e4
+   .byte 60    ; show_fruit
+   .word 300   ; scatter_time
+   .word 900   ; chase_time
+   .byte 75    ; vuln_time
    .byte 2     ; number of bars
    .byte 9,11, 18,8
 
@@ -365,17 +509,11 @@ __level_fade_in:  .byte 0
 
 .macro LOAD_LEVEL_PARAM param ; Input:
                               ;  param: param offset
+                              ;  ZP_PTR_1: level params address
                               ; Output:
                               ;  A: value of param
                               ;  Y: param offset
                               ;  ZP_PTR_1: level params address
-   lda level
-   asl
-   tax
-   lda level_table,x
-   sta ZP_PTR_1
-   lda level_table+1,x
-   sta ZP_PTR_1+1
    ldy #param
    lda (ZP_PTR_1),y
 .endmacro
@@ -418,13 +556,13 @@ level_tick:
    sta @vscroll
    lda VERA_data0
    sta @vscroll+1
+   jsr select_level
    LOAD_LEVEL_PARAM LEVEL_HSCROLL
    sta @level_hscroll
    iny
    lda (ZP_PTR_1),y
    sta @level_hscroll+1
-   iny
-   lda (ZP_PTR_1),y
+   LOAD_LEVEL_PARAM LEVEL_VSCROLL
    sta @level_vscroll
    iny
    lda (ZP_PTR_1),y
@@ -514,7 +652,18 @@ level_tick:
 @return:
    rts
 
+select_level: ; Output: ZP_PTR_1: level params address
+   lda level
+   asl
+   tax
+   lda level_table,x
+   sta ZP_PTR_1
+   lda level_table+1,x
+   sta ZP_PTR_1+1
+   rts
+
 clear_bars:
+   jsr select_level
    LOAD_LEVEL_PARAM NUM_BARS
    tax               ; X = number of bars
    iny
@@ -553,6 +702,7 @@ clear_bars:
    rts
 
 level_east:
+   jsr select_level
    LOAD_LEVEL_PARAM EAST_NEIGHBOR
    sta level
    jsr level_transition
@@ -563,6 +713,7 @@ level_east:
    rts
 
 level_west:
+   jsr select_level
    LOAD_LEVEL_PARAM WEST_NEIGHBOR
    sta level
    jsr level_transition
@@ -573,6 +724,7 @@ level_west:
    rts
 
 level_south:
+   jsr select_level
    LOAD_LEVEL_PARAM SOUTH_NEIGHBOR
    sta level
    jsr level_transition
@@ -583,6 +735,7 @@ level_south:
    rts
 
 level_north:
+   jsr select_level
    LOAD_LEVEL_PARAM NORTH_NEIGHBOR
    sta level
    jsr level_transition
@@ -599,6 +752,7 @@ level_restore:
 @source: .byte 0,0,0
 @dest:   .byte 0,0,0
 @start:
+   jsr select_level
    LOAD_LEVEL_PARAM NUM_PELLETS
    sta pellets
    LOAD_LEVEL_PARAM LEVEL_HSCROLL
@@ -606,8 +760,7 @@ level_restore:
    iny
    lda (ZP_PTR_1),y
    sta @hscroll+1
-   iny
-   lda (ZP_PTR_1),y
+   LOAD_LEVEL_PARAM LEVEL_VSCROLL
    sta @vscroll
    iny
    lda (ZP_PTR_1),y
@@ -724,10 +877,26 @@ level_transition:
    sbc #60
 @load_params:
    sta __level_fade_in
+   jsr select_level
    LOAD_LEVEL_PARAM NUM_PELLETS
    sta pellets
+   LOAD_LEVEL_PARAM L_RELEASE_E3
+   sta release_e3
+   LOAD_LEVEL_PARAM L_RELEASE_E4
+   sta release_e4
+   LOAD_LEVEL_PARAM L_SHOW_FRUIT
+   sta show_fruit
+   LOAD_LEVEL_PARAM L_SCATTER
+   sta scatter_time
    iny
-   lda (ZP_PTR_1),y ; new level?
+   lda (ZP_PTR_1),y
+   sta scatter_time+1
+   LOAD_LEVEL_PARAM L_CHASE
+   sta chase_time
+   iny
+   lda (ZP_PTR_1),y
+   sta chase_time+1
+   LOAD_LEVEL_PARAM NEW_LEVEL
    beq @req_move
    lda #0
    sta (ZP_PTR_1),y
@@ -757,6 +926,7 @@ level_backup:
 @source: .byte 0,0,0
 @dest:   .byte 0,0,0
 @start:
+   jsr select_level
    LOAD_LEVEL_PARAM LEVEL_HSCROLL
    sta @hscroll
    iny

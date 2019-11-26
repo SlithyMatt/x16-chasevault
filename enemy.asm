@@ -68,8 +68,6 @@ reverse_dir:   .byte $1, $0, $3, $2
 ticks_vuln_rem:   .word 0
 chase:            .byte 0     ; 0=scatter mode, 1=chase mode
 ticks_mode_rem:   .word 300   ; ticks remaining until switch between chase and scatter
-scatter_time:     .word 300
-chase_time:       .word 900
 
 enemy_clear:
    lda #1
