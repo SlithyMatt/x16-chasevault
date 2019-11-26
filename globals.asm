@@ -56,6 +56,6 @@ move_y:           .byte 0
 start_prompt:     .byte 1
 paused:           .byte 0
 continue_prompt:  .byte 0
-new_start:        .byte 1
+new_start:        .byte 0
 
 .endif
