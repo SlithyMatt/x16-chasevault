@@ -31,10 +31,11 @@ LEVEL_VSCROLL = 8
 L_RELEASE_E3 = 10
 L_RELEASE_E4 = 11
 L_SHOW_FRUIT = 12
-L_SCATTER    = 13
-L_CHASE      = 15
-L_VULN       = 17
-NUM_BARS = 18
+L_FRUIT_FRAME  = 13
+L_SCATTER      = 14
+L_CHASE        = 16
+L_VULN         = 18
+NUM_BARS       = 19
 
 level_table:   ; table of level data structures
    .word 0
@@ -61,6 +62,7 @@ level1:
    .byte 71    ; release_e3
    .byte 33    ; release_e4
    .byte 51    ; show_fruit
+   .byte 23    ; fruit_frame (banana)
    .word 300   ; scatter_time
    .word 900   ; chase_time
    .byte 90    ; vuln_time
@@ -79,7 +81,8 @@ level2:
    .byte 76    ; release_e3
    .byte 35    ; release_e4
    .byte 54    ; show_fruit
-   .word 300   ; scatter_time
+   .byte 23    ; fruit_frame (banana)
+   .word 270   ; scatter_time
    .word 900   ; chase_time
    .byte 88    ; vuln_time
    .byte 3     ; number of bars
@@ -97,8 +100,9 @@ level3:
    .byte 71    ; release_e3
    .byte 33    ; release_e4
    .byte 50    ; show_fruit
-   .word 300   ; scatter_time
-   .word 900   ; chase_time
+   .byte 23    ; fruit_frame (banana)
+   .word 270   ; scatter_time
+   .word 930  ; chase_time
    .byte 86    ; vuln_time
    .byte 2     ; number of bars
    .byte 9,11, 18,8
@@ -115,6 +119,7 @@ level4:
    .byte 71    ; release_e3
    .byte 33    ; release_e4
    .byte 50    ; show_fruit
+   .byte 23    ; fruit_frame (banana)
    .word 300   ; scatter_time
    .word 900   ; chase_time
    .byte 84    ; vuln_time
@@ -133,6 +138,7 @@ level5:
    .byte 71    ; release_e3
    .byte 33    ; release_e4
    .byte 50    ; show_fruit
+   .byte 23    ; fruit_frame (banana)
    .word 300   ; scatter_time
    .word 900   ; chase_time
    .byte 82    ; vuln_time
@@ -151,6 +157,7 @@ level6:
    .byte 71    ; release_e3
    .byte 33    ; release_e4
    .byte 50    ; show_fruit
+   .byte 23    ; fruit_frame (banana)
    .word 300   ; scatter_time
    .word 900   ; chase_time
    .byte 80    ; vuln_time
@@ -169,6 +176,7 @@ level7:
    .byte 71    ; release_e3
    .byte 33    ; release_e4
    .byte 50    ; show_fruit
+   .byte 23    ; fruit_frame (banana)
    .word 300   ; scatter_time
    .word 900   ; chase_time
    .byte 78    ; vuln_time
@@ -187,6 +195,7 @@ level8:
    .byte 71    ; release_e3
    .byte 33    ; release_e4
    .byte 50    ; show_fruit
+   .byte 23    ; fruit_frame (banana)
    .word 300   ; scatter_time
    .word 900   ; chase_time
    .byte 76    ; vuln_time
@@ -205,6 +214,7 @@ level9:
    .byte 80    ; release_e3
    .byte 50    ; release_e4
    .byte 60    ; show_fruit
+   .byte 23    ; fruit_frame (banana)
    .word 300   ; scatter_time
    .word 900   ; chase_time
    .byte 75    ; vuln_time
@@ -223,6 +233,7 @@ level10:
    .byte 80    ; release_e3
    .byte 50    ; release_e4
    .byte 60    ; show_fruit
+   .byte 23    ; fruit_frame (banana)
    .word 300   ; scatter_time
    .word 900   ; chase_time
    .byte 75    ; vuln_time
@@ -241,6 +252,7 @@ level11:
    .byte 80    ; release_e3
    .byte 50    ; release_e4
    .byte 60    ; show_fruit
+   .byte 23    ; fruit_frame (banana)
    .word 300   ; scatter_time
    .word 900   ; chase_time
    .byte 75    ; vuln_time
@@ -277,6 +289,7 @@ level13:
    .byte 80    ; release_e3
    .byte 50    ; release_e4
    .byte 60    ; show_fruit
+   .byte 23    ; fruit_frame (banana)
    .word 300   ; scatter_time
    .word 900   ; chase_time
    .byte 75    ; vuln_time
@@ -295,6 +308,7 @@ level14:
    .byte 80    ; release_e3
    .byte 50    ; release_e4
    .byte 60    ; show_fruit
+   .byte 23    ; fruit_frame (banana)
    .word 300   ; scatter_time
    .word 900   ; chase_time
    .byte 75    ; vuln_time
@@ -313,6 +327,7 @@ level15:
    .byte 80    ; release_e3
    .byte 50    ; release_e4
    .byte 60    ; show_fruit
+   .byte 23    ; fruit_frame (banana)
    .word 300   ; scatter_time
    .word 900   ; chase_time
    .byte 75    ; vuln_time
@@ -331,6 +346,7 @@ level16:
    .byte 80    ; release_e3
    .byte 50    ; release_e4
    .byte 60    ; show_fruit
+   .byte 23    ; fruit_frame (banana)
    .word 300   ; scatter_time
    .word 900   ; chase_time
    .byte 75    ; vuln_time
@@ -886,6 +902,8 @@ level_transition:
    sta release_e4
    LOAD_LEVEL_PARAM L_SHOW_FRUIT
    sta show_fruit
+   LOAD_LEVEL_PARAM L_FRUIT_FRAME
+   sta fruit_frame
    LOAD_LEVEL_PARAM L_SCATTER
    sta scatter_time
    iny

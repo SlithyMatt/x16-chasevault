@@ -360,6 +360,7 @@ player_tick:
    beq @check_move_req
    stz regenerate_req
    jsr regenerate
+   jsr fruit_reset
    bra @return
 @check_move_req:
    lda move_req
@@ -371,6 +372,7 @@ player_tick:
    ldy move_y
    jsr sprite_setpos
    jsr player_move
+   jsr fruit_move
    lda player
    and #$0C
    lsr
@@ -704,7 +706,7 @@ check_collision:
 
 
 eat_fruit:
-   ; TODO: disappear fruit
+   jsr fruit_clear
    lda #200       ; Add 500 to score
    jsr add_score
    jsr add_score
@@ -758,6 +760,7 @@ check_off:  ; Input:
    jsr player_stop
    lda #PLAYER_idx
    jsr sprite_disable
+   jsr fruit_reset
    jsr enemy_clear
    lda #1
    bra @return
@@ -799,6 +802,7 @@ player_die:
    jsr enemy_stop
    ldx #ENEMY4_idx
    jsr enemy_stop
+   jsr fruit_stop
    stz player_index_d
    SET_TIMER 5, @animation
    lda player
@@ -828,17 +832,15 @@ player_die:
    jmp timer_done
 
 regenerate:
+   jsr fruit_store_pos
    lda #>(VRAM_sprattr>>4)
    ldx #<(VRAM_sprattr>>4)
    ldy #<spriteattr_fn
    jsr loadvram            ; reset sprites
+   jsr fruit_restore_pos
    jsr refresh_status
    SET_TIMER 60, readygo
    jsr enemy_reset
-   lda #75 ; default scatter time = 5 seconds TODO: change with level
-   ldx #<900  ; default chase time = 15 seconds TODO: change with level
-   ldy #>900
-   jsr enemy_set_mode_times
    rts
 readygo:
    SUPERIMPOSE "ready?", 7, 9
@@ -855,6 +857,7 @@ readygo:
 @gooff:
    SUPERIMPOSE_RESTORE
    jsr player_move
+   jsr fruit_move
    ldx #ENEMY1_idx   ; release first two enemies immediately
    jsr enemy_release
    ldx #ENEMY2_idx
@@ -882,6 +885,7 @@ continue:
 
 next_level:
    jsr enemy_clear
+   jsr fruit_stop
    jsr player_stop
    SET_TIMER 15, @level_up
    rts
@@ -892,6 +896,7 @@ next_level:
 @update_level:
    SUPERIMPOSE_RESTORE
    jsr clear_bars
+   jsr fruit_move
    jsr player_move
    jmp timer_done
 

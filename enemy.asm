@@ -49,11 +49,6 @@ ENEMY4_TGT_Y = 14
 BOX_X = 9
 BOX_Y = 7
 
-ENEMY_MIN_X  = 1
-ENEMY_MIN_Y  = 3
-ENEMY_MAX_X  = 19
-ENEMY_MAX_Y  = 12
-
 target_x:   .byte ENEMY1_TGT_X, ENEMY2_TGT_X, ENEMY3_TGT_X, ENEMY4_TGT_X
 target_y:   .byte ENEMY1_TGT_Y, ENEMY2_TGT_Y, ENEMY3_TGT_Y, ENEMY4_TGT_Y
 
@@ -131,19 +126,6 @@ __enemy_scatter:  ; A: 1=reset mode timer, 0=continue mode
    sta target_y+2
    lda #ENEMY4_TGT_Y
    sta target_y+3
-   rts
-
-enemy_set_mode_times:   ; Input:
-                        ; A: scatter time, 15ths of seconds (0 to 17 seconds)
-                        ; X/Y: chase time, ticks (0 to 1091-14/15 seconds)
-   sta scatter_time
-   stz scatter_time+1
-   asl scatter_time
-   rol scatter_time+1
-   asl scatter_time
-   rol scatter_time+1
-   stx chase_time
-   sty chase_time+1
    rts
 
 make_vulnerable: ; A: 15ths of seconds (0 to 17 seconds)
@@ -620,7 +602,7 @@ __enemy_move:  ; X: enemy offset (0-3)
    beq @east_blocked
    ldx @last_x
    ldy @last_y
-   cpx #ENEMY_MAX_X
+   cpx #SPRITE_MAX_X
    beq @east_blocked
    inx
    lda #1
@@ -640,7 +622,7 @@ __enemy_move:  ; X: enemy offset (0-3)
    cmp #DIR_RIGHT
    beq @west_blocked
    ldx @last_x
-   cpx #ENEMY_MIN_X
+   cpx #SPRITE_MIN_X
    beq @west_blocked
    dex
    ldy @last_y
@@ -662,7 +644,7 @@ __enemy_move:  ; X: enemy offset (0-3)
    beq @south_blocked
    ldx @last_x
    ldy @last_y
-   cpy #ENEMY_MAX_Y
+   cpy #SPRITE_MAX_Y
    beq @south_blocked
    iny
    lda #1
@@ -687,7 +669,7 @@ __enemy_move:  ; X: enemy offset (0-3)
    cmp #DIR_DOWN
    beq @north_blocked
    ldy @last_y
-   cpy #ENEMY_MIN_Y
+   cpy #SPRITE_MIN_Y
    beq @north_blocked
    dey
    ldx @last_x

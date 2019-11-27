@@ -30,6 +30,12 @@ DIR_LEFT    = 1
 DIR_DOWN    = 2
 DIR_UP      = 3
 
+SPRITE_MIN_X  = 1
+SPRITE_MIN_Y  = 3
+SPRITE_MAX_X  = 19
+SPRITE_MAX_Y  = 12
+
+
 ; --------- Global Variables ---------
 
 player:     .byte 0 ; 7-4 (TBD) | 3:2 - direction | 1 - movable | 0 - animated
@@ -42,9 +48,10 @@ keys:       .byte 0
 
 score_mult: .byte 1
 
-release_e3: .byte 71 ; pellets remaining to release enemy 3
-release_e4: .byte 33 ; pellets remaining to release enemy 4
-show_fruit: .byte 51 ; pellets remaining to show fruit
+release_e3:       .byte 71 ; pellets remaining to release enemy 3
+release_e4:       .byte 33 ; pellets remaining to release enemy 4
+show_fruit:       .byte 51 ; pellets remaining to show fruit
+fruit_frame:      .byte 23 ; banana for level 1
 scatter_time:     .word 300
 chase_time:       .word 900
 vuln_time:        .byte 90 ; Unit: 1/15 second (6 seconds)

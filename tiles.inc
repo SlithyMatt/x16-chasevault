@@ -18,7 +18,7 @@ LOGO3          = $015
 LOGO4          = $016
 LOGO5          = $017
 HOME_FENCE     = $018
-CHERRY         = $019
+BANANA         = $019
 
 
 

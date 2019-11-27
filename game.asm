@@ -97,6 +97,7 @@ check_input:
    jsr bank2vram
    lda #15
    jsr set_bg_palette
+   stz VERA_ctrl
    VERA_SET_ADDR VRAM_sprreg, 0  ; enable sprites
    lda #$01
    sta VERA_data0
