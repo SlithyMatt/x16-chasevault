@@ -578,6 +578,7 @@ sprite_setpos: ; A: Bit 7: tile layer, Bits 6-0: sprite index
 @start:
    pha
    stx @xpos
+   stz @xpos+1
    asl @xpos
    rol @xpos+1
    asl @xpos
@@ -585,6 +586,7 @@ sprite_setpos: ; A: Bit 7: tile layer, Bits 6-0: sprite index
    asl @xpos
    rol @xpos+1
    sty @ypos
+   stz @ypos+1
    asl @ypos
    rol @ypos+1
    asl @ypos

@@ -198,8 +198,8 @@ fruit_tick:
 
 fruit_reset:
    lda #($80 | FRUIT_idx)
-   ldx FRUIT_START_X
-   ldy FRUIT_START_Y
+   ldx #FRUIT_START_X
+   ldy #FRUIT_START_Y
    jsr sprite_setpos
    stz fruit
    rts
