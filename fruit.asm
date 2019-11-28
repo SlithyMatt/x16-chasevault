@@ -13,12 +13,18 @@ FRUIT_START_Y = 5
 
 FRUIT_TICK_MOVE = 1
 
-fruit: .byte 0 ; 7:4 (TBD) | 3 - cleared | 2 - moving | 1:0 - direction
-;                                                       0:R,1:L,2:D,3:U
+fruit: .byte 0   ; 7:5 (TBD) | 4 - blinking
+;                3 - cleared | 2 - moving | 1:0 - direction
+;                                           0:R,1:L,2:D,3:U
+
+FRUIT_BLINK_FRAME = 22
+FRUIT_BLINK_TICKS = 15
+__fruit_blink_ticks: .byte FRUIT_BLINK_TICKS
 
 __fruit_stored_x: .byte FRUIT_START_X
 __fruit_stored_y: .byte FRUIT_START_Y
 
+FRUIT_BLINKING    =  $10
 FRUIT_CLEARED     =  $08
 FRUIT_MOVING      =  $04
 FRUIT_STOP_MASK   =  $FB
@@ -38,7 +44,20 @@ fruit_tick:
 @start:
    lda fruit
    bit #FRUIT_CLEARED
+   beq @check_blink
+   jmp @return
+@check_blink:
+   bit #FRUIT_BLINKING
    beq @check_pellets
+   dec __fruit_blink_ticks
+   beq @clear
+   lda #FRUIT_BLINK_FRAME
+   ldx #FRUIT_idx
+   ldy #0
+   jsr sprite_frame
+   jmp @return
+@clear:
+   jsr fruit_clear
    jmp @return
 @check_pellets:
    lda pellets
@@ -214,6 +233,14 @@ fruit_stop:
    lda fruit
    and #FRUIT_STOP_MASK
    sta fruit
+   rts
+
+fruit_blink:
+   lda fruit
+   ora #FRUIT_BLINKING
+   sta fruit
+   lda #FRUIT_BLINK_TICKS
+   sta __fruit_blink_ticks
    rts
 
 fruit_clear:

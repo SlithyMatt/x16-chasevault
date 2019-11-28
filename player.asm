@@ -706,9 +706,10 @@ check_collision:
 
 
 eat_fruit:
-   jsr fruit_clear
+   jsr fruit_blink
    lda #200       ; Add 500 to score
    jsr add_score
+   lda #200
    jsr add_score
    lda #100
    jsr add_score
@@ -824,6 +825,7 @@ player_die:
 @animation_done:
    dec lives
    bne @regenerate
+   jsr refresh_status
    SET_TIMER 30, game_over
    bra @return
 @regenerate:
