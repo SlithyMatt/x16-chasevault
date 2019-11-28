@@ -8,7 +8,7 @@ GAME_INC = 1
 .include "superimpose.asm"
 .include "debug.asm"
 .include "levels.asm"
-.include "loadvram.asm"
+.include "loadbank.asm"
 .include "fruit.asm"
 
 init_game:

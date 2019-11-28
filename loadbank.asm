@@ -1,3 +1,6 @@
+.ifndef LOADBANK_INC
+LOADBANK_INC = 1
+
 .include "x16.inc"
 .include "filenames.asm"
 
@@ -119,3 +122,5 @@ bank2vram:  ; A = RAM bank,
    cmp ZP_PTR_2+1
    bne @loop
    rts
+
+.endif

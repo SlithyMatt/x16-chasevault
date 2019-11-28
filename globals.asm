@@ -30,10 +30,10 @@ DIR_LEFT    = 1
 DIR_DOWN    = 2
 DIR_UP      = 3
 
-SPRITE_MIN_X  = 1
-SPRITE_MIN_Y  = 3
+SPRITE_MIN_X  = 0
+SPRITE_MIN_Y  = 2
 SPRITE_MAX_X  = 19
-SPRITE_MAX_Y  = 12
+SPRITE_MAX_Y  = 13
 
 
 ; --------- Global Variables ---------
