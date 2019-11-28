@@ -19,7 +19,12 @@ LOGO4          = $016
 LOGO5          = $017
 HOME_FENCE     = $018
 BANANA         = $019
-
+MANGO          = $01A
+GUAVA          = $01F
+GRAPEFRUIT     = $0D2
+CARAMBOLA      = $0D3
+CHERRY         = $0D4
+APPLE          = $0D5
 
 
 .endif

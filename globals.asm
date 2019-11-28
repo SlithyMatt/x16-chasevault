@@ -35,6 +35,14 @@ SPRITE_MIN_Y  = 2
 SPRITE_MAX_X  = 19
 SPRITE_MAX_Y  = 13
 
+BANANA_FRAME      = 23
+MANGO_FRAME       = 24
+GUAVA_FRAME       = 25
+GRAPEFRUIT_FRAME  = 26
+CARAMBOLA_FRAME   = 27
+CHERRY_FRAME      = 28
+APPLE_FRAME       = 29
+
 
 ; --------- Global Variables ---------
 

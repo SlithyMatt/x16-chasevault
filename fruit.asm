@@ -11,11 +11,21 @@ FRUIT_INC = 1
 FRUIT_START_X = 9
 FRUIT_START_Y = 5
 
+FRUIT_STATUS_X = 12
+FRUIT_STATUS_Y = 14
+
 FRUIT_TICK_MOVE = 1
 
 fruit: .byte 0   ; 7:5 (TBD) | 4 - blinking
 ;                3 - cleared | 2 - moving | 1:0 - direction
 ;                                           0:R,1:L,2:D,3:U
+
+FRUIT_BLINKING    =  $10
+FRUIT_CLEARED     =  $08
+FRUIT_MOVING      =  $04
+FRUIT_STOP_MASK   =  $FB
+FRUIT_DIR         =  $03
+FRUIT_DIR_MASK    =  $FC
 
 FRUIT_BLINK_FRAME = 22
 FRUIT_BLINK_TICKS = 15
@@ -24,12 +34,24 @@ __fruit_blink_ticks: .byte FRUIT_BLINK_TICKS
 __fruit_stored_x: .byte FRUIT_START_X
 __fruit_stored_y: .byte FRUIT_START_Y
 
-FRUIT_BLINKING    =  $10
-FRUIT_CLEARED     =  $08
-FRUIT_MOVING      =  $04
-FRUIT_STOP_MASK   =  $FB
-FRUIT_DIR         =  $03
-FRUIT_DIR_MASK    =  $FC
+__fruit_status: .byte 0
+BANANA_STATUS     = $01
+MANGO_STATUS      = $02
+GUAVA_STATUS      = $04
+GRAPEFRUIT_STATUS = $08
+CARAMBOLA_STATUS  = $10
+CHERRY_STATUS     = $20
+APPLE_STATUS      = $40
+END_FRUIT_STATUS  = $80
+
+__fruit_tile_map:
+.byte BANANA
+.byte MANGO
+.byte GUAVA
+.byte GRAPEFRUIT
+.byte CARAMBOLA
+.byte CHERRY
+.byte APPLE
 
 fruit_tick:
    bra @start
@@ -274,6 +296,72 @@ fruit_restore_pos:
    ldy __fruit_stored_y
    jsr sprite_setpos
    rts
+
+fruit_status: ; A: 0=do not add current fruit, 1=add current fruit
+   bra @start
+@mask:   .byte 0
+@start:
+   cmp #0
+   beq @check_status
+   lda #BANANA_STATUS
+   sta @mask
+   lda fruit_frame
+   sec
+   sbc #BANANA_FRAME
+   tax
+@mask_loop:
+   cpx #0
+   beq @add_status
+   asl @mask
+   dex
+   bra @mask_loop
+@add_status:
+   lda __fruit_status
+   ora @mask
+   sta __fruit_status
+@check_status:
+   lda #BANANA_STATUS
+   sta @mask
+   ldy #0
+   lda #<__fruit_tile_map
+   sta ZP_PTR_1
+   lda #>__fruit_tile_map
+   sta ZP_PTR_1+1
+@status_loop:
+   lda __fruit_status
+   bit @mask
+   beq @push_blank
+   lda (ZP_PTR_1),y
+   pha
+   bra @next_status
+@push_blank:
+   lda #BLANK
+   pha
+@next_status:
+   iny
+   asl @mask
+   cpy #7
+   bmi @status_loop
+   lda #1
+   ldx #FRUIT_STATUS_X
+   ldy #FRUIT_STATUS_Y
+   jsr xy2vaddr
+   stz VERA_ctrl
+   ora #$20
+   sta VERA_addr_bank
+   stx VERA_addr_low
+   sty VERA_addr_high
+   ldx #7
+@tile_loop:
+   cpx #0
+   beq @return
+   pla
+   sta VERA_data0
+   dex
+   bra @tile_loop
+@return:
+   rts
+
 
 __fruit_tile_collision: ; Input: X: tile index (low byte)
                         ; Output: C: set if fruit collides

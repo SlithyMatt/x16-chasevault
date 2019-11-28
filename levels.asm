@@ -62,7 +62,7 @@ level1:
    .byte 71    ; release_e3
    .byte 33    ; release_e4
    .byte 51    ; show_fruit
-   .byte 23    ; fruit_frame (banana)
+   .byte BANANA_FRAME ; fruit_frame
    .word 300   ; scatter_time
    .word 900   ; chase_time
    .byte 90    ; vuln_time
@@ -81,7 +81,7 @@ level2:
    .byte 76    ; release_e3
    .byte 35    ; release_e4
    .byte 54    ; show_fruit
-   .byte 23    ; fruit_frame (banana)
+   .byte MANGO_FRAME
    .word 270   ; scatter_time
    .word 900   ; chase_time
    .byte 88    ; vuln_time
@@ -100,7 +100,7 @@ level3:
    .byte 71    ; release_e3
    .byte 33    ; release_e4
    .byte 50    ; show_fruit
-   .byte 23    ; fruit_frame (banana)
+   .byte GUAVA_FRAME
    .word 270   ; scatter_time
    .word 930  ; chase_time
    .byte 86    ; vuln_time
@@ -119,7 +119,7 @@ level4:
    .byte 71    ; release_e3
    .byte 33    ; release_e4
    .byte 50    ; show_fruit
-   .byte 23    ; fruit_frame (banana)
+   .byte GRAPEFRUIT_FRAME
    .word 300   ; scatter_time
    .word 900   ; chase_time
    .byte 84    ; vuln_time
@@ -138,7 +138,7 @@ level5:
    .byte 71    ; release_e3
    .byte 33    ; release_e4
    .byte 50    ; show_fruit
-   .byte 23    ; fruit_frame (banana)
+   .byte CARAMBOLA_FRAME
    .word 300   ; scatter_time
    .word 900   ; chase_time
    .byte 82    ; vuln_time
@@ -157,7 +157,7 @@ level6:
    .byte 71    ; release_e3
    .byte 33    ; release_e4
    .byte 50    ; show_fruit
-   .byte 23    ; fruit_frame (banana)
+   .byte CHERRY_FRAME
    .word 300   ; scatter_time
    .word 900   ; chase_time
    .byte 80    ; vuln_time
@@ -176,7 +176,7 @@ level7:
    .byte 71    ; release_e3
    .byte 33    ; release_e4
    .byte 50    ; show_fruit
-   .byte 23    ; fruit_frame (banana)
+   .byte APPLE_FRAME
    .word 300   ; scatter_time
    .word 900   ; chase_time
    .byte 78    ; vuln_time
@@ -195,7 +195,7 @@ level8:
    .byte 71    ; release_e3
    .byte 33    ; release_e4
    .byte 50    ; show_fruit
-   .byte 23    ; fruit_frame (banana)
+   .byte BANANA_FRAME
    .word 300   ; scatter_time
    .word 900   ; chase_time
    .byte 76    ; vuln_time
@@ -214,7 +214,7 @@ level9:
    .byte 80    ; release_e3
    .byte 50    ; release_e4
    .byte 60    ; show_fruit
-   .byte 23    ; fruit_frame (banana)
+   .byte MANGO_FRAME
    .word 300   ; scatter_time
    .word 900   ; chase_time
    .byte 75    ; vuln_time
@@ -233,7 +233,7 @@ level10:
    .byte 80    ; release_e3
    .byte 50    ; release_e4
    .byte 60    ; show_fruit
-   .byte 23    ; fruit_frame (banana)
+   .byte GUAVA_FRAME
    .word 300   ; scatter_time
    .word 900   ; chase_time
    .byte 75    ; vuln_time
@@ -252,7 +252,7 @@ level11:
    .byte 80    ; release_e3
    .byte 50    ; release_e4
    .byte 60    ; show_fruit
-   .byte 23    ; fruit_frame (banana)
+   .byte GRAPEFRUIT_FRAME
    .word 300   ; scatter_time
    .word 900   ; chase_time
    .byte 75    ; vuln_time
@@ -271,6 +271,7 @@ level12:
    .byte 80    ; release_e3
    .byte 50    ; release_e4
    .byte 60    ; show_fruit
+   .byte CARAMBOLA_FRAME
    .word 300   ; scatter_time
    .word 900   ; chase_time
    .byte 75    ; vuln_time
@@ -289,7 +290,7 @@ level13:
    .byte 80    ; release_e3
    .byte 50    ; release_e4
    .byte 60    ; show_fruit
-   .byte 23    ; fruit_frame (banana)
+   .byte CHERRY_FRAME
    .word 300   ; scatter_time
    .word 900   ; chase_time
    .byte 75    ; vuln_time
@@ -308,7 +309,7 @@ level14:
    .byte 80    ; release_e3
    .byte 50    ; release_e4
    .byte 60    ; show_fruit
-   .byte 23    ; fruit_frame (banana)
+   .byte APPLE_FRAME
    .word 300   ; scatter_time
    .word 900   ; chase_time
    .byte 75    ; vuln_time
@@ -327,7 +328,7 @@ level15:
    .byte 80    ; release_e3
    .byte 50    ; release_e4
    .byte 60    ; show_fruit
-   .byte 23    ; fruit_frame (banana)
+   .byte BANANA_FRAME
    .word 300   ; scatter_time
    .word 900   ; chase_time
    .byte 75    ; vuln_time
@@ -346,7 +347,7 @@ level16:
    .byte 80    ; release_e3
    .byte 50    ; release_e4
    .byte 60    ; show_fruit
-   .byte 23    ; fruit_frame (banana)
+   .byte MANGO_FRAME
    .word 300   ; scatter_time
    .word 900   ; chase_time
    .byte 75    ; vuln_time

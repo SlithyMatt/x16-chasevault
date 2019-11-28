@@ -713,7 +713,8 @@ eat_fruit:
    jsr add_score
    lda #100
    jsr add_score
-   ; TODO: add icon to achievement tray
+   lda #1
+   jsr fruit_status
    ; TODO: level-specific result
    rts
 
@@ -788,6 +789,8 @@ refresh_status:
    lda keys
    ora #$30
    sta VERA_data0
+   lda #0
+   jsr fruit_status
    rts
 
 
