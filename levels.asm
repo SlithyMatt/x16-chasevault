@@ -51,7 +51,7 @@ level_table:   ; table of level data structures
    .word level45, level46, level47, level48, level49
 
 level1:
-   .byte 102   ; number of pellets
+   .byte 108   ; number of pellets
    .byte 0     ; new
    .byte 9     ; east neighbor
    .byte 0     ; west neighbor
@@ -61,16 +61,16 @@ level1:
    .word 0     ; yscroll
    .byte 71    ; release_e3
    .byte 33    ; release_e4
-   .byte 51    ; show_fruit
+   .byte 54    ; show_fruit
    .byte BANANA_FRAME ; fruit_frame
    .word 300   ; scatter_time
    .word 900   ; chase_time
    .byte 90    ; vuln_time
    .byte 2     ; number of bars
-   .byte 9,11, 18,8  ; x,y coordinates of each bar tile
+   .byte 9,12, 18,8  ; x,y coordinates of each bar tile
 
 level2:
-   .byte 108   ; number of pellets
+   .byte 102   ; number of pellets
    .byte 1
    .byte 10
    .byte 0
@@ -86,7 +86,7 @@ level2:
    .word 900   ; chase_time
    .byte 88    ; vuln_time
    .byte 3     ; number of bars
-   .byte 9,12, 18,8, 9,2
+   .byte 9,11, 18,8, 9,2
 
 level3:
    .byte 69    ; number of pellets
