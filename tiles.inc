@@ -20,7 +20,10 @@ LOGO5          = $017
 HOME_FENCE     = $018
 BANANA         = $019
 MANGO          = $01A
+; $1B-1E "Press START or ENTER to Play"
 GUAVA          = $01F
+; $20-$5A ASCII characters
+; $5B-$D1 Start Screen
 GRAPEFRUIT     = $0D2
 CARAMBOLA      = $0D3
 CHERRY         = $0D4

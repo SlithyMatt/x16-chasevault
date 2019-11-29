@@ -89,7 +89,7 @@ level2:
    .byte 9,12, 18,8, 9,2
 
 level3:
-   .byte 102   ; number of pellets
+   .byte 69    ; number of pellets
    .byte 1
    .byte 11
    .byte 0
@@ -97,15 +97,15 @@ level3:
    .byte 2
    .word 0
    .word 480
-   .byte 71    ; release_e3
+   .byte 50    ; release_e3
    .byte 33    ; release_e4
-   .byte 50    ; show_fruit
+   .byte 40    ; show_fruit
    .byte GUAVA_FRAME
    .word 270   ; scatter_time
    .word 930  ; chase_time
    .byte 86    ; vuln_time
-   .byte 2     ; number of bars
-   .byte 9,11, 18,8
+   .byte 4     ; number of bars
+   .byte 9,13, 18,8, 15,11, 9,2
 
 level4:
    .byte 102   ; number of pellets
