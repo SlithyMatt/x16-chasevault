@@ -949,12 +949,13 @@ level_transition:
    sta __level_changing
    rts
 @regenerate:
+   jsr __level_prepare_locks
    jsr level_backup
    lda #1
    sta regenerate_req
-   jsr __level_prepare_locks
    jmp timer_done
 @move:
+   jsr __level_prepare_locks
    jsr level_backup
    lda #1
    sta move_req
