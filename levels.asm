@@ -17,6 +17,15 @@ SOUTH_ENTRANCE_Y = 14
 WEST_ENTRANCE_X = 1
 WEST_ENTRANCE_Y = 8
 
+NORTH_LOCK_X = 9
+NORTH_LOCK_Y = 1
+EAST_LOCK_X  = 19
+EAST_LOCK_Y  = 8
+SOUTH_LOCK_X = 9
+SOUTH_LOCK_Y = 14
+WEST_LOCK_X  = 0
+WEST_LOCK_Y  = 8
+
 HSCROLL_STEP = 5
 VSCROLL_STEP = 4
 
@@ -120,8 +129,8 @@ level4:
    .byte 33    ; release_e4
    .byte 50    ; show_fruit
    .byte GRAPEFRUIT_FRAME
-   .word 300   ; scatter_time
-   .word 900   ; chase_time
+   .word 240   ; scatter_time
+   .word 930   ; chase_time
    .byte 84    ; vuln_time
    .byte 2     ; number of bars
    .byte 9,11, 18,8
@@ -139,8 +148,8 @@ level5:
    .byte 33    ; release_e4
    .byte 50    ; show_fruit
    .byte CARAMBOLA_FRAME
-   .word 300   ; scatter_time
-   .word 900   ; chase_time
+   .word 240   ; scatter_time
+   .word 960   ; chase_time
    .byte 82    ; vuln_time
    .byte 2     ; number of bars
    .byte 9,11, 18,8
@@ -158,8 +167,8 @@ level6:
    .byte 33    ; release_e4
    .byte 50    ; show_fruit
    .byte CHERRY_FRAME
-   .word 300   ; scatter_time
-   .word 900   ; chase_time
+   .word 210   ; scatter_time
+   .word 960   ; chase_time
    .byte 80    ; vuln_time
    .byte 2     ; number of bars
    .byte 9,11, 18,8
@@ -177,8 +186,8 @@ level7:
    .byte 33    ; release_e4
    .byte 50    ; show_fruit
    .byte APPLE_FRAME
-   .word 300   ; scatter_time
-   .word 900   ; chase_time
+   .word 210   ; scatter_time
+   .word 990   ; chase_time
    .byte 78    ; vuln_time
    .byte 2     ; number of bars
    .byte 9,11, 18,8
@@ -196,14 +205,14 @@ level8:
    .byte 33    ; release_e4
    .byte 50    ; show_fruit
    .byte BANANA_FRAME
-   .word 300   ; scatter_time
-   .word 900   ; chase_time
+   .word 180   ; scatter_time
+   .word 990   ; chase_time
    .byte 76    ; vuln_time
    .byte 2     ; number of bars
    .byte 9,11, 18,8
 
 level9:
-   .byte 100   ; number of pellets
+   .byte 99    ; number of pellets
    .byte 1
    .byte 17
    .byte 1
@@ -215,14 +224,14 @@ level9:
    .byte 50    ; release_e4
    .byte 60    ; show_fruit
    .byte MANGO_FRAME
-   .word 300   ; scatter_time
-   .word 900   ; chase_time
+   .word 180   ; scatter_time
+   .word 1020  ; chase_time
    .byte 75    ; vuln_time
    .byte 3     ; number of bars
-   .byte 0,8, 9,12, 18,8
+   .byte 2,8, 9,12, 18,8
 
 level10:
-   .byte 102   ; number of pellets
+   .byte 101   ; number of pellets
    .byte 1     ; new
    .byte 18    ; east neighbor
    .byte 2     ; west neighbor
@@ -234,11 +243,11 @@ level10:
    .byte 50    ; release_e4
    .byte 60    ; show_fruit
    .byte GUAVA_FRAME
-   .word 300   ; scatter_time
-   .word 900   ; chase_time
+   .word 150   ; scatter_time
+   .word 1020  ; chase_time
    .byte 75    ; vuln_time
-   .byte 2     ; number of bars
-   .byte 9,11, 18,8
+   .byte 4     ; number of bars
+   .byte 9,4, 1,8, 18,8, 9,13
 
 level11:
    .byte 102   ; number of pellets
@@ -573,6 +582,7 @@ level_tick:
    sta @vscroll
    lda VERA_data0
    sta @vscroll+1
+   lda #0
    jsr select_level
    LOAD_LEVEL_PARAM LEVEL_HSCROLL
    sta @level_hscroll
@@ -669,8 +679,12 @@ level_tick:
 @return:
    rts
 
-select_level: ; Output: ZP_PTR_1: level params address
+select_level:  ; Input: A: level to select (current level if zero)
+               ; Output: ZP_PTR_1: level params address
+   cmp #0
+   bne @select
    lda level
+@select:
    asl
    tax
    lda level_table,x
@@ -680,6 +694,7 @@ select_level: ; Output: ZP_PTR_1: level params address
    rts
 
 clear_bars:
+   lda #0
    jsr select_level
    LOAD_LEVEL_PARAM NUM_BARS
    tax               ; X = number of bars
@@ -719,6 +734,7 @@ clear_bars:
    rts
 
 level_east:
+   lda #0
    jsr select_level
    LOAD_LEVEL_PARAM EAST_NEIGHBOR
    sta level
@@ -730,6 +746,7 @@ level_east:
    rts
 
 level_west:
+   lda #0
    jsr select_level
    LOAD_LEVEL_PARAM WEST_NEIGHBOR
    sta level
@@ -741,6 +758,7 @@ level_west:
    rts
 
 level_south:
+   lda #0
    jsr select_level
    LOAD_LEVEL_PARAM SOUTH_NEIGHBOR
    sta level
@@ -752,6 +770,7 @@ level_south:
    rts
 
 level_north:
+   lda #0
    jsr select_level
    LOAD_LEVEL_PARAM NORTH_NEIGHBOR
    sta level
@@ -769,6 +788,7 @@ level_restore:
 @source: .byte 0,0,0
 @dest:   .byte 0,0,0
 @start:
+   lda #0
    jsr select_level
    LOAD_LEVEL_PARAM NUM_PELLETS
    sta pellets
@@ -894,6 +914,7 @@ level_transition:
    sbc #60
 @load_params:
    sta __level_fade_in
+   lda #0
    jsr select_level
    LOAD_LEVEL_PARAM NUM_PELLETS
    sta pellets
@@ -931,6 +952,7 @@ level_transition:
    jsr level_backup
    lda #1
    sta regenerate_req
+   jsr __level_prepare_locks
    jmp timer_done
 @move:
    jsr level_backup
@@ -945,6 +967,7 @@ level_backup:
 @source: .byte 0,0,0
 @dest:   .byte 0,0,0
 @start:
+   lda #0
    jsr select_level
    LOAD_LEVEL_PARAM LEVEL_HSCROLL
    sta @hscroll
@@ -1053,6 +1076,105 @@ set_bg_palette: ; A: palette offset
    VERA_SET_ADDR $F2007, 0
    pla
    sta VERA_data0
+   rts
+
+__level_prepare_locks:
+   lda #0
+   jsr select_level
+   LOAD_LEVEL_PARAM EAST_NEIGHBOR
+   beq @check_west
+   jsr select_level
+   LOAD_LEVEL_PARAM NEW_LEVEL
+   bne @check_west
+   ldx #EAST_LOCK_X
+   ldy #EAST_LOCK_Y
+   jsr clear_vlock
+@check_west:
+   lda #0
+   jsr select_level
+   LOAD_LEVEL_PARAM WEST_NEIGHBOR
+   beq @check_south
+   jsr select_level
+   LOAD_LEVEL_PARAM NEW_LEVEL
+   bne @check_south
+   ldx #WEST_LOCK_X
+   ldy #WEST_LOCK_Y
+   jsr clear_vlock
+@check_south:
+   lda #0
+   jsr select_level
+   LOAD_LEVEL_PARAM SOUTH_NEIGHBOR
+   beq @check_north
+   jsr select_level
+   LOAD_LEVEL_PARAM NEW_LEVEL
+   bne @check_north
+   ldx #SOUTH_LOCK_X
+   ldy #SOUTH_LOCK_Y
+   jsr clear_hlock
+@check_north:
+   lda #0
+   jsr select_level
+   LOAD_LEVEL_PARAM NORTH_NEIGHBOR
+   beq @return
+   jsr select_level
+   LOAD_LEVEL_PARAM NEW_LEVEL
+   bne @return
+   ldx #NORTH_LOCK_X
+   ldy #NORTH_LOCK_Y
+   jsr clear_hlock
+@return:
+   rts
+
+clear_hlock:   ; Input:
+               ;  X: tile x
+               ;  Y: tile y
+   phx
+   phy
+   lda #1
+   jsr xy2vaddr
+   stz VERA_ctrl
+   sta VERA_addr_bank
+   stx VERA_addr_low
+   sty VERA_addr_high
+   stz VERA_data0
+   ply
+   plx
+   phx
+   phy
+   dex
+   lda #DIR_RIGHT
+   jsr make_wall_stub
+   ply
+   plx
+   inx
+   lda #DIR_LEFT
+   jsr make_wall_stub
+   rts
+
+clear_vlock:   ; Input:
+               ;  X: tile x
+               ;  Y: tile y
+   phx
+   phy
+   lda #1
+   jsr xy2vaddr
+   stz VERA_ctrl
+   sta VERA_addr_bank
+   stx VERA_addr_low
+   sty VERA_addr_high
+   stz VERA_data0
+   ply
+   plx
+   phx
+   phy
+   dey
+   lda #DIR_DOWN
+   jsr make_wall_stub
+   ply
+   plx
+   iny
+   lda #DIR_UP
+   jsr make_wall_stub
    rts
 
 .endif

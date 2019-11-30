@@ -51,7 +51,7 @@ player:     .byte 0 ; 7-4 (TBD) | 3:2 - direction | 1 - movable | 0 - animated
 lives:      .byte 4
 level:      .byte 1     ; BCD
 score:      .dword 0    ; BCD
-pellets:    .byte 102
+pellets:    .byte 108
 keys:       .byte 0
 
 score_mult: .byte 1

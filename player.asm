@@ -481,34 +481,15 @@ check_hlock:   ; Input:
                ;  Y: tile y
                ; Output:
                ;  Z: cleared if unlocked, set if remaining
-   bra @start
-@lock_x: .byte 0
-@lock_y: .byte 0
-@tile: .word 0
-@start:
    lda keys
    cmp #0
    beq @return
-   stx @lock_x
-   sty @lock_y
-   lda #1
-   jsr xy2vaddr
-   stz VERA_ctrl
-   sta VERA_addr_bank
-   stx VERA_addr_low
-   sty VERA_addr_high
-   stz VERA_data0
+   phx
+   phy
    jsr use_key
-   ldx @lock_x
-   dex
-   ldy @lock_y
-   lda #DIR_RIGHT
-   jsr make_wall_stub
-   ldx @lock_x
-   inx
-   ldy @lock_y
-   lda #DIR_LEFT
-   jsr make_wall_stub
+   ply
+   plx
+   jsr clear_hlock
    lda #1
 @return:
    rts
@@ -518,33 +499,15 @@ check_vlock:   ; Input:
                ;  Y: tile y
                ; Output:
                ;  Z: cleared if unlocked, set if remaining
-   bra @start
-@lock_x: .byte 0
-@lock_y: .byte 0
-@start:
    lda keys
    cmp #0
    beq @return
-   stx @lock_x
-   sty @lock_y
-   lda #1
-   jsr xy2vaddr
-   stz VERA_ctrl
-   sta VERA_addr_bank
-   stx VERA_addr_low
-   sty VERA_addr_high
-   stz VERA_data0
+   phx
+   phy
    jsr use_key
-   ldx @lock_x
-   ldy @lock_y
-   dey
-   lda #DIR_DOWN
-   jsr make_wall_stub
-   ldx @lock_x
-   ldy @lock_y
-   iny
-   lda #DIR_UP
-   jsr make_wall_stub
+   ply
+   plx
+   jsr clear_vlock
    lda #1
 @return:
    rts
