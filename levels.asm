@@ -57,7 +57,7 @@ level_table:   ; table of level data structures
    .word level30, level31, level32, level33, level34
    .word level35, level36, level37, level38, level39
    .word level40, level41, level42, level43, level44
-   .word level45, level46, level47, level48, level49
+   .word level45, level46, level47, level48
 
 level1:
    .byte 108   ; number of pellets
@@ -250,7 +250,7 @@ level10:
    .byte 9,4, 1,8, 18,8, 9,13
 
 level11:
-   .byte 102   ; number of pellets
+   .byte 111   ; number of pellets
    .byte 1     ; new
    .byte 19    ; east neighbor
    .byte 3     ; west neighbor
@@ -265,8 +265,8 @@ level11:
    .word 300   ; scatter_time
    .word 900   ; chase_time
    .byte 75    ; vuln_time
-   .byte 2     ; number of bars
-   .byte 9,11, 18,8
+   .byte 4     ; number of bars
+   .byte 9,2, 1,8, 18,8, 9,13
 
 level12:
    .byte 102   ; number of pellets
@@ -365,166 +365,609 @@ level16:
 
 level17:
    .byte 102   ; number of pellets
+   .byte 1     ; new
+   .byte 25    ; east neighbor
+   .byte 9     ; west neighbor
+   .byte 18    ; south neighbor
+   .byte 0     ; north neighbor
+   .word 640   ; hscroll
+   .word 0     ; vscroll
+   .byte 80    ; release_e3
+   .byte 50    ; release_e4
+   .byte 60    ; show_fruit
+   .byte GUAVA_FRAME
+   .word 300   ; scatter_time
+   .word 900   ; chase_time
+   .byte 75    ; vuln_time
    .byte 2     ; number of bars
    .byte 9,11, 18,8
 
 level18:
    .byte 102   ; number of pellets
+   .byte 1     ; new
+   .byte 26    ; east neighbor
+   .byte 10    ; west neighbor
+   .byte 19    ; south neighbor
+   .byte 17    ; north neighbor
+   .word 640   ; hscroll
+   .word 240   ; vscroll
+   .byte 80    ; release_e3
+   .byte 50    ; release_e4
+   .byte 60    ; show_fruit
+   .byte GRAPEFRUIT_FRAME
+   .word 300   ; scatter_time
+   .word 900   ; chase_time
+   .byte 75    ; vuln_time
    .byte 2     ; number of bars
    .byte 9,11, 18,8
 
 level19:
    .byte 102   ; number of pellets
+   .byte 1     ; new
+   .byte 27    ; east neighbor
+   .byte 11    ; west neighbor
+   .byte 20    ; south neighbor
+   .byte 18    ; north neighbor
+   .word 640   ; hscroll
+   .word 480   ; vscroll
+   .byte 80    ; release_e3
+   .byte 50    ; release_e4
+   .byte 60    ; show_fruit
+   .byte CARAMBOLA_FRAME
+   .word 300   ; scatter_time
+   .word 900   ; chase_time
+   .byte 75    ; vuln_time
    .byte 2     ; number of bars
    .byte 9,11, 18,8
 
 level20:
    .byte 102   ; number of pellets
+   .byte 1     ; new
+   .byte 28    ; east neighbor
+   .byte 12    ; west neighbor
+   .byte 21    ; south neighbor
+   .byte 19    ; north neighbor
+   .word 640   ; hscroll
+   .word 720   ; vscroll
+   .byte 80    ; release_e3
+   .byte 50    ; release_e4
+   .byte 60    ; show_fruit
+   .byte CHERRY_FRAME
+   .word 300   ; scatter_time
+   .word 900   ; chase_time
+   .byte 75    ; vuln_time
    .byte 2     ; number of bars
    .byte 9,11, 18,8
 
 level21:
    .byte 102   ; number of pellets
+   .byte 1     ; new
+   .byte 29    ; east neighbor
+   .byte 13    ; west neighbor
+   .byte 22    ; south neighbor
+   .byte 20    ; north neighbor
+   .word 640   ; hscroll
+   .word 960   ; vscroll
+   .byte 80    ; release_e3
+   .byte 50    ; release_e4
+   .byte 60    ; show_fruit
+   .byte APPLE_FRAME
+   .word 300   ; scatter_time
+   .word 900   ; chase_time
+   .byte 75    ; vuln_time
    .byte 2     ; number of bars
    .byte 9,11, 18,8
 
 level22:
    .byte 102   ; number of pellets
+   .byte 1     ; new
+   .byte 30    ; east neighbor
+   .byte 14    ; west neighbor
+   .byte 23    ; south neighbor
+   .byte 21    ; north neighbor
+   .word 640   ; hscroll
+   .word 1200  ; vscroll
+   .byte 80    ; release_e3
+   .byte 50    ; release_e4
+   .byte 60    ; show_fruit
+   .byte BANANA_FRAME
+   .word 300   ; scatter_time
+   .word 900   ; chase_time
+   .byte 75    ; vuln_time
    .byte 2     ; number of bars
    .byte 9,11, 18,8
 
 level23:
    .byte 102   ; number of pellets
+   .byte 1     ; new
+   .byte 31    ; east neighbor
+   .byte 15    ; west neighbor
+   .byte 24    ; south neighbor
+   .byte 22    ; north neighbor
+   .word 640   ; hscroll
+   .word 1440  ; vscroll
+   .byte 80    ; release_e3
+   .byte 50    ; release_e4
+   .byte 60    ; show_fruit
+   .byte MANGO_FRAME
+   .word 300   ; scatter_time
+   .word 900   ; chase_time
+   .byte 75    ; vuln_time
    .byte 2     ; number of bars
    .byte 9,11, 18,8
 
 level24:
    .byte 102   ; number of pellets
+   .byte 1     ; new
+   .byte 32    ; east neighbor
+   .byte 16    ; west neighbor
+   .byte 0     ; south neighbor
+   .byte 23    ; north neighbor
+   .word 640   ; hscroll
+   .word 1680  ; vscroll
+   .byte 80    ; release_e3
+   .byte 50    ; release_e4
+   .byte 60    ; show_fruit
+   .byte GUAVA_FRAME
+   .word 300   ; scatter_time
+   .word 900   ; chase_time
+   .byte 75    ; vuln_time
    .byte 2     ; number of bars
    .byte 9,11, 18,8
 
 level25:
    .byte 102   ; number of pellets
+   .byte 1     ; new
+   .byte 17    ; east neighbor
+   .byte 33    ; west neighbor
+   .byte 26    ; south neighbor
+   .byte 0     ; north neighbor
+   .word 960   ; hscroll
+   .word 0     ; vscroll
+   .byte 80    ; release_e3
+   .byte 50    ; release_e4
+   .byte 60    ; show_fruit
+   .byte GRAPEFRUIT_FRAME
+   .word 300   ; scatter_time
+   .word 900   ; chase_time
+   .byte 75    ; vuln_time
    .byte 2     ; number of bars
    .byte 9,11, 18,8
 
 level26:
    .byte 102   ; number of pellets
+   .byte 1     ; new
+   .byte 18    ; east neighbor
+   .byte 34    ; west neighbor
+   .byte 27    ; south neighbor
+   .byte 25    ; north neighbor
+   .word 960   ; hscroll
+   .word 240   ; vscroll
+   .byte 80    ; release_e3
+   .byte 50    ; release_e4
+   .byte 60    ; show_fruit
+   .byte CARAMBOLA_FRAME
+   .word 300   ; scatter_time
+   .word 900   ; chase_time
+   .byte 75    ; vuln_time
    .byte 2     ; number of bars
    .byte 9,11, 18,8
 
 level27:
    .byte 102   ; number of pellets
+   .byte 1     ; new
+   .byte 19    ; east neighbor
+   .byte 35    ; west neighbor
+   .byte 28    ; south neighbor
+   .byte 26    ; north neighbor
+   .word 960   ; hscroll
+   .word 480   ; vscroll
+   .byte 80    ; release_e3
+   .byte 50    ; release_e4
+   .byte 60    ; show_fruit
+   .byte CHERRY_FRAME
+   .word 300   ; scatter_time
+   .word 900   ; chase_time
+   .byte 75    ; vuln_time
    .byte 2     ; number of bars
    .byte 9,11, 18,8
 
 level28:
    .byte 102   ; number of pellets
+   .byte 1     ; new
+   .byte 20    ; east neighbor
+   .byte 36    ; west neighbor
+   .byte 29    ; south neighbor
+   .byte 27    ; north neighbor
+   .word 960   ; hscroll
+   .word 720   ; vscroll
+   .byte 80    ; release_e3
+   .byte 50    ; release_e4
+   .byte 60    ; show_fruit
+   .byte APPLE_FRAME
+   .word 300   ; scatter_time
+   .word 900   ; chase_time
+   .byte 75    ; vuln_time
    .byte 2     ; number of bars
    .byte 9,11, 18,8
 
 level29:
    .byte 102   ; number of pellets
+   .byte 1     ; new
+   .byte 21    ; east neighbor
+   .byte 37    ; west neighbor
+   .byte 30    ; south neighbor
+   .byte 28    ; north neighbor
+   .word 960   ; hscroll
+   .word 960   ; vscroll
+   .byte 80    ; release_e3
+   .byte 50    ; release_e4
+   .byte 60    ; show_fruit
+   .byte BANANA_FRAME
+   .word 300   ; scatter_time
+   .word 900   ; chase_time
+   .byte 75    ; vuln_time
    .byte 2     ; number of bars
    .byte 9,11, 18,8
 
 level30:
    .byte 102   ; number of pellets
+   .byte 1     ; new
+   .byte 22    ; east neighbor
+   .byte 38    ; west neighbor
+   .byte 31    ; south neighbor
+   .byte 29    ; north neighbor
+   .word 960   ; hscroll
+   .word 1200  ; vscroll
+   .byte 80    ; release_e3
+   .byte 50    ; release_e4
+   .byte 60    ; show_fruit
+   .byte MANGO_FRAME
+   .word 300   ; scatter_time
+   .word 900   ; chase_time
+   .byte 75    ; vuln_time
    .byte 2     ; number of bars
    .byte 9,11, 18,8
 
 level31:
    .byte 102   ; number of pellets
+   .byte 1     ; new
+   .byte 23    ; east neighbor
+   .byte 39    ; west neighbor
+   .byte 32    ; south neighbor
+   .byte 30    ; north neighbor
+   .word 960   ; hscroll
+   .word 1440  ; vscroll
+   .byte 80    ; release_e3
+   .byte 50    ; release_e4
+   .byte 60    ; show_fruit
+   .byte GUAVA_FRAME
+   .word 300   ; scatter_time
+   .word 900   ; chase_time
+   .byte 75    ; vuln_time
    .byte 2     ; number of bars
    .byte 9,11, 18,8
 
 level32:
    .byte 102   ; number of pellets
+   .byte 1     ; new
+   .byte 24    ; east neighbor
+   .byte 40    ; west neighbor
+   .byte 0     ; south neighbor
+   .byte 31    ; north neighbor
+   .word 960   ; hscroll
+   .word 1680  ; vscroll
+   .byte 80    ; release_e3
+   .byte 50    ; release_e4
+   .byte 60    ; show_fruit
+   .byte GRAPEFRUIT_FRAME
+   .word 300   ; scatter_time
+   .word 900   ; chase_time
+   .byte 75    ; vuln_time
    .byte 2     ; number of bars
    .byte 9,11, 18,8
 
 level33:
    .byte 102   ; number of pellets
+   .byte 1     ; new
+   .byte 25    ; east neighbor
+   .byte 41    ; west neighbor
+   .byte 34    ; south neighbor
+   .byte 0     ; north neighbor
+   .word 1280  ; hscroll
+   .word 0     ; vscroll
+   .byte 80    ; release_e3
+   .byte 50    ; release_e4
+   .byte 60    ; show_fruit
+   .byte CARAMBOLA_FRAME
+   .word 300   ; scatter_time
+   .word 900   ; chase_time
+   .byte 75    ; vuln_time
    .byte 2     ; number of bars
    .byte 9,11, 18,8
 
 level34:
    .byte 102   ; number of pellets
+   .byte 1     ; new
+   .byte 26    ; east neighbor
+   .byte 42    ; west neighbor
+   .byte 35    ; south neighbor
+   .byte 33    ; north neighbor
+   .word 1280  ; hscroll
+   .word 240   ; vscroll
+   .byte 80    ; release_e3
+   .byte 50    ; release_e4
+   .byte 60    ; show_fruit
+   .byte CHERRY_FRAME
+   .word 300   ; scatter_time
+   .word 900   ; chase_time
+   .byte 75    ; vuln_time
    .byte 2     ; number of bars
    .byte 9,11, 18,8
 
 level35:
    .byte 102   ; number of pellets
+   .byte 1     ; new
+   .byte 27    ; east neighbor
+   .byte 43    ; west neighbor
+   .byte 36    ; south neighbor
+   .byte 34    ; north neighbor
+   .word 1280  ; hscroll
+   .word 480   ; vscroll
+   .byte 80    ; release_e3
+   .byte 50    ; release_e4
+   .byte 60    ; show_fruit
+   .byte APPLE_FRAME
+   .word 300   ; scatter_time
+   .word 900   ; chase_time
+   .byte 75    ; vuln_time
    .byte 2     ; number of bars
    .byte 9,11, 18,8
 
 level36:
    .byte 102   ; number of pellets
+   .byte 1     ; new
+   .byte 28    ; east neighbor
+   .byte 44    ; west neighbor
+   .byte 37    ; south neighbor
+   .byte 35    ; north neighbor
+   .word 1280  ; hscroll
+   .word 720   ; vscroll
+   .byte 80    ; release_e3
+   .byte 50    ; release_e4
+   .byte 60    ; show_fruit
+   .byte BANANA_FRAME
+   .word 300   ; scatter_time
+   .word 900   ; chase_time
+   .byte 75    ; vuln_time
    .byte 2     ; number of bars
    .byte 9,11, 18,8
 
 level37:
    .byte 102   ; number of pellets
+   .byte 1     ; new
+   .byte 29    ; east neighbor
+   .byte 45    ; west neighbor
+   .byte 38    ; south neighbor
+   .byte 36    ; north neighbor
+   .word 1280  ; hscroll
+   .word 960   ; vscroll
+   .byte 80    ; release_e3
+   .byte 50    ; release_e4
+   .byte 60    ; show_fruit
+   .byte MANGO_FRAME
+   .word 300   ; scatter_time
+   .word 900   ; chase_time
+   .byte 75    ; vuln_time
    .byte 2     ; number of bars
    .byte 9,11, 18,8
 
 level38:
    .byte 102   ; number of pellets
+   .byte 1     ; new
+   .byte 30    ; east neighbor
+   .byte 46    ; west neighbor
+   .byte 39    ; south neighbor
+   .byte 37    ; north neighbor
+   .word 1280  ; hscroll
+   .word 1200  ; vscroll
+   .byte 80    ; release_e3
+   .byte 50    ; release_e4
+   .byte 60    ; show_fruit
+   .byte GUAVA_FRAME
+   .word 300   ; scatter_time
+   .word 900   ; chase_time
+   .byte 75    ; vuln_time
    .byte 2     ; number of bars
    .byte 9,11, 18,8
 
 level39:
    .byte 102   ; number of pellets
+   .byte 1     ; new
+   .byte 31    ; east neighbor
+   .byte 47    ; west neighbor
+   .byte 40    ; south neighbor
+   .byte 38    ; north neighbor
+   .word 1280  ; hscroll
+   .word 1440  ; vscroll
+   .byte 80    ; release_e3
+   .byte 50    ; release_e4
+   .byte 60    ; show_fruit
+   .byte GRAPEFRUIT_FRAME
+   .word 300   ; scatter_time
+   .word 900   ; chase_time
+   .byte 75    ; vuln_time
    .byte 2     ; number of bars
    .byte 9,11, 18,8
 
 level40:
    .byte 102   ; number of pellets
+   .byte 1     ; new
+   .byte 32    ; east neighbor
+   .byte 48    ; west neighbor
+   .byte 0    ; south neighbor
+   .byte 39    ; north neighbor
+   .word 1280  ; hscroll
+   .word 1680  ; vscroll
+   .byte 80    ; release_e3
+   .byte 50    ; release_e4
+   .byte 60    ; show_fruit
+   .byte CARAMBOLA_FRAME
+   .word 300   ; scatter_time
+   .word 900   ; chase_time
+   .byte 75    ; vuln_time
    .byte 2     ; number of bars
    .byte 9,11, 18,8
 
 level41:
    .byte 102   ; number of pellets
+   .byte 1     ; new
+   .byte 33    ; east neighbor
+   .byte 0     ; west neighbor
+   .byte 42    ; south neighbor
+   .byte 0     ; north neighbor
+   .word 1600  ; hscroll
+   .word 0     ; vscroll
+   .byte 80    ; release_e3
+   .byte 50    ; release_e4
+   .byte 60    ; show_fruit
+   .byte CHERRY_FRAME
+   .word 300   ; scatter_time
+   .word 900   ; chase_time
+   .byte 75    ; vuln_time
    .byte 2     ; number of bars
    .byte 9,11, 18,8
 
 level42:
    .byte 102   ; number of pellets
+   .byte 1     ; new
+   .byte 34    ; east neighbor
+   .byte 0     ; west neighbor
+   .byte 43    ; south neighbor
+   .byte 41    ; north neighbor
+   .word 1600  ; hscroll
+   .word 240   ; vscroll
+   .byte 80    ; release_e3
+   .byte 50    ; release_e4
+   .byte 60    ; show_fruit
+   .byte APPLE_FRAME
+   .word 300   ; scatter_time
+   .word 900   ; chase_time
+   .byte 75    ; vuln_time
    .byte 2     ; number of bars
    .byte 9,11, 18,8
 
 level43:
    .byte 102   ; number of pellets
+   .byte 1     ; new
+   .byte 35    ; east neighbor
+   .byte 0     ; west neighbor
+   .byte 44    ; south neighbor
+   .byte 42    ; north neighbor
+   .word 1600  ; hscroll
+   .word 480   ; vscroll
+   .byte 80    ; release_e3
+   .byte 50    ; release_e4
+   .byte 60    ; show_fruit
+   .byte BANANA_FRAME
+   .word 300   ; scatter_time
+   .word 900   ; chase_time
+   .byte 75    ; vuln_time
    .byte 2     ; number of bars
    .byte 9,11, 18,8
 
 level44:
    .byte 102   ; number of pellets
+   .byte 1     ; new
+   .byte 36    ; east neighbor
+   .byte 0     ; west neighbor
+   .byte 45    ; south neighbor
+   .byte 43    ; north neighbor
+   .word 1600  ; hscroll
+   .word 720   ; vscroll
+   .byte 80    ; release_e3
+   .byte 50    ; release_e4
+   .byte 60    ; show_fruit
+   .byte MANGO_FRAME
+   .word 300   ; scatter_time
+   .word 900   ; chase_time
+   .byte 75    ; vuln_time
    .byte 2     ; number of bars
    .byte 9,11, 18,8
 
 level45:
    .byte 102   ; number of pellets
+   .byte 1     ; new
+   .byte 37    ; east neighbor
+   .byte 0     ; west neighbor
+   .byte 46    ; south neighbor
+   .byte 44    ; north neighbor
+   .word 1600  ; hscroll
+   .word 960   ; vscroll
+   .byte 80    ; release_e3
+   .byte 50    ; release_e4
+   .byte 60    ; show_fruit
+   .byte GUAVA_FRAME
+   .word 300   ; scatter_time
+   .word 900   ; chase_time
+   .byte 75    ; vuln_time
    .byte 2     ; number of bars
    .byte 9,11, 18,8
 
 level46:
    .byte 102   ; number of pellets
+   .byte 1     ; new
+   .byte 38    ; east neighbor
+   .byte 0     ; west neighbor
+   .byte 47    ; south neighbor
+   .byte 45    ; north neighbor
+   .word 1600  ; hscroll
+   .word 1200  ; vscroll
+   .byte 80    ; release_e3
+   .byte 50    ; release_e4
+   .byte 60    ; show_fruit
+   .byte GRAPEFRUIT_FRAME
+   .word 300   ; scatter_time
+   .word 900   ; chase_time
+   .byte 75    ; vuln_time
    .byte 2     ; number of bars
    .byte 9,11, 18,8
 
 level47:
    .byte 102   ; number of pellets
+   .byte 1     ; new
+   .byte 39    ; east neighbor
+   .byte 0     ; west neighbor
+   .byte 48    ; south neighbor
+   .byte 46    ; north neighbor
+   .word 1600  ; hscroll
+   .word 1440  ; vscroll
+   .byte 80    ; release_e3
+   .byte 50    ; release_e4
+   .byte 60    ; show_fruit
+   .byte CARAMBOLA_FRAME
+   .word 300   ; scatter_time
+   .word 900   ; chase_time
+   .byte 75    ; vuln_time
    .byte 2     ; number of bars
    .byte 9,11, 18,8
 
 level48:
    .byte 102   ; number of pellets
-   .byte 2     ; number of bars
-   .byte 9,11, 18,8
-
-level49:
-   .byte 102   ; number of pellets
+   .byte 1     ; new
+   .byte 40    ; east neighbor
+   .byte 0     ; west neighbor
+   .byte 0     ; south neighbor
+   .byte 47    ; north neighbor
+   .word 1600  ; hscroll
+   .word 1680  ; vscroll
+   .byte 80    ; release_e3
+   .byte 50    ; release_e4
+   .byte 60    ; show_fruit
+   .byte CHERRY_FRAME
+   .word 300   ; scatter_time
+   .word 900   ; chase_time
+   .byte 75    ; vuln_time
    .byte 2     ; number of bars
    .byte 9,11, 18,8
 
