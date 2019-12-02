@@ -250,7 +250,7 @@ level10:
    .byte 9,4, 1,8, 18,8, 9,13
 
 level11:
-   .byte 111   ; number of pellets
+   .byte 109   ; number of pellets
    .byte 1     ; new
    .byte 19    ; east neighbor
    .byte 3     ; west neighbor
@@ -266,7 +266,7 @@ level11:
    .word 900   ; chase_time
    .byte 75    ; vuln_time
    .byte 4     ; number of bars
-   .byte 9,2, 1,8, 18,8, 9,13
+   .byte 9,2, 1,8, 18,8, 9,12
 
 level12:
    .byte 102   ; number of pellets
@@ -364,7 +364,7 @@ level16:
    .byte 9,11, 18,8
 
 level17:
-   .byte 102   ; number of pellets
+   .byte 101   ; number of pellets
    .byte 1     ; new
    .byte 25    ; east neighbor
    .byte 9     ; west neighbor
@@ -379,11 +379,11 @@ level17:
    .word 300   ; scatter_time
    .word 900   ; chase_time
    .byte 75    ; vuln_time
-   .byte 2     ; number of bars
-   .byte 9,11, 18,8
+   .byte 4     ; number of bars
+   .byte 1,8, 9,11, 18,8
 
 level18:
-   .byte 102   ; number of pellets
+   .byte 107   ; number of pellets
    .byte 1     ; new
    .byte 26    ; east neighbor
    .byte 10    ; west neighbor
@@ -398,8 +398,8 @@ level18:
    .word 300   ; scatter_time
    .word 900   ; chase_time
    .byte 75    ; vuln_time
-   .byte 2     ; number of bars
-   .byte 9,11, 18,8
+   .byte 4     ; number of bars
+   .byte 9,2, 1,8, 18,8, 9,12
 
 level19:
    .byte 102   ; number of pellets
@@ -518,8 +518,8 @@ level24:
 level25:
    .byte 102   ; number of pellets
    .byte 1     ; new
-   .byte 17    ; east neighbor
-   .byte 33    ; west neighbor
+   .byte 33    ; east neighbor
+   .byte 17    ; west neighbor
    .byte 26    ; south neighbor
    .byte 0     ; north neighbor
    .word 960   ; hscroll
@@ -537,8 +537,8 @@ level25:
 level26:
    .byte 102   ; number of pellets
    .byte 1     ; new
-   .byte 18    ; east neighbor
-   .byte 34    ; west neighbor
+   .byte 34    ; east neighbor
+   .byte 18    ; west neighbor
    .byte 27    ; south neighbor
    .byte 25    ; north neighbor
    .word 960   ; hscroll
@@ -556,8 +556,8 @@ level26:
 level27:
    .byte 102   ; number of pellets
    .byte 1     ; new
-   .byte 19    ; east neighbor
-   .byte 35    ; west neighbor
+   .byte 35    ; east neighbor
+   .byte 19    ; west neighbor
    .byte 28    ; south neighbor
    .byte 26    ; north neighbor
    .word 960   ; hscroll
@@ -575,8 +575,8 @@ level27:
 level28:
    .byte 102   ; number of pellets
    .byte 1     ; new
-   .byte 20    ; east neighbor
-   .byte 36    ; west neighbor
+   .byte 36    ; east neighbor
+   .byte 20    ; west neighbor
    .byte 29    ; south neighbor
    .byte 27    ; north neighbor
    .word 960   ; hscroll
@@ -594,8 +594,8 @@ level28:
 level29:
    .byte 102   ; number of pellets
    .byte 1     ; new
-   .byte 21    ; east neighbor
-   .byte 37    ; west neighbor
+   .byte 37    ; east neighbor
+   .byte 21    ; west neighbor
    .byte 30    ; south neighbor
    .byte 28    ; north neighbor
    .word 960   ; hscroll
@@ -613,8 +613,8 @@ level29:
 level30:
    .byte 102   ; number of pellets
    .byte 1     ; new
-   .byte 22    ; east neighbor
-   .byte 38    ; west neighbor
+   .byte 38    ; east neighbor
+   .byte 22    ; west neighbor
    .byte 31    ; south neighbor
    .byte 29    ; north neighbor
    .word 960   ; hscroll
@@ -632,8 +632,8 @@ level30:
 level31:
    .byte 102   ; number of pellets
    .byte 1     ; new
-   .byte 23    ; east neighbor
-   .byte 39    ; west neighbor
+   .byte 39    ; east neighbor
+   .byte 23    ; west neighbor
    .byte 32    ; south neighbor
    .byte 30    ; north neighbor
    .word 960   ; hscroll
@@ -651,8 +651,8 @@ level31:
 level32:
    .byte 102   ; number of pellets
    .byte 1     ; new
-   .byte 24    ; east neighbor
-   .byte 40    ; west neighbor
+   .byte 40    ; east neighbor
+   .byte 24    ; west neighbor
    .byte 0     ; south neighbor
    .byte 31    ; north neighbor
    .word 960   ; hscroll
@@ -670,8 +670,8 @@ level32:
 level33:
    .byte 102   ; number of pellets
    .byte 1     ; new
-   .byte 25    ; east neighbor
-   .byte 41    ; west neighbor
+   .byte 41    ; east neighbor
+   .byte 25    ; west neighbor
    .byte 34    ; south neighbor
    .byte 0     ; north neighbor
    .word 1280  ; hscroll
@@ -689,8 +689,8 @@ level33:
 level34:
    .byte 102   ; number of pellets
    .byte 1     ; new
-   .byte 26    ; east neighbor
-   .byte 42    ; west neighbor
+   .byte 42    ; east neighbor
+   .byte 26    ; west neighbor
    .byte 35    ; south neighbor
    .byte 33    ; north neighbor
    .word 1280  ; hscroll
@@ -708,8 +708,8 @@ level34:
 level35:
    .byte 102   ; number of pellets
    .byte 1     ; new
-   .byte 27    ; east neighbor
-   .byte 43    ; west neighbor
+   .byte 43    ; east neighbor
+   .byte 27    ; west neighbor
    .byte 36    ; south neighbor
    .byte 34    ; north neighbor
    .word 1280  ; hscroll
@@ -727,8 +727,8 @@ level35:
 level36:
    .byte 102   ; number of pellets
    .byte 1     ; new
-   .byte 28    ; east neighbor
-   .byte 44    ; west neighbor
+   .byte 44    ; east neighbor
+   .byte 28    ; west neighbor
    .byte 37    ; south neighbor
    .byte 35    ; north neighbor
    .word 1280  ; hscroll
@@ -746,8 +746,8 @@ level36:
 level37:
    .byte 102   ; number of pellets
    .byte 1     ; new
-   .byte 29    ; east neighbor
-   .byte 45    ; west neighbor
+   .byte 45    ; east neighbor
+   .byte 29    ; west neighbor
    .byte 38    ; south neighbor
    .byte 36    ; north neighbor
    .word 1280  ; hscroll
@@ -765,8 +765,8 @@ level37:
 level38:
    .byte 102   ; number of pellets
    .byte 1     ; new
-   .byte 30    ; east neighbor
-   .byte 46    ; west neighbor
+   .byte 46    ; east neighbor
+   .byte 30    ; west neighbor
    .byte 39    ; south neighbor
    .byte 37    ; north neighbor
    .word 1280  ; hscroll
@@ -784,8 +784,8 @@ level38:
 level39:
    .byte 102   ; number of pellets
    .byte 1     ; new
-   .byte 31    ; east neighbor
-   .byte 47    ; west neighbor
+   .byte 47    ; east neighbor
+   .byte 31    ; west neighbor
    .byte 40    ; south neighbor
    .byte 38    ; north neighbor
    .word 1280  ; hscroll
@@ -803,8 +803,8 @@ level39:
 level40:
    .byte 102   ; number of pellets
    .byte 1     ; new
-   .byte 32    ; east neighbor
-   .byte 48    ; west neighbor
+   .byte 48    ; east neighbor
+   .byte 32    ; west neighbor
    .byte 0    ; south neighbor
    .byte 39    ; north neighbor
    .word 1280  ; hscroll
@@ -822,8 +822,8 @@ level40:
 level41:
    .byte 102   ; number of pellets
    .byte 1     ; new
-   .byte 33    ; east neighbor
-   .byte 0     ; west neighbor
+   .byte 0     ; east neighbor
+   .byte 33    ; west neighbor
    .byte 42    ; south neighbor
    .byte 0     ; north neighbor
    .word 1600  ; hscroll
@@ -841,8 +841,8 @@ level41:
 level42:
    .byte 102   ; number of pellets
    .byte 1     ; new
-   .byte 34    ; east neighbor
-   .byte 0     ; west neighbor
+   .byte 0     ; east neighbor
+   .byte 34    ; west neighbor
    .byte 43    ; south neighbor
    .byte 41    ; north neighbor
    .word 1600  ; hscroll
@@ -860,8 +860,8 @@ level42:
 level43:
    .byte 102   ; number of pellets
    .byte 1     ; new
-   .byte 35    ; east neighbor
-   .byte 0     ; west neighbor
+   .byte 0     ; east neighbor
+   .byte 35    ; west neighbor
    .byte 44    ; south neighbor
    .byte 42    ; north neighbor
    .word 1600  ; hscroll
@@ -879,8 +879,8 @@ level43:
 level44:
    .byte 102   ; number of pellets
    .byte 1     ; new
-   .byte 36    ; east neighbor
-   .byte 0     ; west neighbor
+   .byte 0     ; east neighbor
+   .byte 36    ; west neighbor
    .byte 45    ; south neighbor
    .byte 43    ; north neighbor
    .word 1600  ; hscroll
@@ -898,8 +898,8 @@ level44:
 level45:
    .byte 102   ; number of pellets
    .byte 1     ; new
-   .byte 37    ; east neighbor
-   .byte 0     ; west neighbor
+   .byte 0     ; east neighbor
+   .byte 37    ; west neighbor
    .byte 46    ; south neighbor
    .byte 44    ; north neighbor
    .word 1600  ; hscroll
@@ -917,8 +917,8 @@ level45:
 level46:
    .byte 102   ; number of pellets
    .byte 1     ; new
-   .byte 38    ; east neighbor
-   .byte 0     ; west neighbor
+   .byte 0     ; east neighbor
+   .byte 38    ; west neighbor
    .byte 47    ; south neighbor
    .byte 45    ; north neighbor
    .word 1600  ; hscroll
@@ -936,8 +936,8 @@ level46:
 level47:
    .byte 102   ; number of pellets
    .byte 1     ; new
-   .byte 39    ; east neighbor
-   .byte 0     ; west neighbor
+   .byte 0     ; east neighbor
+   .byte 39    ; west neighbor
    .byte 48    ; south neighbor
    .byte 46    ; north neighbor
    .word 1600  ; hscroll
@@ -955,8 +955,8 @@ level47:
 level48:
    .byte 102   ; number of pellets
    .byte 1     ; new
-   .byte 40    ; east neighbor
-   .byte 0     ; west neighbor
+   .byte 0     ; east neighbor
+   .byte 40    ; west neighbor
    .byte 0     ; south neighbor
    .byte 47    ; north neighbor
    .word 1600  ; hscroll

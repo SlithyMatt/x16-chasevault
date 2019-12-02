@@ -28,7 +28,7 @@ FRUIT_DIR         =  $03
 FRUIT_DIR_MASK    =  $FC
 
 FRUIT_BLINK_FRAME = 22
-FRUIT_BLINK_TICKS = 15
+FRUIT_BLINK_TICKS = 10
 __fruit_blink_ticks: .byte FRUIT_BLINK_TICKS
 
 __fruit_stored_x: .byte FRUIT_START_X

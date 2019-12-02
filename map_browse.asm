@@ -17,6 +17,8 @@
 
 hscroll: .word 0
 vscroll: .word 0
+select_down: .byte 0
+next_scale: .byte 128
 
 start:
    ; move text to layer 0 (TODO: replace with bitmap)
@@ -103,6 +105,29 @@ mainloop:
 
    ; VSYNC occurred
    jsr joystick_tick
+   lda joystick1_select
+   beq @select_up
+   lda select_down
+   bne @check_right
+   lda #1
+   sta select_down
+   stz VERA_ctrl
+   VERA_SET_ADDR VRAM_hscale,1
+   lda next_scale
+   sta VERA_data0
+   sta VERA_data0
+   cmp #64
+   beq @next128
+   lda #64
+   bra @scale
+@next128:
+   lda #128
+@scale:
+   sta next_scale
+   bra @check_right
+@select_up:
+   stz select_down
+@check_right:
    lda joystick1_right
    cmp #0
    beq @check_left
@@ -147,13 +172,8 @@ mainloop:
    sbc #0
    sta vscroll+1
 @set_scroll:
-   VERA_SET_ADDR VRAM_layer1, 1
-   lda VERA_data0 ; ignore
-   lda VERA_data0
-   lda VERA_data0
-   lda VERA_data0
-   lda VERA_data0
-   lda VERA_data0
+   stz VERA_ctrl
+   VERA_SET_ADDR $F3006, 1
    lda hscroll
    sta VERA_data0
    lda hscroll+1

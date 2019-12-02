@@ -864,7 +864,7 @@ next_level:
 @update_level:
    SUPERIMPOSE_RESTORE
    jsr clear_bars
-   jsr fruit_move
+   jsr fruit_blink
    jsr player_move
    jmp timer_done
 
