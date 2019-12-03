@@ -4,6 +4,8 @@ SUPERIMPOSE_INC = 1
 .include "x16.inc"
 .include "tilelib.asm"
 
+ASCII_SPACE = $20
+
 .macro SUPERIMPOSE str_arg, x_arg, y_arg
    .scope
          jmp end_string
@@ -120,6 +122,10 @@ __superimpose: ; A: string length (max = 20)
    txa
    beq @end
    lda (ZP_PTR_1),y
+   cmp #ASCII_SPACE
+   bne @store_char
+   lda #0               ; replace spaces with blank tiles
+@store_char:
    sta VERA_data0        ; store character tile
    lda #0
    sta VERA_data0        ; store tile control (PO 0, no flip)

@@ -26,8 +26,8 @@ GUAVA          = $01F
 ; $5B-$D1 Start Screen
 GRAPEFRUIT     = $0D2
 CARAMBOLA      = $0D3
-CHERRY         = $0D4
-APPLE          = $0D5
+CHERRY         = $020
+APPLE          = $095
 
 
 .endif
