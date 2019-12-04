@@ -226,7 +226,7 @@ level9:
    .byte MANGO_FRAME
    .word 180   ; scatter_time
    .word 1020  ; chase_time
-   .byte 75    ; vuln_time
+   .byte 74    ; vuln_time
    .byte 3     ; number of bars
    .byte 2,8, 9,12, 18,8
 
@@ -245,7 +245,7 @@ level10:
    .byte GUAVA_FRAME
    .word 150   ; scatter_time
    .word 1020  ; chase_time
-   .byte 75    ; vuln_time
+   .byte 72    ; vuln_time
    .byte 4     ; number of bars
    .byte 9,4, 1,8, 18,8, 9,13
 
@@ -262,9 +262,9 @@ level11:
    .byte 50    ; release_e4
    .byte 60    ; show_fruit
    .byte GRAPEFRUIT_FRAME
-   .word 300   ; scatter_time
-   .word 900   ; chase_time
-   .byte 75    ; vuln_time
+   .word 150   ; scatter_time
+   .word 1050  ; chase_time
+   .byte 70    ; vuln_time
    .byte 4     ; number of bars
    .byte 9,2, 1,8, 18,8, 9,12
 
@@ -281,9 +281,9 @@ level12:
    .byte 50    ; release_e4
    .byte 60    ; show_fruit
    .byte CARAMBOLA_FRAME
-   .word 300   ; scatter_time
-   .word 900   ; chase_time
-   .byte 75    ; vuln_time
+   .word 120   ; scatter_time
+   .word 1050  ; chase_time
+   .byte 68    ; vuln_time
    .byte 4     ; number of bars
    .byte 9,2, 1,8, 17,8, 9,12
 
@@ -300,9 +300,9 @@ level13:
    .byte 50    ; release_e4
    .byte 60    ; show_fruit
    .byte CHERRY_FRAME
-   .word 300   ; scatter_time
-   .word 900   ; chase_time
-   .byte 75    ; vuln_time
+   .word 120   ; scatter_time
+   .word 1080   ; chase_time
+   .byte 66    ; vuln_time
    .byte 2     ; number of bars
    .byte 9,11, 18,8
 
@@ -319,9 +319,9 @@ level14:
    .byte 50    ; release_e4
    .byte 60    ; show_fruit
    .byte APPLE_FRAME
-   .word 300   ; scatter_time
-   .word 900   ; chase_time
-   .byte 75    ; vuln_time
+   .word 90    ; scatter_time
+   .word 1080  ; chase_time
+   .byte 64    ; vuln_time
    .byte 3     ; number of bars
    .byte 9,2, 9,12, 17,8
 
@@ -338,9 +338,9 @@ level15:
    .byte 50    ; release_e4
    .byte 60    ; show_fruit
    .byte BANANA_FRAME
-   .word 300   ; scatter_time
-   .word 900   ; chase_time
-   .byte 75    ; vuln_time
+   .word 90    ; scatter_time
+   .word 1100  ; chase_time
+   .byte 62    ; vuln_time
    .byte 2     ; number of bars
    .byte 9,11, 18,8
 
@@ -357,9 +357,9 @@ level16:
    .byte 50    ; release_e4
    .byte 60    ; show_fruit
    .byte MANGO_FRAME
-   .word 300   ; scatter_time
-   .word 900   ; chase_time
-   .byte 75    ; vuln_time
+   .word 60    ; scatter_time
+   .word 1100  ; chase_time
+   .byte 60    ; vuln_time
    .byte 2     ; number of bars
    .byte 9,11, 18,8
 
@@ -376,9 +376,9 @@ level17:
    .byte 50    ; release_e4
    .byte 60    ; show_fruit
    .byte GUAVA_FRAME
-   .word 300   ; scatter_time
-   .word 900   ; chase_time
-   .byte 75    ; vuln_time
+   .word 60    ; scatter_time
+   .word 1130  ; chase_time
+   .byte 58    ; vuln_time
    .byte 4     ; number of bars
    .byte 1,8, 9,11, 18,8
 
@@ -395,9 +395,9 @@ level18:
    .byte 50    ; release_e4
    .byte 60    ; show_fruit
    .byte GRAPEFRUIT_FRAME
-   .word 300   ; scatter_time
-   .word 900   ; chase_time
-   .byte 75    ; vuln_time
+   .word 45    ; scatter_time
+   .word 1130  ; chase_time
+   .byte 56    ; vuln_time
    .byte 4     ; number of bars
    .byte 9,2, 1,8, 18,8, 9,12
 
@@ -414,9 +414,9 @@ level19:
    .byte 50    ; release_e4
    .byte 60    ; show_fruit
    .byte CARAMBOLA_FRAME
-   .word 300   ; scatter_time
-   .word 900   ; chase_time
-   .byte 75    ; vuln_time
+   .word 45    ; scatter_time
+   .word 1160  ; chase_time
+   .byte 54    ; vuln_time
    .byte 4     ; number of bars
    .byte 9,2, 9,12, 1,8, 17,8
 
@@ -433,9 +433,9 @@ level20:
    .byte 50    ; release_e4
    .byte 60    ; show_fruit
    .byte CHERRY_FRAME
-   .word 300   ; scatter_time
-   .word 900   ; chase_time
-   .byte 75    ; vuln_time
+   .word 30    ; scatter_time
+   .word 1160  ; chase_time
+   .byte 52    ; vuln_time
    .byte 4     ; number of bars
    .byte 9,4, 1,8, 18,8, 9,13
 
@@ -452,9 +452,9 @@ level21:
    .byte 50    ; release_e4
    .byte 60    ; show_fruit
    .byte APPLE_FRAME
-   .word 300   ; scatter_time
-   .word 900   ; chase_time
-   .byte 75    ; vuln_time
+   .word 30    ; scatter_time
+   .word 1190  ; chase_time
+   .byte 50    ; vuln_time
    .byte 4     ; number of bars
    .byte 9,2, 2,8, 9,12, 18,8
 
@@ -471,9 +471,9 @@ level22:
    .byte 50    ; release_e4
    .byte 60    ; show_fruit
    .byte BANANA_FRAME
-   .word 300   ; scatter_time
-   .word 900   ; chase_time
-   .byte 75    ; vuln_time
+   .word 15    ; scatter_time
+   .word 1190  ; chase_time
+   .byte 48    ; vuln_time
    .byte 4     ; number of bars
    .byte 2,8, 9,2, 9,13, 18,8
 
@@ -490,9 +490,9 @@ level23:
    .byte 50    ; release_e4
    .byte 60    ; show_fruit
    .byte MANGO_FRAME
-   .word 300   ; scatter_time
-   .word 900   ; chase_time
-   .byte 75    ; vuln_time
+   .word 15    ; scatter_time
+   .word 1220  ; chase_time
+   .byte 46    ; vuln_time
    .byte 2     ; number of bars
    .byte 9,11, 18,8
 
@@ -509,9 +509,9 @@ level24:
    .byte 50    ; release_e4
    .byte 60    ; show_fruit
    .byte GUAVA_FRAME
-   .word 300   ; scatter_time
-   .word 900   ; chase_time
-   .byte 75    ; vuln_time
+   .word 15    ; scatter_time
+   .word 1230  ; chase_time
+   .byte 44    ; vuln_time
    .byte 2     ; number of bars
    .byte 9,11, 18,8
 
@@ -528,9 +528,9 @@ level25:
    .byte 50    ; release_e4
    .byte 60    ; show_fruit
    .byte GRAPEFRUIT_FRAME
-   .word 300   ; scatter_time
-   .word 900   ; chase_time
-   .byte 75    ; vuln_time
+   .word 10    ; scatter_time
+   .word 1230  ; chase_time
+   .byte 42    ; vuln_time
    .byte 2     ; number of bars
    .byte 9,11, 18,8
 
@@ -547,9 +547,9 @@ level26:
    .byte 50    ; release_e4
    .byte 60    ; show_fruit
    .byte CARAMBOLA_FRAME
-   .word 300   ; scatter_time
-   .word 900   ; chase_time
-   .byte 75    ; vuln_time
+   .word 10    ; scatter_time
+   .word 1260  ; chase_time
+   .byte 40    ; vuln_time
    .byte 2     ; number of bars
    .byte 9,11, 18,8
 
@@ -566,9 +566,9 @@ level27:
    .byte 50    ; release_e4
    .byte 60    ; show_fruit
    .byte CHERRY_FRAME
-   .word 300   ; scatter_time
-   .word 900   ; chase_time
-   .byte 75    ; vuln_time
+   .word 10    ; scatter_time
+   .word 1290  ; chase_time
+   .byte 38    ; vuln_time
    .byte 2     ; number of bars
    .byte 9,11, 18,8
 
@@ -585,9 +585,9 @@ level28:
    .byte 50    ; release_e4
    .byte 60    ; show_fruit
    .byte APPLE_FRAME
-   .word 300   ; scatter_time
-   .word 900   ; chase_time
-   .byte 75    ; vuln_time
+   .word 10    ; scatter_time
+   .word 1320  ; chase_time
+   .byte 36    ; vuln_time
    .byte 2     ; number of bars
    .byte 9,11, 18,8
 
@@ -604,9 +604,9 @@ level29:
    .byte 50    ; release_e4
    .byte 60    ; show_fruit
    .byte BANANA_FRAME
-   .word 300   ; scatter_time
-   .word 900   ; chase_time
-   .byte 75    ; vuln_time
+   .word 10    ; scatter_time
+   .word 1350  ; chase_time
+   .byte 34    ; vuln_time
    .byte 2     ; number of bars
    .byte 9,11, 18,8
 
@@ -623,9 +623,9 @@ level30:
    .byte 50    ; release_e4
    .byte 60    ; show_fruit
    .byte MANGO_FRAME
-   .word 300   ; scatter_time
-   .word 900   ; chase_time
-   .byte 75    ; vuln_time
+   .word 10    ; scatter_time
+   .word 1380  ; chase_time
+   .byte 32    ; vuln_time
    .byte 2     ; number of bars
    .byte 9,11, 18,8
 
@@ -642,9 +642,9 @@ level31:
    .byte 50    ; release_e4
    .byte 60    ; show_fruit
    .byte GUAVA_FRAME
-   .word 300   ; scatter_time
-   .word 900   ; chase_time
-   .byte 75    ; vuln_time
+   .word 10    ; scatter_time
+   .word 1410  ; chase_time
+   .byte 30    ; vuln_time
    .byte 2     ; number of bars
    .byte 9,11, 18,8
 
@@ -661,9 +661,9 @@ level32:
    .byte 50    ; release_e4
    .byte 60    ; show_fruit
    .byte GRAPEFRUIT_FRAME
-   .word 300   ; scatter_time
-   .word 900   ; chase_time
-   .byte 75    ; vuln_time
+   .word 10    ; scatter_time
+   .word 1440  ; chase_time
+   .byte 29    ; vuln_time
    .byte 2     ; number of bars
    .byte 9,11, 18,8
 
@@ -680,9 +680,9 @@ level33:
    .byte 50    ; release_e4
    .byte 60    ; show_fruit
    .byte CARAMBOLA_FRAME
-   .word 300   ; scatter_time
-   .word 900   ; chase_time
-   .byte 75    ; vuln_time
+   .word 5     ; scatter_time
+   .word 1440  ; chase_time
+   .byte 28    ; vuln_time
    .byte 2     ; number of bars
    .byte 9,11, 18,8
 
@@ -699,9 +699,9 @@ level34:
    .byte 50    ; release_e4
    .byte 60    ; show_fruit
    .byte CHERRY_FRAME
-   .word 300   ; scatter_time
-   .word 900   ; chase_time
-   .byte 75    ; vuln_time
+   .word 5     ; scatter_time
+   .word 1470  ; chase_time
+   .byte 27    ; vuln_time
    .byte 2     ; number of bars
    .byte 9,11, 18,8
 
@@ -718,9 +718,9 @@ level35:
    .byte 50    ; release_e4
    .byte 60    ; show_fruit
    .byte APPLE_FRAME
-   .word 300   ; scatter_time
-   .word 900   ; chase_time
-   .byte 75    ; vuln_time
+   .word 5     ; scatter_time
+   .word 1500  ; chase_time
+   .byte 26    ; vuln_time
    .byte 2     ; number of bars
    .byte 9,11, 18,8
 
@@ -737,9 +737,9 @@ level36:
    .byte 50    ; release_e4
    .byte 60    ; show_fruit
    .byte BANANA_FRAME
-   .word 300   ; scatter_time
-   .word 900   ; chase_time
-   .byte 75    ; vuln_time
+   .word 5     ; scatter_time
+   .word 1530  ; chase_time
+   .byte 25    ; vuln_time
    .byte 2     ; number of bars
    .byte 9,11, 18,8
 
@@ -756,9 +756,9 @@ level37:
    .byte 50    ; release_e4
    .byte 60    ; show_fruit
    .byte MANGO_FRAME
-   .word 300   ; scatter_time
-   .word 900   ; chase_time
-   .byte 75    ; vuln_time
+   .word 5     ; scatter_time
+   .word 1560  ; chase_time
+   .byte 24    ; vuln_time
    .byte 2     ; number of bars
    .byte 9,11, 18,8
 
@@ -775,9 +775,9 @@ level38:
    .byte 50    ; release_e4
    .byte 60    ; show_fruit
    .byte GUAVA_FRAME
-   .word 300   ; scatter_time
-   .word 900   ; chase_time
-   .byte 75    ; vuln_time
+   .word 5     ; scatter_time
+   .word 1590  ; chase_time
+   .byte 23    ; vuln_time
    .byte 2     ; number of bars
    .byte 9,11, 18,8
 
@@ -794,9 +794,9 @@ level39:
    .byte 50    ; release_e4
    .byte 60    ; show_fruit
    .byte GRAPEFRUIT_FRAME
-   .word 300   ; scatter_time
-   .word 900   ; chase_time
-   .byte 75    ; vuln_time
+   .word 5     ; scatter_time
+   .word 1620  ; chase_time
+   .byte 23    ; vuln_time
    .byte 2     ; number of bars
    .byte 9,11, 18,8
 
@@ -813,9 +813,9 @@ level40:
    .byte 50    ; release_e4
    .byte 60    ; show_fruit
    .byte CARAMBOLA_FRAME
-   .word 300   ; scatter_time
-   .word 900   ; chase_time
-   .byte 75    ; vuln_time
+   .word 5     ; scatter_time
+   .word 1650  ; chase_time
+   .byte 23    ; vuln_time
    .byte 2     ; number of bars
    .byte 9,11, 18,8
 
@@ -832,9 +832,9 @@ level41:
    .byte 50    ; release_e4
    .byte 60    ; show_fruit
    .byte CHERRY_FRAME
-   .word 300   ; scatter_time
-   .word 900   ; chase_time
-   .byte 75    ; vuln_time
+   .word 1     ; scatter_time
+   .word 1650  ; chase_time
+   .byte 23    ; vuln_time
    .byte 2     ; number of bars
    .byte 9,11, 18,8
 
@@ -851,9 +851,9 @@ level42:
    .byte 50    ; release_e4
    .byte 60    ; show_fruit
    .byte APPLE_FRAME
-   .word 300   ; scatter_time
-   .word 900   ; chase_time
-   .byte 75    ; vuln_time
+   .word 1     ; scatter_time
+   .word 1680  ; chase_time
+   .byte 23    ; vuln_time
    .byte 2     ; number of bars
    .byte 9,11, 18,8
 
@@ -870,9 +870,9 @@ level43:
    .byte 50    ; release_e4
    .byte 60    ; show_fruit
    .byte BANANA_FRAME
-   .word 300   ; scatter_time
-   .word 900   ; chase_time
-   .byte 75    ; vuln_time
+   .word 1     ; scatter_time
+   .word 1710  ; chase_time
+   .byte 23    ; vuln_time
    .byte 2     ; number of bars
    .byte 9,11, 18,8
 
@@ -889,9 +889,9 @@ level44:
    .byte 50    ; release_e4
    .byte 60    ; show_fruit
    .byte MANGO_FRAME
-   .word 300   ; scatter_time
-   .word 900   ; chase_time
-   .byte 75    ; vuln_time
+   .word 1     ; scatter_time
+   .word 2000  ; chase_time
+   .byte 23    ; vuln_time
    .byte 2     ; number of bars
    .byte 9,11, 18,8
 
@@ -908,9 +908,9 @@ level45:
    .byte 50    ; release_e4
    .byte 60    ; show_fruit
    .byte GUAVA_FRAME
-   .word 300   ; scatter_time
-   .word 900   ; chase_time
-   .byte 75    ; vuln_time
+   .word 1     ; scatter_time
+   .word 3000  ; chase_time
+   .byte 23    ; vuln_time
    .byte 2     ; number of bars
    .byte 9,11, 18,8
 
@@ -927,9 +927,9 @@ level46:
    .byte 50    ; release_e4
    .byte 60    ; show_fruit
    .byte GRAPEFRUIT_FRAME
-   .word 300   ; scatter_time
-   .word 900   ; chase_time
-   .byte 75    ; vuln_time
+   .word 1     ; scatter_time
+   .word 4000  ; chase_time
+   .byte 23    ; vuln_time
    .byte 2     ; number of bars
    .byte 9,11, 18,8
 
@@ -946,9 +946,9 @@ level47:
    .byte 50    ; release_e4
    .byte 60    ; show_fruit
    .byte CARAMBOLA_FRAME
-   .word 300   ; scatter_time
-   .word 900   ; chase_time
-   .byte 75    ; vuln_time
+   .word 1     ; scatter_time
+   .word 5000  ; chase_time
+   .byte 23    ; vuln_time
    .byte 2     ; number of bars
    .byte 9,11, 18,8
 
@@ -965,9 +965,9 @@ level48:
    .byte 50    ; release_e4
    .byte 60    ; show_fruit
    .byte CHERRY_FRAME
-   .word 300   ; scatter_time
-   .word 900   ; chase_time
-   .byte 75    ; vuln_time
+   .word 1     ; scatter_time
+   .word 10000 ; chase_time
+   .byte 23    ; vuln_time
    .byte 2     ; number of bars
    .byte 9,11, 18,8
 
