@@ -42,16 +42,22 @@ game_tick:        ; called after every VSYNC detected (60 Hz)
    rts
 
 check_input:
+.if NUKE_ENABLED
+   lda joystick1_a
+   beq @check_start
+   jsr enemy_clear
+.endif
+@check_start:
    lda joystick1_start
    and new_start
-   bne @check_start
+   bne @check_start_action
    lda joystick1_start
    bne @start_still_pressed
    lda #1
    sta new_start
 @start_still_pressed:
    jmp check_input_return
-@check_start:
+@check_start_action:
    stz new_start
    lda start_prompt
    bne @start_game

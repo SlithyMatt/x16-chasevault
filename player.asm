@@ -364,7 +364,7 @@ player_tick:
    bra @return
 @check_move_req:
    lda move_req
-   beq @return
+   beq @check_refresh_req
    stz move_req
    lda #PLAYER_idx
    ora #$80
@@ -384,7 +384,12 @@ player_tick:
    ldy player_start_flip,x
    ldx #PLAYER_idx
    jsr sprite_frame
-   nop
+   jsr refresh_status
+   bra @return
+@check_refresh_req:
+   lda refresh_req
+   beq @return
+   stz refresh_req
    jsr refresh_status
 @return:
    rts
@@ -655,6 +660,9 @@ check_collision:
    beq @check_fruit
    jmp @enemy_loop
 @check_fruit:
+   lda fruit
+   bit #FRUIT_BLINKING
+   bne @return
    lda #FRUIT_idx
    sta @index
    SPRITE_SCREEN_POS @index, @s_xpos, @s_ypos
@@ -846,7 +854,7 @@ game_over:
 continue:
    SUPERIMPOSE_RESTORE
    jsr level_restore
-   lda #4
+   lda max_lives
    sta lives
    SET_TIMER 1, regenerate
    rts

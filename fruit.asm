@@ -42,7 +42,8 @@ GRAPEFRUIT_STATUS = $08
 CARAMBOLA_STATUS  = $10
 CHERRY_STATUS     = $20
 APPLE_STATUS      = $40
-END_FRUIT_STATUS  = $80
+ALL_FRUITS        = $7F
+
 
 __fruit_tile_map:
 .byte BANANA
@@ -52,6 +53,8 @@ __fruit_tile_map:
 .byte CARAMBOLA
 .byte CHERRY
 .byte APPLE
+
+__fruit_bonus_displayed: .byte 0
 
 fruit_tick:
    bra @start
@@ -93,6 +96,11 @@ fruit_tick:
    ldx #FRUIT_idx
    ldy #0
    jsr sprite_frame
+   lda frame_num
+   bit #1            ; only move on even frames
+   beq @check_move
+   jmp @return
+@check_move:
    lda fruit
    bit #FRUIT_MOVING
    bne @steer
@@ -354,12 +362,28 @@ fruit_status: ; A: 0=do not add current fruit, 1=add current fruit
    ldx #7
 @tile_loop:
    cpx #0
-   beq @return
+   beq @check_bonus
    pla
    sta VERA_data0
    dex
    bra @tile_loop
-@return:
+@check_bonus:
+   lda __fruit_status
+   cmp #ALL_FRUITS
+   bne __fruit_status_return
+   lda __fruit_bonus_displayed
+   bne __fruit_status_return
+   SUPERIMPOSE "bonus!", 7, 9
+   lda #1
+   sta paused
+   sta refresh_req
+   sta __fruit_bonus_displayed
+   clc
+   adc max_lives
+   sta max_lives
+   sta lives
+   SET_TIMER 30, __fruit_bonus_done
+__fruit_status_return:
    rts
 
 
@@ -377,6 +401,15 @@ __fruit_tile_collision: ; Input: X: tile index (low byte)
 @clear:
    clc
 @return:
+   rts
+
+__fruit_bonus_done:
+   SUPERIMPOSE_RESTORE
+   stz __fruit_bonus_displayed
+   stz __fruit_status
+   stz paused
+   lda #1
+   sta refresh_req
    rts
 
 .endif

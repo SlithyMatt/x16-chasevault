@@ -1,6 +1,9 @@
 .ifndef GLOBALS_INC
 GLOBALS_INC = 1
 
+; ---------- Build Options ----------
+NUKE_ENABLED   = 1
+
 ; ------------ Constants ------------
 
 
@@ -55,6 +58,7 @@ pellets:    .byte 108
 keys:       .byte 0
 
 score_mult: .byte 1
+max_lives:  .byte 4
 
 release_e3:       .byte 71 ; pellets remaining to release enemy 3
 release_e4:       .byte 33 ; pellets remaining to release enemy 4
@@ -66,6 +70,7 @@ vuln_time:        .byte 90 ; Unit: 1/15 second (6 seconds)
 
 regenerate_req:   .byte 0
 move_req:         .byte 0
+refresh_req:      .byte 0
 move_x:           .byte 0
 move_y:           .byte 0
 start_prompt:     .byte 1
