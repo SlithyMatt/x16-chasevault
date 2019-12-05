@@ -144,8 +144,8 @@ level5:
    .byte 4
    .word 0
    .word 960
-   .byte 71    ; release_e3
-   .byte 33    ; release_e4
+   .byte 72    ; release_e3
+   .byte 34    ; release_e4
    .byte 50    ; show_fruit
    .byte CARAMBOLA_FRAME
    .word 240   ; scatter_time
@@ -222,7 +222,7 @@ level9:
    .word 0
    .byte 80    ; release_e3
    .byte 50    ; release_e4
-   .byte 60    ; show_fruit
+   .byte 40    ; show_fruit
    .byte MANGO_FRAME
    .word 180   ; scatter_time
    .word 1020  ; chase_time
@@ -241,7 +241,7 @@ level10:
    .word 240   ; vscroll
    .byte 80    ; release_e3
    .byte 50    ; release_e4
-   .byte 60    ; show_fruit
+   .byte 40    ; show_fruit
    .byte GUAVA_FRAME
    .word 150   ; scatter_time
    .word 1020  ; chase_time
@@ -258,9 +258,9 @@ level11:
    .byte 10    ; north neighbor
    .word 320   ; hscroll
    .word 480   ; vscroll
-   .byte 80    ; release_e3
-   .byte 50    ; release_e4
-   .byte 60    ; show_fruit
+   .byte 82    ; release_e3
+   .byte 51    ; release_e4
+   .byte 40    ; show_fruit
    .byte GRAPEFRUIT_FRAME
    .word 150   ; scatter_time
    .word 1050  ; chase_time
@@ -279,7 +279,7 @@ level12:
    .word 720   ; vscroll
    .byte 80    ; release_e3
    .byte 50    ; release_e4
-   .byte 60    ; show_fruit
+   .byte 40    ; show_fruit
    .byte CARAMBOLA_FRAME
    .word 120   ; scatter_time
    .word 1050  ; chase_time
@@ -298,13 +298,13 @@ level13:
    .word 960   ; vscroll
    .byte 80    ; release_e3
    .byte 50    ; release_e4
-   .byte 60    ; show_fruit
+   .byte 40    ; show_fruit
    .byte CHERRY_FRAME
    .word 120   ; scatter_time
    .word 1080   ; chase_time
    .byte 66    ; vuln_time
-   .byte 2     ; number of bars
-   .byte 9,11, 18,8
+   .byte 4     ; number of bars
+   .byte 9,2, 2,8, 18,8, 9,12
 
 level14:
    .byte 101   ; number of pellets
@@ -317,7 +317,7 @@ level14:
    .word 1200  ; vscroll
    .byte 80    ; release_e3
    .byte 50    ; release_e4
-   .byte 60    ; show_fruit
+   .byte 40    ; show_fruit
    .byte APPLE_FRAME
    .word 90    ; scatter_time
    .word 1080  ; chase_time
@@ -336,7 +336,7 @@ level15:
    .word 1440  ; vscroll
    .byte 80    ; release_e3
    .byte 50    ; release_e4
-   .byte 60    ; show_fruit
+   .byte 40    ; show_fruit
    .byte BANANA_FRAME
    .word 90    ; scatter_time
    .word 1100  ; chase_time
@@ -355,7 +355,7 @@ level16:
    .word 1680  ; vscroll
    .byte 80    ; release_e3
    .byte 50    ; release_e4
-   .byte 60    ; show_fruit
+   .byte 40    ; show_fruit
    .byte MANGO_FRAME
    .word 60    ; scatter_time
    .word 1100  ; chase_time
@@ -372,9 +372,9 @@ level17:
    .byte 0     ; north neighbor
    .word 640   ; hscroll
    .word 0     ; vscroll
-   .byte 80    ; release_e3
-   .byte 50    ; release_e4
-   .byte 60    ; show_fruit
+   .byte 85    ; release_e3
+   .byte 60    ; release_e4
+   .byte 30    ; show_fruit
    .byte GUAVA_FRAME
    .word 60    ; scatter_time
    .word 1130  ; chase_time
@@ -391,9 +391,9 @@ level18:
    .byte 17    ; north neighbor
    .word 640   ; hscroll
    .word 240   ; vscroll
-   .byte 80    ; release_e3
-   .byte 50    ; release_e4
-   .byte 60    ; show_fruit
+   .byte 87    ; release_e3
+   .byte 61    ; release_e4
+   .byte 30    ; show_fruit
    .byte GRAPEFRUIT_FRAME
    .word 45    ; scatter_time
    .word 1130  ; chase_time
@@ -410,9 +410,9 @@ level19:
    .byte 18    ; north neighbor
    .word 640   ; hscroll
    .word 480   ; vscroll
-   .byte 80    ; release_e3
-   .byte 50    ; release_e4
-   .byte 60    ; show_fruit
+   .byte 85    ; release_e3
+   .byte 60    ; release_e4
+   .byte 30    ; show_fruit
    .byte CARAMBOLA_FRAME
    .word 45    ; scatter_time
    .word 1160  ; chase_time
@@ -429,9 +429,9 @@ level20:
    .byte 19    ; north neighbor
    .word 640   ; hscroll
    .word 720   ; vscroll
-   .byte 80    ; release_e3
-   .byte 50    ; release_e4
-   .byte 60    ; show_fruit
+   .byte 85    ; release_e3
+   .byte 60    ; release_e4
+   .byte 30    ; show_fruit
    .byte CHERRY_FRAME
    .word 30    ; scatter_time
    .word 1160  ; chase_time
@@ -448,9 +448,9 @@ level21:
    .byte 20    ; north neighbor
    .word 640   ; hscroll
    .word 960   ; vscroll
-   .byte 80    ; release_e3
-   .byte 50    ; release_e4
-   .byte 60    ; show_fruit
+   .byte 85    ; release_e3
+   .byte 60    ; release_e4
+   .byte 30    ; show_fruit
    .byte APPLE_FRAME
    .word 30    ; scatter_time
    .word 1190  ; chase_time
@@ -467,9 +467,9 @@ level22:
    .byte 21    ; north neighbor
    .word 640   ; hscroll
    .word 1200  ; vscroll
-   .byte 80    ; release_e3
-   .byte 50    ; release_e4
-   .byte 60    ; show_fruit
+   .byte 85    ; release_e3
+   .byte 60    ; release_e4
+   .byte 30    ; show_fruit
    .byte BANANA_FRAME
    .word 15    ; scatter_time
    .word 1190  ; chase_time
@@ -486,18 +486,18 @@ level23:
    .byte 22    ; north neighbor
    .word 640   ; hscroll
    .word 1440  ; vscroll
-   .byte 80    ; release_e3
-   .byte 50    ; release_e4
-   .byte 60    ; show_fruit
+   .byte 85    ; release_e3
+   .byte 60    ; release_e4
+   .byte 30    ; show_fruit
    .byte MANGO_FRAME
    .word 15    ; scatter_time
    .word 1220  ; chase_time
    .byte 46    ; vuln_time
-   .byte 2     ; number of bars
-   .byte 9,11, 18,8
+   .byte 4     ; number of bars
+   .byte 9,2, 2,8, 18,8, 9,12
 
 level24:
-   .byte 102   ; number of pellets
+   .byte 96    ; number of pellets
    .byte 1     ; new
    .byte 32    ; east neighbor
    .byte 16    ; west neighbor
@@ -505,15 +505,15 @@ level24:
    .byte 23    ; north neighbor
    .word 640   ; hscroll
    .word 1680  ; vscroll
-   .byte 80    ; release_e3
-   .byte 50    ; release_e4
-   .byte 60    ; show_fruit
+   .byte 85    ; release_e3
+   .byte 60    ; release_e4
+   .byte 30    ; show_fruit
    .byte GUAVA_FRAME
    .word 15    ; scatter_time
    .word 1230  ; chase_time
    .byte 44    ; vuln_time
-   .byte 2     ; number of bars
-   .byte 9,11, 18,8
+   .byte 4     ; number of bars
+   .byte 9,2, 1,8, 17,8, 9,12
 
 level25:
    .byte 102   ; number of pellets
@@ -524,9 +524,9 @@ level25:
    .byte 0     ; north neighbor
    .word 960   ; hscroll
    .word 0     ; vscroll
-   .byte 80    ; release_e3
-   .byte 50    ; release_e4
-   .byte 60    ; show_fruit
+   .byte 90    ; release_e3
+   .byte 70    ; release_e4
+   .byte 25    ; show_fruit
    .byte GRAPEFRUIT_FRAME
    .word 10    ; scatter_time
    .word 1230  ; chase_time
@@ -543,9 +543,9 @@ level26:
    .byte 25    ; north neighbor
    .word 960   ; hscroll
    .word 240   ; vscroll
-   .byte 80    ; release_e3
-   .byte 50    ; release_e4
-   .byte 60    ; show_fruit
+   .byte 90    ; release_e3
+   .byte 70    ; release_e4
+   .byte 25    ; show_fruit
    .byte CARAMBOLA_FRAME
    .word 10    ; scatter_time
    .word 1260  ; chase_time
@@ -562,9 +562,9 @@ level27:
    .byte 26    ; north neighbor
    .word 960   ; hscroll
    .word 480   ; vscroll
-   .byte 80    ; release_e3
-   .byte 50    ; release_e4
-   .byte 60    ; show_fruit
+   .byte 90    ; release_e3
+   .byte 70    ; release_e4
+   .byte 25    ; show_fruit
    .byte CHERRY_FRAME
    .word 10    ; scatter_time
    .word 1290  ; chase_time
@@ -581,9 +581,9 @@ level28:
    .byte 27    ; north neighbor
    .word 960   ; hscroll
    .word 720   ; vscroll
-   .byte 80    ; release_e3
-   .byte 50    ; release_e4
-   .byte 60    ; show_fruit
+   .byte 90    ; release_e3
+   .byte 70    ; release_e4
+   .byte 25    ; show_fruit
    .byte APPLE_FRAME
    .word 10    ; scatter_time
    .word 1320  ; chase_time
@@ -600,9 +600,9 @@ level29:
    .byte 28    ; north neighbor
    .word 960   ; hscroll
    .word 960   ; vscroll
-   .byte 80    ; release_e3
-   .byte 50    ; release_e4
-   .byte 60    ; show_fruit
+   .byte 90    ; release_e3
+   .byte 70    ; release_e4
+   .byte 25    ; show_fruit
    .byte BANANA_FRAME
    .word 10    ; scatter_time
    .word 1350  ; chase_time
@@ -619,9 +619,9 @@ level30:
    .byte 29    ; north neighbor
    .word 960   ; hscroll
    .word 1200  ; vscroll
-   .byte 80    ; release_e3
-   .byte 50    ; release_e4
-   .byte 60    ; show_fruit
+   .byte 90    ; release_e3
+   .byte 70    ; release_e4
+   .byte 25    ; show_fruit
    .byte MANGO_FRAME
    .word 10    ; scatter_time
    .word 1380  ; chase_time
@@ -638,9 +638,9 @@ level31:
    .byte 30    ; north neighbor
    .word 960   ; hscroll
    .word 1440  ; vscroll
-   .byte 80    ; release_e3
-   .byte 50    ; release_e4
-   .byte 60    ; show_fruit
+   .byte 90    ; release_e3
+   .byte 70    ; release_e4
+   .byte 25    ; show_fruit
    .byte GUAVA_FRAME
    .word 10    ; scatter_time
    .word 1410  ; chase_time
@@ -657,9 +657,9 @@ level32:
    .byte 31    ; north neighbor
    .word 960   ; hscroll
    .word 1680  ; vscroll
-   .byte 80    ; release_e3
-   .byte 50    ; release_e4
-   .byte 60    ; show_fruit
+   .byte 90    ; release_e3
+   .byte 70    ; release_e4
+   .byte 25    ; show_fruit
    .byte GRAPEFRUIT_FRAME
    .word 10    ; scatter_time
    .word 1440  ; chase_time
@@ -676,9 +676,9 @@ level33:
    .byte 0     ; north neighbor
    .word 1280  ; hscroll
    .word 0     ; vscroll
-   .byte 80    ; release_e3
-   .byte 50    ; release_e4
-   .byte 60    ; show_fruit
+   .byte 100   ; release_e3
+   .byte 80    ; release_e4
+   .byte 20    ; show_fruit
    .byte CARAMBOLA_FRAME
    .word 5     ; scatter_time
    .word 1440  ; chase_time
@@ -695,9 +695,9 @@ level34:
    .byte 33    ; north neighbor
    .word 1280  ; hscroll
    .word 240   ; vscroll
-   .byte 80    ; release_e3
-   .byte 50    ; release_e4
-   .byte 60    ; show_fruit
+   .byte 100   ; release_e3
+   .byte 80    ; release_e4
+   .byte 20    ; show_fruit
    .byte CHERRY_FRAME
    .word 5     ; scatter_time
    .word 1470  ; chase_time
@@ -714,9 +714,9 @@ level35:
    .byte 34    ; north neighbor
    .word 1280  ; hscroll
    .word 480   ; vscroll
-   .byte 80    ; release_e3
-   .byte 50    ; release_e4
-   .byte 60    ; show_fruit
+   .byte 100   ; release_e3
+   .byte 80    ; release_e4
+   .byte 20    ; show_fruit
    .byte APPLE_FRAME
    .word 5     ; scatter_time
    .word 1500  ; chase_time
@@ -733,9 +733,9 @@ level36:
    .byte 35    ; north neighbor
    .word 1280  ; hscroll
    .word 720   ; vscroll
-   .byte 80    ; release_e3
-   .byte 50    ; release_e4
-   .byte 60    ; show_fruit
+   .byte 100   ; release_e3
+   .byte 80    ; release_e4
+   .byte 20    ; show_fruit
    .byte BANANA_FRAME
    .word 5     ; scatter_time
    .word 1530  ; chase_time
@@ -752,9 +752,9 @@ level37:
    .byte 36    ; north neighbor
    .word 1280  ; hscroll
    .word 960   ; vscroll
-   .byte 80    ; release_e3
-   .byte 50    ; release_e4
-   .byte 60    ; show_fruit
+   .byte 100   ; release_e3
+   .byte 80    ; release_e4
+   .byte 20    ; show_fruit
    .byte MANGO_FRAME
    .word 5     ; scatter_time
    .word 1560  ; chase_time
@@ -771,9 +771,9 @@ level38:
    .byte 37    ; north neighbor
    .word 1280  ; hscroll
    .word 1200  ; vscroll
-   .byte 80    ; release_e3
-   .byte 50    ; release_e4
-   .byte 60    ; show_fruit
+   .byte 100   ; release_e3
+   .byte 80    ; release_e4
+   .byte 20    ; show_fruit
    .byte GUAVA_FRAME
    .word 5     ; scatter_time
    .word 1590  ; chase_time
@@ -790,9 +790,9 @@ level39:
    .byte 38    ; north neighbor
    .word 1280  ; hscroll
    .word 1440  ; vscroll
-   .byte 80    ; release_e3
-   .byte 50    ; release_e4
-   .byte 60    ; show_fruit
+   .byte 100   ; release_e3
+   .byte 80    ; release_e4
+   .byte 20    ; show_fruit
    .byte GRAPEFRUIT_FRAME
    .word 5     ; scatter_time
    .word 1620  ; chase_time
@@ -809,9 +809,9 @@ level40:
    .byte 39    ; north neighbor
    .word 1280  ; hscroll
    .word 1680  ; vscroll
-   .byte 80    ; release_e3
-   .byte 50    ; release_e4
-   .byte 60    ; show_fruit
+   .byte 100   ; release_e3
+   .byte 80    ; release_e4
+   .byte 20    ; show_fruit
    .byte CARAMBOLA_FRAME
    .word 5     ; scatter_time
    .word 1650  ; chase_time
@@ -828,9 +828,9 @@ level41:
    .byte 0     ; north neighbor
    .word 1600  ; hscroll
    .word 0     ; vscroll
-   .byte 80    ; release_e3
-   .byte 50    ; release_e4
-   .byte 60    ; show_fruit
+   .byte 100   ; release_e3
+   .byte 90    ; release_e4
+   .byte 15    ; show_fruit
    .byte CHERRY_FRAME
    .word 1     ; scatter_time
    .word 1650  ; chase_time
@@ -847,9 +847,9 @@ level42:
    .byte 41    ; north neighbor
    .word 1600  ; hscroll
    .word 240   ; vscroll
-   .byte 80    ; release_e3
-   .byte 50    ; release_e4
-   .byte 60    ; show_fruit
+   .byte 100   ; release_e3
+   .byte 90    ; release_e4
+   .byte 15    ; show_fruit
    .byte APPLE_FRAME
    .word 1     ; scatter_time
    .word 1680  ; chase_time
@@ -866,9 +866,9 @@ level43:
    .byte 42    ; north neighbor
    .word 1600  ; hscroll
    .word 480   ; vscroll
-   .byte 80    ; release_e3
-   .byte 50    ; release_e4
-   .byte 60    ; show_fruit
+   .byte 100   ; release_e3
+   .byte 90    ; release_e4
+   .byte 15    ; show_fruit
    .byte BANANA_FRAME
    .word 1     ; scatter_time
    .word 1710  ; chase_time
@@ -885,9 +885,9 @@ level44:
    .byte 43    ; north neighbor
    .word 1600  ; hscroll
    .word 720   ; vscroll
-   .byte 80    ; release_e3
-   .byte 50    ; release_e4
-   .byte 60    ; show_fruit
+   .byte 100   ; release_e3
+   .byte 90    ; release_e4
+   .byte 15    ; show_fruit
    .byte MANGO_FRAME
    .word 1     ; scatter_time
    .word 2000  ; chase_time
@@ -904,9 +904,9 @@ level45:
    .byte 44    ; north neighbor
    .word 1600  ; hscroll
    .word 960   ; vscroll
-   .byte 80    ; release_e3
-   .byte 50    ; release_e4
-   .byte 60    ; show_fruit
+   .byte 100   ; release_e3
+   .byte 100   ; release_e4
+   .byte 10    ; show_fruit
    .byte GUAVA_FRAME
    .word 1     ; scatter_time
    .word 3000  ; chase_time
@@ -923,9 +923,9 @@ level46:
    .byte 45    ; north neighbor
    .word 1600  ; hscroll
    .word 1200  ; vscroll
-   .byte 80    ; release_e3
-   .byte 50    ; release_e4
-   .byte 60    ; show_fruit
+   .byte 100   ; release_e3
+   .byte 100   ; release_e4
+   .byte 10    ; show_fruit
    .byte GRAPEFRUIT_FRAME
    .word 1     ; scatter_time
    .word 4000  ; chase_time
@@ -942,9 +942,9 @@ level47:
    .byte 46    ; north neighbor
    .word 1600  ; hscroll
    .word 1440  ; vscroll
-   .byte 80    ; release_e3
-   .byte 50    ; release_e4
-   .byte 60    ; show_fruit
+   .byte 100   ; release_e3
+   .byte 100   ; release_e4
+   .byte 10    ; show_fruit
    .byte CARAMBOLA_FRAME
    .word 1     ; scatter_time
    .word 5000  ; chase_time
@@ -961,9 +961,9 @@ level48:
    .byte 47    ; north neighbor
    .word 1600  ; hscroll
    .word 1680  ; vscroll
-   .byte 80    ; release_e3
-   .byte 50    ; release_e4
-   .byte 60    ; show_fruit
+   .byte 100   ; release_e3
+   .byte 100   ; release_e4
+   .byte 10    ; show_fruit
    .byte CHERRY_FRAME
    .word 1     ; scatter_time
    .word 10000 ; chase_time
