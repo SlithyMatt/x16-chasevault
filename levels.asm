@@ -174,7 +174,7 @@ level6:
    .byte 9,2, 9,12, 17,8
 
 level7:
-   .byte 102   ; number of pellets
+   .byte 42   ; number of pellets
    .byte 1
    .byte 15
    .byte 0
@@ -182,15 +182,15 @@ level7:
    .byte 6
    .word 0
    .word 1440
-   .byte 71    ; release_e3
-   .byte 33    ; release_e4
-   .byte 50    ; show_fruit
+   .byte 34    ; release_e3
+   .byte 15    ; release_e4
+   .byte 22    ; show_fruit
    .byte APPLE_FRAME
    .word 210   ; scatter_time
    .word 990   ; chase_time
    .byte 78    ; vuln_time
-   .byte 2     ; number of bars
-   .byte 9,11, 18,8
+   .byte 3     ; number of bars
+   .byte 9,4, 9,11, 13,8
 
 level8:
    .byte 102   ; number of pellets
@@ -326,7 +326,7 @@ level14:
    .byte 1,8, 9,2, 10,12, 18,8
 
 level15:
-   .byte 102   ; number of pellets
+   .byte 89    ; number of pellets
    .byte 1     ; new
    .byte 23    ; east neighbor
    .byte 7     ; west neighbor
@@ -334,15 +334,15 @@ level15:
    .byte 14    ; north neighbor
    .word 320   ; hscroll
    .word 1440  ; vscroll
-   .byte 80    ; release_e3
-   .byte 50    ; release_e4
-   .byte 40    ; show_fruit
+   .byte 72    ; release_e3
+   .byte 45    ; release_e4
+   .byte 36    ; show_fruit
    .byte BANANA_FRAME
    .word 90    ; scatter_time
    .word 1100  ; chase_time
    .byte 62    ; vuln_time
-   .byte 2     ; number of bars
-   .byte 9,11, 18,8
+   .byte 4     ; number of bars
+   .byte 9,4, 9,13, 17,6, 1,8
 
 level16:
    .byte 102   ; number of pellets
