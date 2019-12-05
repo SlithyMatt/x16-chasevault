@@ -382,7 +382,7 @@ fruit_status: ; A: 0=do not add current fruit, 1=add current fruit
    adc max_lives
    sta max_lives
    sta lives
-   SET_TIMER 30, __fruit_bonus_done
+   SET_TIMER 45, __fruit_bonus_done
 __fruit_status_return:
    rts
 
