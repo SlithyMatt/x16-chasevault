@@ -193,7 +193,7 @@ level7:
    .byte 9,4, 9,11, 13,8
 
 level8:
-   .byte 102   ; number of pellets
+   .byte 107   ; number of pellets
    .byte 1
    .byte 16
    .byte 0
@@ -209,7 +209,7 @@ level8:
    .word 990   ; chase_time
    .byte 76    ; vuln_time
    .byte 2     ; number of bars
-   .byte 9,11, 18,8
+   .byte 9,2, 17,8
 
 level9:
    .byte 99    ; number of pellets
@@ -345,7 +345,7 @@ level15:
    .byte 9,4, 9,13, 17,6, 1,8
 
 level16:
-   .byte 102   ; number of pellets
+   .byte 99    ; number of pellets
    .byte 1     ; new
    .byte 24    ; east neighbor
    .byte 8     ; west neighbor
@@ -360,8 +360,8 @@ level16:
    .word 60    ; scatter_time
    .word 1100  ; chase_time
    .byte 60    ; vuln_time
-   .byte 2     ; number of bars
-   .byte 9,11, 18,8
+   .byte 3     ; number of bars
+   .byte 9,2, 2,8, 17,8
 
 level17:
    .byte 101   ; number of pellets
