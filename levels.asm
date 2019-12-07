@@ -516,7 +516,7 @@ level24:
    .byte 9,2, 1,8, 17,8, 9,12
 
 level25:
-   .byte 102   ; number of pellets
+   .byte 11    ; number of pellets
    .byte 1     ; new
    .byte 33    ; east neighbor
    .byte 17    ; west neighbor
@@ -524,18 +524,18 @@ level25:
    .byte 0     ; north neighbor
    .word 960   ; hscroll
    .word 0     ; vscroll
-   .byte 90    ; release_e3
-   .byte 70    ; release_e4
-   .byte 25    ; show_fruit
+   .byte 8     ; release_e3
+   .byte 5     ; release_e4
+   .byte 0     ; show_fruit
    .byte GRAPEFRUIT_FRAME
    .word 10    ; scatter_time
    .word 1230  ; chase_time
    .byte 42    ; vuln_time
    .byte 2     ; number of bars
-   .byte 9,11, 18,8
+   .byte 9,13, 1,8
 
 level26:
-   .byte 102   ; number of pellets
+   .byte 94   ; number of pellets
    .byte 1     ; new
    .byte 34    ; east neighbor
    .byte 18    ; west neighbor
@@ -550,8 +550,8 @@ level26:
    .word 10    ; scatter_time
    .word 1260  ; chase_time
    .byte 40    ; vuln_time
-   .byte 2     ; number of bars
-   .byte 9,11, 18,8
+   .byte 4     ; number of bars
+   .byte 1,8, 9,2, 9,12, 17,8
 
 level27:
    .byte 102   ; number of pellets
