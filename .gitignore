@@ -1,7 +1,5 @@
 *.bin
 *.BIN
-!*.B*.BIN
-!STARTSCRNBG.BIN
 *.prg
 *.PRG
 *.list
