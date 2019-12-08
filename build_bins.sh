@@ -5,3 +5,5 @@
 ./asc2bin.exe tile_buffer.txt TILES.BIN 0000
 ./asc2bin.exe palette.txt PAL.BIN 1000
 ./asc2bin.exe sprite_attr.txt SPRITEATTR.BIN 5000
+./make4bitbin.exe bitmap.data BITMAP.BIN A000
+./make4bitbin.exe startscrnbg.data STARTSCRNBG.BIN 6A00
