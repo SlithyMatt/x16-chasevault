@@ -518,7 +518,7 @@ level24:
 level25:
    .byte 11    ; number of pellets
    .byte 1     ; new
-   .byte 33    ; east neighbor
+   .byte 0     ; east neighbor
    .byte 17    ; west neighbor
    .byte 26    ; south neighbor
    .byte 0     ; north neighbor
@@ -554,7 +554,7 @@ level26:
    .byte 1,8, 9,2, 9,12, 17,8
 
 level27:
-   .byte 102   ; number of pellets
+   .byte 98    ; number of pellets
    .byte 1     ; new
    .byte 35    ; east neighbor
    .byte 19    ; west neighbor
@@ -569,8 +569,8 @@ level27:
    .word 10    ; scatter_time
    .word 1290  ; chase_time
    .byte 38    ; vuln_time
-   .byte 2     ; number of bars
-   .byte 9,11, 18,8
+   .byte 4     ; number of bars
+   .byte 1,8, 9,2, 10,12, 18,8
 
 level28:
    .byte 102   ; number of pellets
@@ -668,10 +668,10 @@ level32:
    .byte 9,11, 18,8
 
 level33:
-   .byte 102   ; number of pellets
+   .byte 69    ; number of pellets
    .byte 1     ; new
    .byte 41    ; east neighbor
-   .byte 25    ; west neighbor
+   .byte 0     ; west neighbor
    .byte 34    ; south neighbor
    .byte 0     ; north neighbor
    .word 1280  ; hscroll
@@ -683,27 +683,27 @@ level33:
    .word 5     ; scatter_time
    .word 1440  ; chase_time
    .byte 28    ; vuln_time
-   .byte 2     ; number of bars
-   .byte 9,11, 18,8
+   .byte 3     ; number of bars
+   .byte 9,13, 18,8, 15,11
 
 level34:
-   .byte 102   ; number of pellets
+   .byte 21    ; number of pellets
    .byte 1     ; new
-   .byte 42    ; east neighbor
+   .byte 0     ; east neighbor
    .byte 26    ; west neighbor
-   .byte 35    ; south neighbor
+   .byte 0     ; south neighbor
    .byte 33    ; north neighbor
    .word 1280  ; hscroll
    .word 240   ; vscroll
-   .byte 100   ; release_e3
-   .byte 80    ; release_e4
-   .byte 20    ; show_fruit
+   .byte 18    ; release_e3
+   .byte 15    ; release_e4
+   .byte 0     ; show_fruit
    .byte CHERRY_FRAME
    .word 5     ; scatter_time
    .word 1470  ; chase_time
    .byte 27    ; vuln_time
    .byte 2     ; number of bars
-   .byte 9,11, 18,8
+   .byte 9,2, 1,8
 
 level35:
    .byte 102   ; number of pellets
