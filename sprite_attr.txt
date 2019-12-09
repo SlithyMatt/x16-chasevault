@@ -5,10 +5,18 @@
 # $F5010: sprite 2 - Enemy 1
 38 07 90 00 50 00 2C 50
 # $F5018: sprite 3 - Enemy 2
-48 07 90 00 71 00 2C 52
+40 07 90 00 71 00 2C 52
 # $F5020: sprite 4 - Enemy 3
-40 07 80 00 6e 00 2C 51
+3C 07 80 00 6e 00 2C 51
 # $F5028: sprite 5 - Enemy 4
-40 07 a0 00 6e 00 2C 53
+3C 07 a0 00 6e 00 2C 53
 # $F5030: sprite 6 - Fruit
 5C 07 90 00 50 00 40 50
+# $F5038: sprite 7 - Fireball 1
+7C 07 98 00 10 00 20 50
+# $F5040: sprite 8 - Fireball 2
+78 07 F8 00 70 00 20 50
+# $F5048: sprite 9 - Fireball 3
+7C 07 98 00 D0 00 21 50
+# $F5050: sprite 10 - Fireball 4
+78 07 38 00 70 00 22 50

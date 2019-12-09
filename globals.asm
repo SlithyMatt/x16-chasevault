@@ -21,6 +21,11 @@ ENEMY2_idx     = 3
 ENEMY3_idx     = 4
 ENEMY4_idx     = 5
 FRUIT_idx      = 6
+FIREBALL1_idx  = 7
+FIREBALL2_idx  = 8
+FIREBALL3_idx  = 9
+FIREBALL4_idx  = 10
+
 
 ACTIVE_ENEMY_L = $0E400
 ACTIVE_ENEMY_H = $0E600
