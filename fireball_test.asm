@@ -12,6 +12,12 @@
 .include "fireball.asm"
 .include "globals.asm"
 
+START_RECORDING = 10
+STOP_RECORDING = 78
+
+record:    .byte 1
+frame_num: .byte 0
+
 vsync_trig: .byte 0
 
 def_irq: .word $0000
@@ -38,7 +44,7 @@ handle_irq:
 
 
 start:
-   ; DIsable layer 1
+   ; Disable layer 1
    stz VERA_ctrl
    VERA_SET_ADDR VRAM_layer1, 1  ; configure VRAM layer 1
    stz VERA_data0
@@ -98,6 +104,21 @@ mainloop:
    beq mainloop
 
    ; VSYNC has occurred, handle
+   lda record
+   beq @do_tick
+   inc frame_num
+   lda frame_num
+   cmp #START_RECORDING
+   bne @check_stop
+   lda #2
+   sta GIF_ctrl ; start recording gif
+@check_stop:
+   cmp #STOP_RECORDING
+   bne @do_tick
+   stz GIF_ctrl ; stop recording gif
+   stz record
+
+@do_tick:
    jsr fireball_tick
 
    stz vsync_trig

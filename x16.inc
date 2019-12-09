@@ -28,6 +28,9 @@ VERA_irq          = $9F27
 ROM_BANK          = $9F60
 RAM_BANK          = $9F61
 
+; Emulator Registers
+GIF_ctrl          = $9FB5
+
 ; Banked Addresses
 RAM_WIN           = $A000
 RAM_WIN_SIZE      = $2000
