@@ -25,6 +25,7 @@ FIREBALL1_idx  = 7
 FIREBALL2_idx  = 8
 FIREBALL3_idx  = 9
 FIREBALL4_idx  = 10
+BOMB_idx       = 11
 
 
 ACTIVE_ENEMY_L = $0E400

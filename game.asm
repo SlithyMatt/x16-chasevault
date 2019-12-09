@@ -11,6 +11,7 @@ GAME_INC = 1
 .include "loadbank.asm"
 .include "fruit.asm"
 .include "fireball.asm"
+.include "bomb.asm"
 
 init_game:
    lda #0
@@ -38,7 +39,8 @@ game_tick:        ; called after every VSYNC detected (60 Hz)
    jsr enemy_tick
    jsr fruit_tick
    jsr level_tick
-   jsr fireball_tick
+   ;jsr fireball_tick
+   jsr bomb_tick
    ; TODO add other tick handlers
 @return:
    rts

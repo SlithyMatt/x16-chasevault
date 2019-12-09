@@ -13,6 +13,8 @@ PLAYER_INC = 1
 .include "globals.asm"
 .include "levels.asm"
 .include "wallstub.asm"
+.include "fruit.asm"
+.include "bomb.asm"
 
 SCOREBOARD_X   = 11
 SCOREBOARD_Y   = 1
@@ -652,7 +654,7 @@ check_collision:
    bra @next_enemy
 @die:
    jsr player_die
-   bra @return
+   jmp @return
 @next_enemy:
    inc @index
    lda @index
@@ -662,8 +664,21 @@ check_collision:
 @check_fruit:
    lda fruit
    bit #FRUIT_BLINKING
-   bne @return
+   bne @check_bomb
    lda #FRUIT_idx
+   sta @index
+   SPRITE_SCREEN_POS @index, @s_xpos, @s_ypos
+   cmp #0
+   beq @check_bomb
+   SPRITE_CHECK_BOX 4, @p_xpos, @p_ypos, @s_xpos, @s_ypos
+   cmp #0
+   beq @check_bomb
+   jsr eat_fruit
+@check_bomb:
+   jsr bomb_armed
+   cmp #0
+   beq @return
+   lda #BOMB_idx
    sta @index
    SPRITE_SCREEN_POS @index, @s_xpos, @s_ypos
    cmp #0
@@ -671,7 +686,7 @@ check_collision:
    SPRITE_CHECK_BOX 4, @p_xpos, @p_ypos, @s_xpos, @s_ypos
    cmp #0
    beq @return
-   jsr eat_fruit
+   jsr light_bomb
 @return:
    rts
 
@@ -875,6 +890,15 @@ next_level:
    jsr fruit_blink
    jsr player_move
    jmp timer_done
+
+light_bomb:
+   jsr bomb_light
+   SET_TIMER BOMB_LIT_TICKS, @detonated
+   rts
+@detonated:
+   jsr enemy_clear
+   jmp timer_done
+
 
 
 .endif
