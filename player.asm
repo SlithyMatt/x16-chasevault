@@ -14,6 +14,7 @@ PLAYER_INC = 1
 .include "levels.asm"
 .include "wallstub.asm"
 .include "fruit.asm"
+.include "skull.asm"
 .include "bomb.asm"
 
 SCOREBOARD_X   = 11
@@ -374,7 +375,6 @@ player_tick:
    ldy move_y
    jsr sprite_setpos
    jsr player_move
-   jsr fruit_move
    lda player
    and #$0C
    lsr
@@ -751,6 +751,7 @@ check_off:  ; Input:
    jsr fruit_reset
    jsr enemy_clear
    jsr bomb_clear
+   jsr skull_clear
    lda #1
    bra @return
 @on_screen:
@@ -793,6 +794,7 @@ player_die:
    jsr enemy_stop
    ldx #ENEMY4_idx
    jsr enemy_stop
+   jsr skull_stop
    jsr fruit_stop
    stz player_index_d
    SET_TIMER 5, @animation
@@ -850,6 +852,7 @@ readygo:
    SUPERIMPOSE_RESTORE
    jsr player_move
    jsr fruit_move
+   jsr skull_move
    ldx #ENEMY1_idx   ; release first two enemies immediately
    jsr enemy_release
    ldx #ENEMY2_idx
@@ -877,6 +880,7 @@ continue:
 
 next_level:
    jsr enemy_clear
+   jsr skull_clear
    jsr fruit_stop
    jsr player_stop
    SET_TIMER 15, @level_up
@@ -898,6 +902,7 @@ light_bomb:
    rts
 @detonated:
    jsr enemy_clear
+   jsr skull_clear
    jmp timer_done
 
 

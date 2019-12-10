@@ -4,6 +4,8 @@ LEVELS_INC = 1
 .include "x16.inc"
 .include "globals.asm"
 .include "timer.asm"
+.include "skull.asm"
+.include "bomb.asm"
 
 LEVEL_X  = 10
 LEVEL_Y  = 0
@@ -1530,6 +1532,8 @@ level_transition:
    sta chase_time+1
    LOAD_LEVEL_PARAM L_VULN
    sta vuln_time
+   LOAD_LEVEL_PARAM NUM_FIREBALLS
+   sta num_fireballs
    LOAD_LEVEL_PARAM NEW_LEVEL
    beq @req_move
    lda #0
@@ -1558,7 +1562,12 @@ level_transition:
 @check_skull:
    LOAD_LEVEL_PARAM SKULL_X
    beq @done_regenerate
-   ; TODO: place skull, set fireball count
+   pha
+   LOAD_LEVEL_PARAM BOMB_Y
+   tay
+   plx
+   lda #1
+   jsr skull_place
 @done_regenerate:
    jmp timer_done
 @move:

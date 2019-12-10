@@ -26,6 +26,7 @@ FIREBALL2_idx  = 8
 FIREBALL3_idx  = 9
 FIREBALL4_idx  = 10
 BOMB_idx       = 11
+SKULL_idx      = 12
 
 
 ACTIVE_ENEMY_L = $0E400
@@ -73,6 +74,7 @@ fruit_frame:      .byte 23 ; banana for level 1
 scatter_time:     .word 300
 chase_time:       .word 900
 vuln_time:        .byte 90 ; Unit: 1/15 second (6 seconds)
+num_fireballs:    .byte 0
 
 regenerate_req:   .byte 0
 move_req:         .byte 0
