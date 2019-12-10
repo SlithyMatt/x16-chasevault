@@ -44,7 +44,12 @@ L_FRUIT_FRAME  = 13
 L_SCATTER      = 14
 L_CHASE        = 16
 L_VULN         = 18
-NUM_BARS       = 19
+SKULL_X        = 19
+SKULL_Y        = 20
+NUM_FIREBALLS  = 21
+BOMB_X         = 22
+BOMB_Y         = 23
+NUM_BARS       = 24
 
 level_table:   ; table of level data structures
    .word 0
@@ -75,6 +80,9 @@ level1:
    .word 300   ; scatter_time
    .word 900   ; chase_time
    .byte 90    ; vuln_time
+   .byte 0,0   ; skull placement
+   .byte 0     ; no. fireballs
+   .byte 0,0   ; bomb placement
    .byte 2     ; number of bars
    .byte 9,12, 18,8  ; x,y coordinates of each bar tile
 
@@ -94,6 +102,9 @@ level2:
    .word 270   ; scatter_time
    .word 900   ; chase_time
    .byte 88    ; vuln_time
+   .byte 0,0   ; skull placement
+   .byte 0     ; no. fireballs
+   .byte 0,0   ; bomb placement
    .byte 3     ; number of bars
    .byte 9,11, 18,8, 9,2
 
@@ -113,6 +124,9 @@ level3:
    .word 270   ; scatter_time
    .word 930  ; chase_time
    .byte 86    ; vuln_time
+   .byte 0,0   ; skull placement
+   .byte 0     ; no. fireballs
+   .byte 0,0   ; bomb placement
    .byte 4     ; number of bars
    .byte 9,13, 18,8, 15,11, 9,2
 
@@ -132,6 +146,9 @@ level4:
    .word 240   ; scatter_time
    .word 930   ; chase_time
    .byte 84    ; vuln_time
+   .byte 0,0   ; skull placement
+   .byte 0     ; no. fireballs
+   .byte 0,0   ; bomb placement
    .byte 3     ; number of bars
    .byte 9,2, 9,12, 17,8
 
@@ -151,6 +168,9 @@ level5:
    .word 240   ; scatter_time
    .word 960   ; chase_time
    .byte 82    ; vuln_time
+   .byte 0,0   ; skull placement
+   .byte 0     ; no. fireballs
+   .byte 0,0   ; bomb placement
    .byte 4     ; number of bars
    .byte 2,8, 9,2, 9,13, 18,8
 
@@ -170,6 +190,9 @@ level6:
    .word 210   ; scatter_time
    .word 960   ; chase_time
    .byte 80    ; vuln_time
+   .byte 0,0   ; skull placement
+   .byte 0     ; no. fireballs
+   .byte 0,0   ; bomb placement
    .byte 3     ; number of bars
    .byte 9,2, 9,12, 17,8
 
@@ -189,6 +212,9 @@ level7:
    .word 210   ; scatter_time
    .word 990   ; chase_time
    .byte 78    ; vuln_time
+   .byte 0,0   ; skull placement
+   .byte 0     ; no. fireballs
+   .byte 0,0   ; bomb placement
    .byte 3     ; number of bars
    .byte 9,4, 9,11, 13,8
 
@@ -208,6 +234,9 @@ level8:
    .word 180   ; scatter_time
    .word 990   ; chase_time
    .byte 76    ; vuln_time
+   .byte 0,0   ; skull placement
+   .byte 0     ; no. fireballs
+   .byte 0,0   ; bomb placement
    .byte 2     ; number of bars
    .byte 9,2, 17,8
 
@@ -227,6 +256,9 @@ level9:
    .word 180   ; scatter_time
    .word 1020  ; chase_time
    .byte 74    ; vuln_time
+   .byte 0,0   ; skull placement
+   .byte 0     ; no. fireballs
+   .byte 0,0   ; bomb placement
    .byte 3     ; number of bars
    .byte 2,8, 9,12, 18,8
 
@@ -246,6 +278,9 @@ level10:
    .word 150   ; scatter_time
    .word 1020  ; chase_time
    .byte 72    ; vuln_time
+   .byte 0,0   ; skull placement
+   .byte 0     ; no. fireballs
+   .byte 0,0   ; bomb placement
    .byte 4     ; number of bars
    .byte 9,4, 1,8, 18,8, 9,13
 
@@ -265,6 +300,9 @@ level11:
    .word 150   ; scatter_time
    .word 1050  ; chase_time
    .byte 70    ; vuln_time
+   .byte 0,0   ; skull placement
+   .byte 0     ; no. fireballs
+   .byte 0,0   ; bomb placement
    .byte 4     ; number of bars
    .byte 9,2, 1,8, 18,8, 9,12
 
@@ -284,6 +322,9 @@ level12:
    .word 120   ; scatter_time
    .word 1050  ; chase_time
    .byte 68    ; vuln_time
+   .byte 0,0   ; skull placement
+   .byte 0     ; no. fireballs
+   .byte 0,0   ; bomb placement
    .byte 4     ; number of bars
    .byte 9,2, 1,8, 17,8, 9,12
 
@@ -303,6 +344,9 @@ level13:
    .word 120   ; scatter_time
    .word 1080   ; chase_time
    .byte 66    ; vuln_time
+   .byte 0,0   ; skull placement
+   .byte 0     ; no. fireballs
+   .byte 0,0   ; bomb placement
    .byte 4     ; number of bars
    .byte 9,2, 2,8, 18,8, 9,12
 
@@ -322,6 +366,9 @@ level14:
    .word 90    ; scatter_time
    .word 1080  ; chase_time
    .byte 64    ; vuln_time
+   .byte 0,0   ; skull placement
+   .byte 0     ; no. fireballs
+   .byte 0,0   ; bomb placement
    .byte 4     ; number of bars
    .byte 1,8, 9,2, 10,12, 18,8
 
@@ -341,6 +388,9 @@ level15:
    .word 90    ; scatter_time
    .word 1100  ; chase_time
    .byte 62    ; vuln_time
+   .byte 0,0   ; skull placement
+   .byte 0     ; no. fireballs
+   .byte 0,0   ; bomb placement
    .byte 4     ; number of bars
    .byte 9,4, 9,13, 17,6, 1,8
 
@@ -360,6 +410,9 @@ level16:
    .word 60    ; scatter_time
    .word 1100  ; chase_time
    .byte 60    ; vuln_time
+   .byte 0,0   ; skull placement
+   .byte 0     ; no. fireballs
+   .byte 0,0   ; bomb placement
    .byte 3     ; number of bars
    .byte 9,2, 2,8, 17,8
 
@@ -379,6 +432,9 @@ level17:
    .word 60    ; scatter_time
    .word 1130  ; chase_time
    .byte 58    ; vuln_time
+   .byte 0,0   ; skull placement
+   .byte 0     ; no. fireballs
+   .byte 0,0   ; bomb placement
    .byte 4     ; number of bars
    .byte 1,8, 9,11, 18,8
 
@@ -398,6 +454,9 @@ level18:
    .word 45    ; scatter_time
    .word 1130  ; chase_time
    .byte 56    ; vuln_time
+   .byte 0,0   ; skull placement
+   .byte 0     ; no. fireballs
+   .byte 0,0   ; bomb placement
    .byte 4     ; number of bars
    .byte 9,2, 1,8, 18,8, 9,12
 
@@ -417,6 +476,9 @@ level19:
    .word 45    ; scatter_time
    .word 1160  ; chase_time
    .byte 54    ; vuln_time
+   .byte 0,0   ; skull placement
+   .byte 0     ; no. fireballs
+   .byte 0,0   ; bomb placement
    .byte 4     ; number of bars
    .byte 9,2, 9,12, 1,8, 17,8
 
@@ -436,6 +498,9 @@ level20:
    .word 30    ; scatter_time
    .word 1160  ; chase_time
    .byte 52    ; vuln_time
+   .byte 0,0   ; skull placement
+   .byte 0     ; no. fireballs
+   .byte 0,0   ; bomb placement
    .byte 4     ; number of bars
    .byte 9,4, 1,8, 18,8, 9,13
 
@@ -455,6 +520,9 @@ level21:
    .word 30    ; scatter_time
    .word 1190  ; chase_time
    .byte 50    ; vuln_time
+   .byte 0,0   ; skull placement
+   .byte 0     ; no. fireballs
+   .byte 0,0   ; bomb placement
    .byte 4     ; number of bars
    .byte 9,2, 2,8, 9,12, 18,8
 
@@ -474,6 +542,9 @@ level22:
    .word 15    ; scatter_time
    .word 1190  ; chase_time
    .byte 48    ; vuln_time
+   .byte 0,0   ; skull placement
+   .byte 0     ; no. fireballs
+   .byte 0,0   ; bomb placement
    .byte 4     ; number of bars
    .byte 2,8, 9,2, 9,13, 18,8
 
@@ -493,6 +564,9 @@ level23:
    .word 15    ; scatter_time
    .word 1220  ; chase_time
    .byte 46    ; vuln_time
+   .byte 0,0   ; skull placement
+   .byte 0     ; no. fireballs
+   .byte 0,0   ; bomb placement
    .byte 4     ; number of bars
    .byte 9,2, 2,8, 18,8, 9,12
 
@@ -512,6 +586,9 @@ level24:
    .word 15    ; scatter_time
    .word 1230  ; chase_time
    .byte 44    ; vuln_time
+   .byte 0,0   ; skull placement
+   .byte 0     ; no. fireballs
+   .byte 0,0   ; bomb placement
    .byte 4     ; number of bars
    .byte 9,2, 1,8, 17,8, 9,12
 
@@ -531,6 +608,9 @@ level25:
    .word 10    ; scatter_time
    .word 1230  ; chase_time
    .byte 42    ; vuln_time
+   .byte 4,5   ; skull placement
+   .byte 2     ; no. fireballs
+   .byte 11,10 ; bomb placement
    .byte 2     ; number of bars
    .byte 9,13, 1,8
 
@@ -550,6 +630,9 @@ level26:
    .word 10    ; scatter_time
    .word 1260  ; chase_time
    .byte 40    ; vuln_time
+   .byte 0,0   ; skull placement
+   .byte 0     ; no. fireballs
+   .byte 0,0   ; bomb placement
    .byte 4     ; number of bars
    .byte 1,8, 9,2, 9,12, 17,8
 
@@ -569,6 +652,9 @@ level27:
    .word 10    ; scatter_time
    .word 1290  ; chase_time
    .byte 38    ; vuln_time
+   .byte 0,0   ; skull placement
+   .byte 0     ; no. fireballs
+   .byte 0,0   ; bomb placement
    .byte 4     ; number of bars
    .byte 1,8, 9,2, 10,12, 18,8
 
@@ -588,6 +674,9 @@ level28:
    .word 10    ; scatter_time
    .word 1320  ; chase_time
    .byte 36    ; vuln_time
+   .byte 0,0   ; skull placement
+   .byte 0     ; no. fireballs
+   .byte 0,0   ; bomb placement
    .byte 2     ; number of bars
    .byte 9,11, 18,8
 
@@ -607,6 +696,9 @@ level29:
    .word 10    ; scatter_time
    .word 1350  ; chase_time
    .byte 34    ; vuln_time
+   .byte 0,0   ; skull placement
+   .byte 0     ; no. fireballs
+   .byte 0,0   ; bomb placement
    .byte 2     ; number of bars
    .byte 9,11, 18,8
 
@@ -626,6 +718,9 @@ level30:
    .word 10    ; scatter_time
    .word 1380  ; chase_time
    .byte 32    ; vuln_time
+   .byte 0,0   ; skull placement
+   .byte 0     ; no. fireballs
+   .byte 0,0   ; bomb placement
    .byte 2     ; number of bars
    .byte 9,11, 18,8
 
@@ -645,6 +740,9 @@ level31:
    .word 10    ; scatter_time
    .word 1410  ; chase_time
    .byte 30    ; vuln_time
+   .byte 0,0   ; skull placement
+   .byte 0     ; no. fireballs
+   .byte 0,0   ; bomb placement
    .byte 2     ; number of bars
    .byte 9,11, 18,8
 
@@ -664,6 +762,9 @@ level32:
    .word 10    ; scatter_time
    .word 1440  ; chase_time
    .byte 29    ; vuln_time
+   .byte 0,0   ; skull placement
+   .byte 0     ; no. fireballs
+   .byte 0,0   ; bomb placement
    .byte 2     ; number of bars
    .byte 9,11, 18,8
 
@@ -683,6 +784,9 @@ level33:
    .word 5     ; scatter_time
    .word 1440  ; chase_time
    .byte 28    ; vuln_time
+   .byte 0,0   ; skull placement
+   .byte 0     ; no. fireballs
+   .byte 0,0   ; bomb placement
    .byte 3     ; number of bars
    .byte 9,13, 18,8, 15,11
 
@@ -702,6 +806,9 @@ level34:
    .word 5     ; scatter_time
    .word 1470  ; chase_time
    .byte 27    ; vuln_time
+   .byte 3,11  ; skull placement
+   .byte 3     ; no. fireballs
+   .byte 11,10 ; bomb placement
    .byte 2     ; number of bars
    .byte 9,2, 1,8
 
@@ -721,6 +828,9 @@ level35:
    .word 5     ; scatter_time
    .word 1500  ; chase_time
    .byte 26    ; vuln_time
+   .byte 0,0   ; skull placement
+   .byte 0     ; no. fireballs
+   .byte 0,0   ; bomb placement
    .byte 2     ; number of bars
    .byte 9,11, 18,8
 
@@ -740,6 +850,9 @@ level36:
    .word 5     ; scatter_time
    .word 1530  ; chase_time
    .byte 25    ; vuln_time
+   .byte 0,0   ; skull placement
+   .byte 0     ; no. fireballs
+   .byte 0,0   ; bomb placement
    .byte 2     ; number of bars
    .byte 9,11, 18,8
 
@@ -759,6 +872,9 @@ level37:
    .word 5     ; scatter_time
    .word 1560  ; chase_time
    .byte 24    ; vuln_time
+   .byte 0,0   ; skull placement
+   .byte 0     ; no. fireballs
+   .byte 0,0   ; bomb placement
    .byte 2     ; number of bars
    .byte 9,11, 18,8
 
@@ -778,6 +894,9 @@ level38:
    .word 5     ; scatter_time
    .word 1590  ; chase_time
    .byte 23    ; vuln_time
+   .byte 0,0   ; skull placement
+   .byte 0     ; no. fireballs
+   .byte 0,0   ; bomb placement
    .byte 2     ; number of bars
    .byte 9,11, 18,8
 
@@ -797,6 +916,9 @@ level39:
    .word 5     ; scatter_time
    .word 1620  ; chase_time
    .byte 23    ; vuln_time
+   .byte 0,0   ; skull placement
+   .byte 0     ; no. fireballs
+   .byte 0,0   ; bomb placement
    .byte 2     ; number of bars
    .byte 9,11, 18,8
 
@@ -816,6 +938,9 @@ level40:
    .word 5     ; scatter_time
    .word 1650  ; chase_time
    .byte 23    ; vuln_time
+   .byte 0,0   ; skull placement
+   .byte 0     ; no. fireballs
+   .byte 0,0   ; bomb placement
    .byte 2     ; number of bars
    .byte 9,11, 18,8
 
@@ -835,6 +960,9 @@ level41:
    .word 1     ; scatter_time
    .word 1650  ; chase_time
    .byte 23    ; vuln_time
+   .byte 0,0   ; skull placement
+   .byte 0     ; no. fireballs
+   .byte 0,0   ; bomb placement
    .byte 2     ; number of bars
    .byte 9,11, 18,8
 
@@ -854,6 +982,9 @@ level42:
    .word 1     ; scatter_time
    .word 1680  ; chase_time
    .byte 23    ; vuln_time
+   .byte 0,0   ; skull placement
+   .byte 0     ; no. fireballs
+   .byte 0,0   ; bomb placement
    .byte 2     ; number of bars
    .byte 9,11, 18,8
 
@@ -873,6 +1004,9 @@ level43:
    .word 1     ; scatter_time
    .word 1710  ; chase_time
    .byte 23    ; vuln_time
+   .byte 0,0   ; skull placement
+   .byte 0     ; no. fireballs
+   .byte 0,0   ; bomb placement
    .byte 2     ; number of bars
    .byte 9,11, 18,8
 
@@ -892,6 +1026,9 @@ level44:
    .word 1     ; scatter_time
    .word 2000  ; chase_time
    .byte 23    ; vuln_time
+   .byte 0,0   ; skull placement
+   .byte 0     ; no. fireballs
+   .byte 0,0   ; bomb placement
    .byte 2     ; number of bars
    .byte 9,11, 18,8
 
@@ -911,6 +1048,9 @@ level45:
    .word 1     ; scatter_time
    .word 3000  ; chase_time
    .byte 23    ; vuln_time
+   .byte 0,0   ; skull placement
+   .byte 0     ; no. fireballs
+   .byte 0,0   ; bomb placement
    .byte 2     ; number of bars
    .byte 9,11, 18,8
 
@@ -930,6 +1070,9 @@ level46:
    .word 1     ; scatter_time
    .word 4000  ; chase_time
    .byte 23    ; vuln_time
+   .byte 0,0   ; skull placement
+   .byte 0     ; no. fireballs
+   .byte 0,0   ; bomb placement
    .byte 2     ; number of bars
    .byte 9,11, 18,8
 
@@ -949,6 +1092,9 @@ level47:
    .word 1     ; scatter_time
    .word 5000  ; chase_time
    .byte 23    ; vuln_time
+   .byte 0,0   ; skull placement
+   .byte 0     ; no. fireballs
+   .byte 0,0   ; bomb placement
    .byte 2     ; number of bars
    .byte 9,11, 18,8
 
@@ -968,6 +1114,9 @@ level48:
    .word 1     ; scatter_time
    .word 10000 ; chase_time
    .byte 23    ; vuln_time
+   .byte 0,0   ; skull placement
+   .byte 0     ; no. fireballs
+   .byte 0,0   ; bomb placement
    .byte 2     ; number of bars
    .byte 9,11, 18,8
 
@@ -1379,6 +1528,8 @@ level_transition:
    iny
    lda (ZP_PTR_1),y
    sta chase_time+1
+   LOAD_LEVEL_PARAM L_VULN
+   sta vuln_time
    LOAD_LEVEL_PARAM NEW_LEVEL
    beq @req_move
    lda #0
@@ -1396,6 +1547,19 @@ level_transition:
    jsr level_backup
    lda #1
    sta regenerate_req
+   LOAD_LEVEL_PARAM BOMB_X
+   beq @check_skull
+   pha
+   LOAD_LEVEL_PARAM BOMB_Y
+   tay
+   plx
+   lda #1
+   jsr bomb_place
+@check_skull:
+   LOAD_LEVEL_PARAM SKULL_X
+   beq @done_regenerate
+   ; TODO: place skull, set fireball count
+@done_regenerate:
    jmp timer_done
 @move:
    jsr __level_prepare_locks

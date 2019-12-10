@@ -750,6 +750,7 @@ check_off:  ; Input:
    jsr sprite_disable
    jsr fruit_reset
    jsr enemy_clear
+   jsr bomb_clear
    lda #1
    bra @return
 @on_screen:
