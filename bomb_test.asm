@@ -12,7 +12,9 @@
 .include "bomb.asm"
 .include "player.asm"
 .include "joystick.asm"
+.include "enemy.asm"
 .include "globals.asm"
+.include "timer.asm"
 
 vsync_trig: .byte 0
 
@@ -113,9 +115,11 @@ mainloop:
    stz frame_num
 
 @do_tick:
+   jsr timer_tick
    jsr joystick_tick
    jsr player_tick
    jsr bomb_tick
+   jsr enemy_tick
 
    stz vsync_trig
    bra mainloop  ; loop forever
