@@ -5,6 +5,7 @@ SKULL_INC = 1
 .include "globals.asm"
 .include "sprite.asm"
 .include "fireball.asm"
+.include "debug.asm"
 
 skull: .byte 0 ; Bits 7-5 (TBD) | Bit 4: moving | Bits 3-1: eye direction | Bit 0: placed
 
@@ -22,15 +23,15 @@ SKULL_EYES_NORTHWEST = $0A
 SKULL_EYES_NORTH     = $0C
 SKULL_EYES_NORTHEAST = $0E
 
-skull_frame: ; frame |  flip
-   .byte       35,      0  ; east
-   .byte       36,      0
-   .byte       37,      0
-   .byte       36,      1
-   .byte       35,      1
-   .byte       39,      1
-   .byte       38,      0
-   .byte       39,      0 ; northeast
+__skull_frame: ;  frame |  flip
+   .byte          35,      0  ; east
+   .byte          36,      0
+   .byte          37,      0
+   .byte          36,      1
+   .byte          35,      1
+   .byte          39,      1
+   .byte          38,      0
+   .byte          39,      0 ; northeast
 
 __skull_path:
    .byte DIR_RIGHT, DIR_UP, DIR_RIGHT, DIR_UP, DIR_RIGHT, DIR_RIGHT, DIR_DOWN, DIR_RIGHT
@@ -51,6 +52,10 @@ __skull_pos_y: .word 0
 __skull_player_x: .word 0
 __skull_player_y: .word 0
 
+__skull_stored_x: .byte 0
+__skull_stored_y: .byte 0
+
+
 skull_tick:
    lda skull
    bit #SKULL_PLACED
@@ -61,6 +66,9 @@ skull_tick:
 @set_pos:
    bit #SKULL_MOVING
    beq @get_vector
+   lda frame_num
+   and #$03
+   bne @get_vector   ; only move every 4 frames
    ldx __skull_path_idx
    inc __skull_path_idx
    lda __skull_path_idx
@@ -97,7 +105,7 @@ skull_tick:
    jsr move_sprite_up
 @get_vector:
    lda skull
-   and SKULL_EYES_CLEAR
+   and #SKULL_EYES_CLEAR
    sta skull
    lda #SKULL_idx
    sta __skull_sprite_idx
@@ -124,15 +132,36 @@ skull_tick:
    ror __skull_player_x
    lsr __skull_player_y+1
    ror __skull_player_y
-   ; reuse high bytes for dividing lines
+   ; reuse high bytes for dividing lines (factor of sin(22.5 deg))
+   ; approximation: a = b*sin(22.5) ~= b*0.3827 ~= (b>>1)-(b>>3)
    lda __skull_player_y
+   bpl @divy
+   lda #0
+   sec
+   sbc __skull_player_y
+@divy:
+   lsr
+   pha
+   lsr
    lsr
    sta __skull_player_y+1
+   pla
+   sec
+   sbc __skull_player_y+1
+   sta __skull_player_y+1
    lda __skull_player_x
+   bpl @divx
+   lda #0
+   sec
+   sbc __skull_player_x
+@divx:
+   lsr
+   pha
+   lsr
    lsr
    sta __skull_player_x+1
+   pla
    sec
-   lda #0
    sbc __skull_player_x+1
    sta __skull_player_x+1
    ; determine general direction
@@ -142,83 +171,94 @@ skull_tick:
 @check_east_y:
    lda __skull_player_y
    bmi @check_northeast
-   sec
-   sbc __skull_player_x
+   cmp __skull_player_x+1
+   bmi @look_east
+   lda __skull_player_x
    cmp __skull_player_y+1
-   bmi @check_southeast
+   bpl @look_southeast
+   jmp @look_south
 @look_east:
    lda skull
    ora #SKULL_EYES_EAST
    sta skull
-   jmp @check_fireballs
-@check_southeast:
-   cmp __skull_player_x+1
-   bpl @look_southeast
-   lda skull
-   ora #SKULL_EYES_SOUTH
-   sta skull
-   jmp @check_fireballs
+   jmp @set_frame
 @look_southeast:
    lda skull
    ora #SKULL_EYES_SOUTHEAST
    sta skull
-   jmp @check_fireballs
+   jmp @set_frame
 @check_northeast:
    sec
-   sbc __skull_player_x
-   cmp __skull_player_y+1
-   bpl @look_east
+   lda #0
+   sbc __skull_player_y
    cmp __skull_player_x+1
+   bmi @look_east
+   lda __skull_player_x
+   cmp __skull_player_y+1
    bpl @look_northeast
-   lda skull
-   ora #SKULL_EYES_NORTH
-   sta skull
-   jmp @check_fireballs
+   jmp @look_north
 @look_northeast:
    lda skull
    ora #SKULL_EYES_NORTHEAST
    sta skull
-   jmp @check_fireballs
+   jmp @set_frame
 @check_west:
    lda __skull_player_y
    bmi @check_northwest
+   lda #0
    sec
    sbc __skull_player_x
    cmp __skull_player_y+1
-   bmi @check_southwest
+   bpl @check_southwest
+@look_south:
+   lda skull
+   ora #SKULL_EYES_SOUTH
+   sta skull
+   jmp @set_frame
+@check_southwest:
+   lda __skull_player_y
+   cmp __skull_player_x+1
+   bpl @look_southwest
 @look_west:
    lda skull
    ora #SKULL_EYES_WEST
    sta skull
-   jmp @check_fireballs
-@check_southwest:
-   cmp __skull_player_x+1
-   bpl @look_southwest
-   lda skull
-   ora #SKULL_EYES_SOUTH
-   sta skull
-   jmp @check_fireballs
+   jmp @set_frame
 @look_southwest:
    lda skull
    ora #SKULL_EYES_SOUTHWEST
    sta skull
-   jmp @check_fireballs
+   jmp @set_frame
 @check_northwest:
+   lda #0
    sec
    sbc __skull_player_x
    cmp __skull_player_y+1
-   bpl @look_west
+   bmi @look_north
+   lda #0
+   sec
+   sbc __skull_player_y
    cmp __skull_player_x+1
-   bpl @look_northwest
-   lda skull
-   ora #SKULL_EYES_NORTH
-   sta skull
-   jmp @check_fireballs
+   bmi @look_west
 @look_northwest:
    lda skull
    ora #SKULL_EYES_NORTHWEST
    sta skull
-@check_fireballs:
+   jmp @set_frame
+@look_north:
+   lda skull
+   ora #SKULL_EYES_NORTH
+   sta skull
+@set_frame:
+   lda skull
+   and #SKULL_EYES
+   tax
+   lda __skull_frame,x
+   inx
+   ldy __skull_frame,x
+   ldx #SKULL_idx
+   jsr sprite_frame
+
 
 
 @return:
@@ -253,6 +293,21 @@ skull_stop:
    lda skull
    and #SKULL_STOP
    sta skull
+   rts
+
+skull_store_pos:
+   lda #SKULL_idx
+   ldx #1
+   jsr sprite_getpos
+   stx __skull_stored_x
+   sty __skull_stored_y
+   rts
+
+skull_restore_pos:
+   lda #($80 | SKULL_idx)
+   ldx __skull_stored_x
+   ldy __skull_stored_y
+   jsr sprite_setpos
    rts
 
 .endif

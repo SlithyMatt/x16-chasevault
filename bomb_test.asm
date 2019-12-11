@@ -13,6 +13,7 @@
 .include "player.asm"
 .include "joystick.asm"
 .include "enemy.asm"
+.include "skull.asm"
 .include "globals.asm"
 .include "timer.asm"
 
@@ -45,7 +46,7 @@ start:
    ; Setup tiles on layer 1
    stz VERA_ctrl
    VERA_SET_ADDR VRAM_layer1, 1  ; configure VRAM layer 1
-   lda #$60                      ; 4bpp tiles
+   lda #$61                      ; 4bpp tiles
    sta VERA_data0
    lda #$31                      ; 64x32 map of 16x16 tiles
    sta VERA_data0
@@ -78,6 +79,11 @@ start:
    ldy #<sprites_fn
    jsr loadvram
 
+   lda #>(VRAM_TILES>>4)
+   ldx #<(VRAM_TILES>>4)
+   ldy #<tiles_fn
+   jsr loadvram
+
    lda #>(VRAM_palette>>4)
    ldx #<(VRAM_palette>>4)
    ldy #<palette_fn
@@ -101,6 +107,12 @@ start:
    jsr player_move
    jsr player_animate
 
+   ; place skull
+   lda #1
+   ldx #3
+   ldy #11
+   jsr skull_place
+   jsr skull_move
 
 mainloop:
    wai
@@ -120,6 +132,7 @@ mainloop:
    jsr player_tick
    jsr bomb_tick
    jsr enemy_tick
+   jsr skull_tick
 
    stz vsync_trig
    bra mainloop  ; loop forever

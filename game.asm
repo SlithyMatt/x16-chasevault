@@ -52,6 +52,7 @@ check_input:
    lda joystick1_a
    beq @check_start
    jsr enemy_clear
+   jsr skull_clear
 .endif
 @check_start:
    lda joystick1_start

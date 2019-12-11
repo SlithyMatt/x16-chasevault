@@ -1563,7 +1563,7 @@ level_transition:
    LOAD_LEVEL_PARAM SKULL_X
    beq @done_regenerate
    pha
-   LOAD_LEVEL_PARAM BOMB_Y
+   LOAD_LEVEL_PARAM SKULL_Y
    tay
    plx
    lda #1

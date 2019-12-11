@@ -20,6 +20,10 @@ bomb_state_ticks: .byte 0
 BOMB_LIT_TICKS = 70
 BOMB_BLINK_TICKS = 10
 
+__bomb_stored_x: .byte 0
+__bomb_stored_y: .byte 0
+
+
 bomb_tick:
    lda bomb
    bit #BOMB_PLACED
@@ -152,6 +156,21 @@ bomb_armed: ; Output: A - 0=not armed, 1=armed
 @not_armed:
    lda #0
 @return:
+   rts
+
+bomb_store_pos:
+   lda #BOMB_idx
+   ldx #1
+   jsr sprite_getpos
+   stx __bomb_stored_x
+   sty __bomb_stored_y
+   rts
+
+bomb_restore_pos:
+   lda #($80 | BOMB_idx)
+   ldx __bomb_stored_x
+   ldy __bomb_stored_y
+   jsr sprite_setpos
    rts
 
 .endif

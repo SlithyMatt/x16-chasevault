@@ -827,11 +827,15 @@ player_die:
 
 regenerate:
    jsr fruit_store_pos
+   jsr skull_store_pos
+   jsr bomb_store_pos
    lda #>(VRAM_sprattr>>4)
    ldx #<(VRAM_sprattr>>4)
    ldy #<spriteattr_fn
    jsr loadvram            ; reset sprites
    jsr fruit_restore_pos
+   jsr skull_restore_pos
+   jsr bomb_restore_pos
    jsr refresh_status
    SET_TIMER 60, readygo
    jsr enemy_reset
