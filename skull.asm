@@ -55,6 +55,15 @@ __skull_player_y: .word 0
 __skull_stored_x: .byte 0
 __skull_stored_y: .byte 0
 
+__skull_fb1_x: .byte 0
+__skull_fb1_y: .byte 0
+__skull_fb2_x: .byte 0
+__skull_fb2_y: .byte 0
+__skull_fb3_x: .byte 0
+__skull_fb3_y: .byte 0
+__skull_fb4_x: .byte 0
+__skull_fb4_y: .byte 0
+
 
 skull_tick:
    lda skull
@@ -109,10 +118,10 @@ skull_tick:
    sta skull
    lda #SKULL_idx
    sta __skull_sprite_idx
-   SPRITE_SCREEN_POS __skull_sprite_idx, __skull_pos_x, __skull_pos_y
+   SPRITE_GET_SCREEN_POS __skull_sprite_idx, __skull_pos_x, __skull_pos_y
    lda #PLAYER_idx
    sta __skull_sprite_idx
-   SPRITE_SCREEN_POS __skull_sprite_idx, __skull_player_x, __skull_player_y
+   SPRITE_GET_SCREEN_POS __skull_sprite_idx, __skull_player_x, __skull_player_y
    sec
    lda __skull_player_x
    sbc __skull_pos_x
@@ -258,9 +267,39 @@ skull_tick:
    ldy __skull_frame,x
    ldx #SKULL_idx
    jsr sprite_frame
-
-
-
+   ; set all fireball vectors
+   lda __skull_player_x
+   sta __skull_fb1_x
+   sta __skull_fb3_x
+   sec
+   sbc #16
+   sta __skull_fb4_x
+   clc
+   adc #32
+   sta __skull_fb2_x
+   lda __skull_player_y
+   sta __skull_fb2_y
+   sta __skull_fb3_y
+   sta __skull_fb4_y
+   sec
+   sbc #16
+   sta __skull_fb1_y
+   ldx #0
+@fireball_loop:
+   cpx num_fireballs
+   beq @return
+   phx
+   txa
+   pha
+   asl
+   tax
+   lda __skull_fb1_x,x
+   ldy __skull_fb1_y,x
+   tax
+   pla
+   FIREBALL_AIM __skull_pos_x, __skull_pos_y
+   plx
+   inx
 @return:
    rts
 

@@ -384,7 +384,7 @@ move_sprite_up:   ; A: sprite index
 @return:
    rts
 
-; Macro: SPRITE_SCREEN_POS
+; Macro: SPRITE_GET_SCREEN_POS
 ; Input:
 ;  idx_addr: address of byte containing sprite index
 ;  xpos_addr: address of writable word
@@ -393,9 +393,9 @@ move_sprite_up:   ; A: sprite index
 ;  A: z-depth (0=disabled)
 ;  xpos_addr: address of word containing sprite X position
 ;  ypos_addr: address of word containing sprite Y position
-.macro SPRITE_SCREEN_POS idx_addr, xpos_addr, ypos_addr
+.macro SPRITE_GET_SCREEN_POS idx_addr, xpos_addr, ypos_addr
    lda idx_addr
-   jsr __sprite_screen_pos
+   jsr __sprite_get_screen_pos
    ldx __sprite_sp_x
    stx xpos_addr
    ldx __sprite_sp_x+1
@@ -409,11 +409,11 @@ move_sprite_up:   ; A: sprite index
 __sprite_sp_x: .word 0
 __sprite_sp_y: .word 0
 
-__sprite_screen_pos: ; Input: A: sprite index
-                     ; Output:
-                     ;  A: z-depth
-                     ;  __sprite_sp_x: sprite X position
-                     ;  __sprite_sp_y: sprite Y position
+__sprite_get_screen_pos:   ; Input: A: sprite index
+                           ; Output:
+                           ;  A: z-depth
+                           ;  __sprite_sp_x: sprite X position
+                           ;  __sprite_sp_y: sprite Y position
    jsr __sprattr
    lda VERA_data0  ; ignore
    lda VERA_data0  ; ignore
@@ -629,5 +629,25 @@ sprite_setpos: ; A: Bit 7: tile layer, Bits 6-0: sprite index
    lda @ypos+1
    sta VERA_data0
    rts
+
+
+.macro SPRITE_SET_SCREEN_POS index_addr, xpos_addr, ypos_addr
+                           ; Input:
+                           ;  idx_addr: address of byte containing sprite index
+                           ;  xpos_addr: address of word containing X position
+                           ;  ypos_addr: address of word containing Y position
+   lda index_addr
+   jsr __sprattr
+   lda VERA_data0 ; use current frame for now
+   lda VERA_data0
+   lda xpos_addr
+   sta VERA_data0
+   lda xpos_addr+1
+   sta VERA_data0
+   lda ypos_addr
+   sta VERA_data0
+   lda ypos_addr+1
+   sta VERA_data0
+.endmacro
 
 .endif

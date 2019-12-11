@@ -627,11 +627,11 @@ check_collision:
 @start:
    lda #PLAYER_idx
    sta @index
-   SPRITE_SCREEN_POS @index, @p_xpos, @p_ypos
+   SPRITE_GET_SCREEN_POS @index, @p_xpos, @p_ypos
    lda #ENEMY1_idx
    sta @index
 @enemy_loop:
-   SPRITE_SCREEN_POS @index, @s_xpos, @s_ypos
+   SPRITE_GET_SCREEN_POS @index, @s_xpos, @s_ypos
    cmp #0
    bne @check_box
    jmp @next_enemy
@@ -667,7 +667,7 @@ check_collision:
    bne @check_bomb
    lda #FRUIT_idx
    sta @index
-   SPRITE_SCREEN_POS @index, @s_xpos, @s_ypos
+   SPRITE_GET_SCREEN_POS @index, @s_xpos, @s_ypos
    cmp #0
    beq @check_bomb
    SPRITE_CHECK_BOX 4, @p_xpos, @p_ypos, @s_xpos, @s_ypos
@@ -680,7 +680,7 @@ check_collision:
    beq @return
    lda #BOMB_idx
    sta @index
-   SPRITE_SCREEN_POS @index, @s_xpos, @s_ypos
+   SPRITE_GET_SCREEN_POS @index, @s_xpos, @s_ypos
    cmp #0
    beq @return
    SPRITE_CHECK_BOX 4, @p_xpos, @p_ypos, @s_xpos, @s_ypos
