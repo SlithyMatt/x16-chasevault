@@ -52,11 +52,11 @@ BOX_Y = 7
 target_x:   .byte ENEMY1_TGT_X, ENEMY2_TGT_X, ENEMY3_TGT_X, ENEMY4_TGT_X
 target_y:   .byte ENEMY1_TGT_Y, ENEMY2_TGT_Y, ENEMY3_TGT_Y, ENEMY4_TGT_Y
 
-body_frames:   .byte 14, 14, 15, 16
-vuln_frames:   .byte 17, 17, 18, 19
-enemy_flips:   .byte $0, $1, $0, $0
-eye_frames:    .byte 20, 20, 21, 21
-eye_flips:     .byte $0, $1, $0, $2
+body_frames:   .byte 14,      14,      15,      16
+vuln_frames:   .byte 17,      17,      18,      19
+enemy_flips:   .byte NO_FLIP, H_FLIP,  NO_FLIP, NO_FLIP
+eye_frames:    .byte 20,      20,      21,      21
+eye_flips:     .byte NO_FLIP, H_FLIP,  NO_FLIP, V_FLIP
 
 reverse_dir:   .byte $1, $0, $3, $2
 

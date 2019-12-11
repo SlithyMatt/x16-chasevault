@@ -40,6 +40,11 @@ DIR_LEFT    = 1
 DIR_DOWN    = 2
 DIR_UP      = 3
 
+NO_FLIP     = $00
+H_FLIP      = $01
+V_FLIP      = $02
+HV_FLIP     = $03
+
 SPRITE_MIN_X  = 0
 SPRITE_MIN_Y  = 2
 SPRITE_MAX_X  = 19

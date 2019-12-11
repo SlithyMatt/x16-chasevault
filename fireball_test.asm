@@ -9,14 +9,11 @@
 
 .include "filenames.asm"
 .include "loadvram.asm"
-.include "fireball.asm"
+.include "player.asm"
+.include "joystick.asm"
+.include "skull.asm"
 .include "globals.asm"
-
-START_RECORDING = 10
-STOP_RECORDING = 78
-
-record:    .byte 1
-frame_num: .byte 0
+.include "timer.asm"
 
 vsync_trig: .byte 0
 
@@ -44,10 +41,26 @@ handle_irq:
 
 
 start:
-   ; Disable layer 1
+   ; Setup tiles on layer 1
    stz VERA_ctrl
    VERA_SET_ADDR VRAM_layer1, 1  ; configure VRAM layer 1
-   stz VERA_data0
+   lda #$61                      ; 4bpp tiles
+   sta VERA_data0
+   lda #$31                      ; 64x32 map of 16x16 tiles
+   sta VERA_data0
+   lda #((VRAM_STARTSCRN >> 2) & $FF)
+   sta VERA_data0
+   lda #((VRAM_STARTSCRN >> 10) & $FF)
+   sta VERA_data0
+   lda #((VRAM_TILES >> 2) & $FF)
+   sta VERA_data0
+   lda #((VRAM_TILES >> 10) & $FF)
+   sta VERA_data0
+   lda #$00                      ; initial scroll position on screen 0
+   sta VERA_data0
+   sta VERA_data0
+   sta VERA_data0
+   sta VERA_data0
 
    VERA_SET_ADDR VRAM_hscale, 1  ; set display to 2x scale
    lda #64
@@ -77,26 +90,19 @@ start:
    ; Setup interrupts
    jsr init_irq
 
-   ; enable fireballs
-   lda #FIREBALL_H_FRAME
-   ldx #FIREBALL1_idx
-   ldy #0
-   jsr sprite_frame
+   ; enable player movement
+   jsr player_move
+   jsr player_animate
 
-   lda #FIREBALL_V_FRAME
-   ldx #FIREBALL2_idx
-   ldy #0
-   jsr sprite_frame
+   ; place skull
+   lda #1
+   ldx #3
+   ldy #11
+   jsr skull_place
+   jsr skull_move
 
-   lda #FIREBALL_H_FRAME
-   ldx #FIREBALL3_idx
-   ldy #1
-   jsr sprite_frame
-
-   lda #FIREBALL_V_FRAME
-   ldx #FIREBALL4_idx
-   ldy #2
-   jsr sprite_frame
+   lda #4
+   sta num_fireballs
 
 mainloop:
    wai
@@ -104,21 +110,17 @@ mainloop:
    beq mainloop
 
    ; VSYNC has occurred, handle
-   lda record
-   beq @do_tick
    inc frame_num
    lda frame_num
-   cmp #START_RECORDING
-   bne @check_stop
-   lda #2
-   sta GIF_ctrl ; start recording gif
-@check_stop:
-   cmp #STOP_RECORDING
+   cmp #60
    bne @do_tick
-   stz GIF_ctrl ; stop recording gif
-   stz record
+   stz frame_num
 
 @do_tick:
+   jsr timer_tick
+   jsr joystick_tick
+   jsr player_tick
+   jsr skull_tick
    jsr fireball_tick
 
    stz vsync_trig

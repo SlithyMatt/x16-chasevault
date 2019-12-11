@@ -24,14 +24,14 @@ SKULL_EYES_NORTH     = $0C
 SKULL_EYES_NORTHEAST = $0E
 
 __skull_frame: ;  frame |  flip
-   .byte          35,      0  ; east
-   .byte          36,      0
-   .byte          37,      0
-   .byte          36,      1
-   .byte          35,      1
-   .byte          39,      1
-   .byte          38,      0
-   .byte          39,      0 ; northeast
+   .byte          35,      NO_FLIP  ; east
+   .byte          36,      NO_FLIP
+   .byte          37,      NO_FLIP
+   .byte          36,      H_FLIP
+   .byte          35,      H_FLIP
+   .byte          39,      H_FLIP
+   .byte          38,      NO_FLIP
+   .byte          39,      NO_FLIP ; northeast
 
 __skull_path:
    .byte DIR_RIGHT, DIR_UP, DIR_RIGHT, DIR_UP, DIR_RIGHT, DIR_RIGHT, DIR_DOWN, DIR_RIGHT

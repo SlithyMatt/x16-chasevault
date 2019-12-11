@@ -36,8 +36,8 @@ player_frames_dn: .byte  6, 7, 6, 5, 6, 7, 6, 5
 player_frames_vf: .byte $0,$0,$0,$0,$1,$1,$1,$0
 player_frames_d:  .byte 0,0,3,3,4,4,11,11,12,12,13,13,13,13,22,22
 player_index_d:   .byte 0
-player_start_frame:  .byte  0, 0, 5, 8
-player_start_flip:   .byte $0,$1,$0,$0
+player_start_frame:  .byte 0,       0,       5,       8
+player_start_flip:   .byte NO_FLIP, H_FLIP,  NO_FLIP, NO_FLIP
 ; --------- Subroutines ---------
 
 player_move:
