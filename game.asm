@@ -88,23 +88,23 @@ check_input:
    jsr set_bg_palette
    stz VERA_ctrl
    VERA_SET_ADDR VRAM_BITMAP, 1
-   lda #0
+   lda #BITMAP_BANK
    ldx #0
    ldy #0
    jsr bank2vram
-   lda #1
+   lda #(BITMAP_BANK+1)
    ldx #0
    ldy #0
    jsr bank2vram
-   lda #2
+   lda #(BITMAP_BANK+2)
    ldx #0
    ldy #0
    jsr bank2vram
-   lda #3
+   lda #(BITMAP_BANK+3)
    ldx #0
    ldy #0
    jsr bank2vram
-   lda #4
+   lda #(BITMAP_BANK+4)
    ldx #0
    ldy #$B0
    jsr bank2vram

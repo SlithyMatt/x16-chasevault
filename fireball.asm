@@ -90,16 +90,15 @@ __fireball_aim: ; A: index offset
    SPRITE_SET_SCREEN_POS __fb_idx, __fb_start_x, __fb_start_y
    rts
 
+__fb_rawx: .byte 0
+__fb_rawy: .byte 0
+
 __fb_normalize:   ; Input: X/Y: raw vector
                   ; Output: X/Y: normalized vector, magnitude ~= 4
-   bra @start
-@rawx: .byte 0
-@rawy: .byte 0
-@start:
-   stx @rawx
-   sty @rawy
-   DEBUG_BYTE @rawx, 0,0
-   DEBUG_BYTE @rawy, 0,1
+   stx __fb_rawx
+   sty __fb_rawy
+   DEBUG_BYTE __fb_rawx, 0,0
+   DEBUG_BYTE __fb_rawy, 0,1
    cpx #0
    bpl @eastern
    jmp @western
@@ -108,204 +107,157 @@ __fb_normalize:   ; Input: X/Y: raw vector
    bpl @southeastern
    jmp @northeastern
 @southeastern:
-   sec
-   lda @rawx
-   sbc @rawy
-   bne @check_se_east
-   ldx #3
-   ldy #3
+   beq @se_4_0
+   cpx #0
+   beq @se_0_4
+   jsr __fb_get_norm
    jmp @return
-@check_se_east:
-   bmi @check_se_south
-   cmp @rawy
-   bmi @se_3_2
-   sec
-   sbc @rawy
-   bmi @se_4_1
+@se_4_0:
    ldx #4
    ldy #0
    jmp @return
-@se_4_1:
-   ldx #4
-   ldy #1
-   jmp @return
-@se_3_2:
-   ldx #3
-   ldy #2
-   jmp @return
-@check_se_south:
-   lda @rawy
-   sec
-   sbc @rawx
-   cmp @rawx
-   bmi @se_2_3
-   sec
-   sbc @rawx
-   bmi @se_1_4
+@se_0_4:
    ldx #0
    ldy #4
-   jmp @return
-@se_1_4:
-   ldx #1
-   ldy #4
-   jmp @return
-@se_2_3:
-   ldx #2
-   ldy #3
    jmp @return
 @northeastern:
+   cpx #0
+   beq @ne_0_4
    lda #0
    sec
-   sbc @rawy
-   sta @rawy
+   sbc __fb_rawy
+   sta __fb_rawy
+   jsr __fb_get_norm
+   sty __fb_rawy
    sec
-   lda @rawx
-   sbc @rawy
-   bne @check_ne_east
-   ldx #3
-   ldy #(256-3)
+   lda #0
+   sbc __fb_rawy
+   tay
    jmp @return
-@check_ne_east:
-   bmi @check_ne_north
-   cmp @rawy
-   bmi @ne_3_2
-   sec
-   sbc @rawy
-   bmi @ne_4_1
-   ldx #4
-   ldy #0
-   jmp @return
-@ne_4_1:
-   ldx #4
-   ldy #(256-1)
-   jmp @return
-@ne_3_2:
-   ldx #3
-   ldy #(256-2)
-   jmp @return
-@check_ne_north:
-   lda @rawy
-   sec
-   sbc @rawx
-   cmp @rawx
-   bmi @ne_2_3
-   sec
-   sbc @rawx
-   bmi @ne_1_4
+@ne_0_4:
    ldx #0
    ldy #(256-4)
-   jmp @return
-@ne_1_4:
-   ldx #1
-   ldy #(256-4)
-   jmp @return
-@ne_2_3:
-   ldx #2
-   ldy #(256-3)
    jmp @return
 @western:
    sec
    lda #0
-   sbc @rawx
-   sta @rawx
+   sbc __fb_rawx
+   sta __fb_rawx
    cpy #0
    bpl @southwestern
    jmp @northwestern
 @southwestern:
+   beq @sw_4_0
+   jsr __fb_get_norm
+   stx __fb_rawx
    sec
-   lda @rawx
-   sbc @rawy
-   bne @check_sw_west
-   ldx #(256-3)
-   ldy #3
+   lda #0
+   sbc __fb_rawx
+   tax
    jmp @return
-@check_sw_west:
-   bmi @check_sw_south
-   cmp @rawy
-   bmi @sw_3_2
-   sec
-   sbc @rawy
-   bmi @sw_4_1
+@sw_4_0:
    ldx #(256-4)
    ldy #0
-   jmp @return
-@sw_4_1:
-   ldx #(256-4)
-   ldy #1
-   jmp @return
-@sw_3_2:
-   ldx #(256-3)
-   ldy #2
-   jmp @return
-@check_sw_south:
-   lda @rawy
-   sec
-   sbc @rawx
-   cmp @rawx
-   bmi @sw_2_3
-   sec
-   sbc @rawx
-   bmi @sw_1_4
-   ldx #0
-   ldy #4
-   jmp @return
-@sw_1_4:
-   ldx #(256-1)
-   ldy #4
-   jmp @return
-@sw_2_3:
-   ldx #(256-2)
-   ldy #3
    jmp @return
 @northwestern:
    lda #0
    sec
-   sbc @rawy
-   sta @rawy
+   sbc __fb_rawy
+   sta __fb_rawy
+   jsr __fb_get_norm
+   stx __fb_rawx
    sec
-   lda @rawx
-   sbc @rawy
-   bne @check_nw_west
-   ldx #(256-3)
-   ldy #(256-3)
-   jmp @return
-@check_nw_west:
-   bmi @check_nw_north
-   cmp @rawy
-   bmi @nw_3_2
+   lda #0
+   sbc __fb_rawx
+   tax
+   sty __fb_rawy
    sec
-   sbc @rawy
-   bmi @nw_4_1
-   ldx #(256-4)
-   ldy #0
+   lda #0
+   sbc __fb_rawy
+   tay
    jmp @return
-@nw_4_1:
-   ldx #(256-4)
-   ldy #(256-1)
-   jmp @return
-@nw_3_2:
-   ldx #(256-3)
-   ldy #(256-2)
-   jmp @return
-@check_nw_north:
-   lda @rawy
-   sec
-   sbc @rawx
-   cmp @rawx
-   bmi @nw_2_3
-   sec
-   sbc @rawx
-   bmi @nw_1_4
-   ldx #0
-   ldy #(256-4)
-   jmp @return
-@nw_1_4:
-   ldx #(256-1)
-   ldy #(256-4)
-   jmp @return
-@nw_2_3:
-   ldx #(256-2)
-   ldy #(256-3)
+@return:
+   rts
+
+__fb_get_norm:       ; Input: __fb_rawx,__fb_rawx = absolute value of raw vector
+                     ; Output: normalized vector
+   lda #NORMX_BANK
+   sta RAM_BANK
+   lda #<RAM_WIN
+   sta ZP_PTR_1
+   lda #>RAM_WIN
+   sta ZP_PTR_1+1
+   lda __fb_rawy
+   dec
+   sta ZP_PTR_2
+   stz ZP_PTR_2+1
+   asl ZP_PTR_2
+   rol ZP_PTR_2+1
+   asl ZP_PTR_2
+   rol ZP_PTR_2+1
+   asl ZP_PTR_2
+   rol ZP_PTR_2+1
+   asl ZP_PTR_2
+   rol ZP_PTR_2+1
+   asl ZP_PTR_2
+   rol ZP_PTR_2+1
+   asl ZP_PTR_2
+   rol ZP_PTR_2+1
+   asl ZP_PTR_2
+   rol ZP_PTR_2+1
+   clc
+   lda ZP_PTR_1
+   adc ZP_PTR_2
+   sta ZP_PTR_1
+   lda ZP_PTR_1+1
+   adc ZP_PTR_2+1
+   sta ZP_PTR_1+1
+   lda __fb_rawx
+   dec
+   lsr
+   clc
+   adc ZP_PTR_1
+   sta ZP_PTR_1
+   lda ZP_PTR_1+1
+   adc #0
+   sta ZP_PTR_1+1
+   lda (ZP_PTR_1)
+   pha
+   lda __fb_rawx
+   bit #$01
+   beq @x_low_nibble
+   pla
+   and #$F0
+   lsr
+   lsr
+   lsr
+   lsr
+   tax
+   bra @get_y
+@x_low_nibble:
+   pla
+   and #$0F
+   tax
+@get_y:
+   lda #NORMY_BANK
+   sta RAM_BANK
+   lda (ZP_PTR_1)
+   pha
+   lda __fb_rawy
+   bit #$01
+   beq @y_low_nibble
+   pla
+   and #$F0
+   lsr
+   lsr
+   lsr
+   lsr
+   tay
+   bra @return
+@y_low_nibble:
+   pla
+   and #$0F
+   tay
 @return:
    rts
 

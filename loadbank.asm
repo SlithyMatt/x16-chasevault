@@ -17,9 +17,8 @@ loadbank:
    sta ZP_PTR_1+1
    ldx #0
 @loop:
-   cpx #BANKS_TO_LOAD
+   cpx #FILES_TO_LOAD
    beq end_loadbank
-   stx RAM_BANK
    phx
    jsr @load         ; load bank
    plx
@@ -27,6 +26,9 @@ loadbank:
    jmp @loop
 
 @load:               ; load banked RAM using params starting at ZP_PTR_1
+   lda (ZP_PTR_1)
+   sta RAM_BANK      ; set RAM bank
+   jsr @inczp1
    lda (ZP_PTR_1)
    pha               ; push filename length to stack
    jsr @inczp1

@@ -9,6 +9,7 @@
 
 .include "filenames.asm"
 .include "loadvram.asm"
+.include "loadbank.asm"
 .include "player.asm"
 .include "joystick.asm"
 .include "skull.asm"
@@ -92,6 +93,8 @@ start:
    ldy #<spriteattr_fn
    jsr loadvram
 
+   jsr loadbank
+
    ; Setup interrupts
    jsr init_irq
 
@@ -106,7 +109,7 @@ start:
    jsr skull_place
    jsr skull_move
 
-   lda #1
+   lda #3
    sta num_fireballs
    jsr fireball_move
 
