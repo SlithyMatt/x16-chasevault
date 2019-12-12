@@ -659,8 +659,31 @@ check_collision:
    inc @index
    lda @index
    cmp #(ENEMY4_idx + 1)
-   beq @check_fruit
+   beq @check_fireball
    jmp @enemy_loop
+@check_fireball:
+   lda #FIREBALL1_idx
+   sta @index
+@fb_loop:
+   jsr fireball_visible
+   cmp #0
+   beq @next_fb
+   SPRITE_GET_SCREEN_POS @index, @s_xpos, @s_ypos
+   cmp #0
+   beq @next_fb
+   SPRITE_CHECK_BOX 4, @p_xpos, @p_ypos, @s_xpos, @s_ypos
+   cmp #0
+   beq @next_fb
+   jsr player_die
+   jmp @return
+@next_fb:
+   inc @index
+   lda @index
+   cmp #(FIREBALL4_idx + 1)
+   beq @check_fruit
+   jmp @fb_loop
+
+
 @check_fruit:
    lda fruit
    bit #FRUIT_BLINKING
@@ -795,6 +818,7 @@ player_die:
    ldx #ENEMY4_idx
    jsr enemy_stop
    jsr skull_stop
+   jsr fireball_stop
    jsr fruit_stop
    stz player_index_d
    SET_TIMER 5, @animation
@@ -828,6 +852,7 @@ player_die:
 regenerate:
    jsr fruit_store_pos
    jsr skull_store_pos
+   jsr fireball_clear
    jsr bomb_store_pos
    lda #>(VRAM_sprattr>>4)
    ldx #<(VRAM_sprattr>>4)
@@ -857,6 +882,7 @@ readygo:
    jsr player_move
    jsr fruit_move
    jsr skull_move
+   jsr fireball_move
    ldx #ENEMY1_idx   ; release first two enemies immediately
    jsr enemy_release
    ldx #ENEMY2_idx
@@ -885,6 +911,7 @@ continue:
 next_level:
    jsr enemy_clear
    jsr skull_clear
+   jsr fireball_clear
    jsr fruit_stop
    jsr player_stop
    SET_TIMER 15, @level_up

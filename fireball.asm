@@ -2,6 +2,7 @@
 FIREBALL_INC = 1
 
 .include "sprite.asm"
+.include "debug.asm"
 
 FIREBALL_H_FRAME = 31
 FIREBALL_V_FRAME = 30
@@ -43,12 +44,12 @@ __fb_start_y: .word 0
    inc
    tax
    lda fireball1,x
-   bit FIREBALL_ON_SCREEN
+   bit #FIREBALL_ON_SCREEN
    beq :+
    plx
    pla
    bra :++
-   lda start_x
+:  lda start_x
    sta __fb_start_x
    lda start_x+1
    sta __fb_start_x+1
@@ -56,7 +57,7 @@ __fb_start_y: .word 0
    sta __fb_start_y
    lda start_y+1
    sta __fb_start_y+1
-:  plx
+   plx
    pla
    jsr __fireball_aim
 :  nop
@@ -78,7 +79,7 @@ __fireball_aim: ; A: index offset
    sta __fb_idx
    inx
    lda fireball1,x
-   ora #(FIREBALL_ON_SCREEN | FIREBALL_MOVING)
+   ora #FIREBALL_ON_SCREEN
    sta fireball1,x
    inx
    pla
@@ -97,6 +98,8 @@ __fb_normalize:   ; Input: X/Y: raw vector
 @start:
    stx @rawx
    sty @rawy
+   DEBUG_BYTE @rawx, 0,0
+   DEBUG_BYTE @rawy, 0,1
    cpx #0
    bpl @eastern
    jmp @western
@@ -338,14 +341,14 @@ fireball_tick:
    jsr sprite_disable
    bra @loop
 @check_vector:
-   lda fireball1,x
-   pha   ; push status
    inx
    lda fireball1,x
    sta @move_x
    inx
    lda fireball1,x
    sta @move_y
+   DEBUG_BYTE @move_x, 3,0
+   DEBUG_BYTE @move_y, 3,1
    lda @move_x
    cmp #4
    bne @check_west
@@ -360,7 +363,9 @@ fireball_tick:
    sta @frame
    lda #H_FLIP
    sta @flip
+   jmp @set_frame
 @check_south:
+   lda @move_y
    cmp #4
    bne @check_north
    lda #FIREBALL_V_FRAME
@@ -467,6 +472,17 @@ fireball_tick:
 @return:
    rts
 
+fireball_visible: ; Input:  A: sprite index
+                  ; Output: A: 0=not visible, 1=visible
+   sec
+   sbc #FIREBALL1_idx
+   asl
+   asl
+   inc
+   tax
+   lda fireball1,x
+   and #FIREBALL_ON_SCREEN
+   rts
 
 fireball_offscreen:  ; A: index offset
    asl
@@ -476,6 +492,47 @@ fireball_offscreen:  ; A: index offset
    lda fireball1,x
    and #FIREBALL_CLEAR
    sta fireball1,x
+   rts
+
+fireball_stop:
+   ldx #1
+   lda fireball1,x
+   and #FIREBALL_STOP
+   sta fireball1,x
+   lda fireball2,x
+   and #FIREBALL_STOP
+   sta fireball2,x
+   lda fireball3,x
+   and #FIREBALL_STOP
+   sta fireball3,x
+   lda fireball4,x
+   and #FIREBALL_STOP
+   sta fireball4,x
+   rts
+
+
+fireball_move:
+   ldx #1
+   lda fireball1,x
+   ora #FIREBALL_MOVING
+   sta fireball1,x
+   lda fireball2,x
+   ora #FIREBALL_MOVING
+   sta fireball2,x
+   lda fireball3,x
+   ora #FIREBALL_MOVING
+   sta fireball3,x
+   lda fireball4,x
+   ora #FIREBALL_MOVING
+   sta fireball4,x
+   rts
+
+fireball_clear:
+   ldx #1
+   stz fireball1,x
+   stz fireball2,x
+   stz fireball3,x
+   stz fireball4,x
    rts
 
 .endif

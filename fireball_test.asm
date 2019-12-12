@@ -77,6 +77,11 @@ start:
    ldy #<sprites_fn
    jsr loadvram
 
+   lda #>(VRAM_TILES>>4)
+   ldx #<(VRAM_TILES>>4)
+   ldy #<tiles_fn
+   jsr loadvram
+
    lda #>(VRAM_palette>>4)
    ldx #<(VRAM_palette>>4)
    ldy #<palette_fn
@@ -101,8 +106,9 @@ start:
    jsr skull_place
    jsr skull_move
 
-   lda #4
+   lda #1
    sta num_fireballs
+   jsr fireball_move
 
 mainloop:
    wai

@@ -41,7 +41,7 @@ game_tick:        ; called after every VSYNC detected (60 Hz)
    jsr fruit_tick
    jsr level_tick
    jsr skull_tick
-   ;jsr fireball_tick
+   jsr fireball_tick
    jsr bomb_tick
    ; TODO add other tick handlers
 @return:

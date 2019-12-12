@@ -300,6 +300,7 @@ skull_tick:
    FIREBALL_AIM __skull_pos_x, __skull_pos_y
    plx
    inx
+   jmp @fireball_loop
 @return:
    rts
 
