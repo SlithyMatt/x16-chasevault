@@ -97,8 +97,8 @@ __fb_normalize:   ; Input: X/Y: raw vector
                   ; Output: X/Y: normalized vector, magnitude ~= 4
    stx __fb_rawx
    sty __fb_rawy
-   DEBUG_BYTE __fb_rawx, 0,0
-   DEBUG_BYTE __fb_rawy, 0,1
+   ;DEBUG_BYTE __fb_rawx, 0,0
+   ;DEBUG_BYTE __fb_rawy, 0,1
    cpx #0
    bpl @eastern
    jmp @western
@@ -191,8 +191,6 @@ __fb_get_norm:       ; Input: __fb_rawx,__fb_rawx = absolute value of raw vector
    dec
    sta ZP_PTR_2
    stz ZP_PTR_2+1
-   asl ZP_PTR_2
-   rol ZP_PTR_2+1
    asl ZP_PTR_2
    rol ZP_PTR_2+1
    asl ZP_PTR_2
@@ -299,8 +297,8 @@ fireball_tick:
    inx
    lda fireball1,x
    sta @move_y
-   DEBUG_BYTE @move_x, 3,0
-   DEBUG_BYTE @move_y, 3,1
+   ;DEBUG_BYTE @move_x, 3,0
+   ;DEBUG_BYTE @move_y, 3,1
    lda @move_x
    cmp #4
    bne @check_west

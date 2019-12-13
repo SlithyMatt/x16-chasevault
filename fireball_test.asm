@@ -109,7 +109,7 @@ start:
    jsr skull_place
    jsr skull_move
 
-   lda #3
+   lda #2
    sta num_fireballs
    jsr fireball_move
 
