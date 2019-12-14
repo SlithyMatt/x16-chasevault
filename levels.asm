@@ -705,7 +705,7 @@ level29:
    .byte 1,8, 18,8
 
 level30:
-   .byte 102   ; number of pellets
+   .byte 84   ; number of pellets
    .byte 1     ; new
    .byte 38    ; east neighbor
    .byte 22    ; west neighbor
@@ -713,9 +713,9 @@ level30:
    .byte 29    ; north neighbor
    .word 960   ; hscroll
    .word 1200  ; vscroll
-   .byte 90    ; release_e3
-   .byte 70    ; release_e4
-   .byte 25    ; show_fruit
+   .byte 72    ; release_e3
+   .byte 56    ; release_e4
+   .byte 20    ; show_fruit
    .byte MANGO_FRAME
    .word 10    ; scatter_time
    .word 1380  ; chase_time
@@ -723,8 +723,8 @@ level30:
    .byte 0,0   ; skull placement
    .byte 0     ; no. fireballs
    .byte 0,0   ; bomb placement
-   .byte 2     ; number of bars
-   .byte 9,11, 18,8
+   .byte 3     ; number of bars
+   .byte 1,8, 9,4, 9,13
 
 level31:
    .byte 102   ; number of pellets
@@ -881,26 +881,26 @@ level37:
    .byte 3,8, 9,2, 17,8
 
 level38:
-   .byte 102   ; number of pellets
+   .byte 16    ; number of pellets
    .byte 1     ; new
    .byte 46    ; east neighbor
-   .byte 30    ; west neighbor
+   .byte 0     ; west neighbor
    .byte 39    ; south neighbor
-   .byte 37    ; north neighbor
+   .byte 0     ; north neighbor
    .word 1280  ; hscroll
    .word 1200  ; vscroll
-   .byte 100   ; release_e3
-   .byte 80    ; release_e4
-   .byte 20    ; show_fruit
+   .byte 14    ; release_e3
+   .byte 12    ; release_e4
+   .byte 0     ; show_fruit
    .byte GUAVA_FRAME
    .word 5     ; scatter_time
    .word 1590  ; chase_time
    .byte 23    ; vuln_time
-   .byte 0,0   ; skull placement
-   .byte 0     ; no. fireballs
-   .byte 0,0   ; bomb placement
+   .byte 17,4  ; skull placement
+   .byte 3     ; no. fireballs
+   .byte 6,7   ; bomb placement
    .byte 2     ; number of bars
-   .byte 9,11, 18,8
+   .byte 9,13, 18,8
 
 level39:
    .byte 102   ; number of pellets
