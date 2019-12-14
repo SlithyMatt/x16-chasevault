@@ -661,11 +661,11 @@ level27:
    .byte 1,8, 9,2, 10,12, 18,8
 
 level28:
-   .byte 102   ; number of pellets
+   .byte 99   ; number of pellets
    .byte 1     ; new
    .byte 36    ; east neighbor
    .byte 20    ; west neighbor
-   .byte 29    ; south neighbor
+   .byte 0     ; south neighbor
    .byte 27    ; north neighbor
    .word 960   ; hscroll
    .word 720   ; vscroll
@@ -679,30 +679,30 @@ level28:
    .byte 0,0   ; skull placement
    .byte 0     ; no. fireballs
    .byte 0,0   ; bomb placement
-   .byte 2     ; number of bars
-   .byte 9,11, 18,8
+   .byte 3     ; number of bars
+   .byte 9,2, 2,8, 17,8
 
 level29:
-   .byte 102   ; number of pellets
+   .byte 20    ; number of pellets
    .byte 1     ; new
    .byte 37    ; east neighbor
    .byte 21    ; west neighbor
-   .byte 30    ; south neighbor
-   .byte 28    ; north neighbor
+   .byte 0     ; south neighbor
+   .byte 0     ; north neighbor
    .word 960   ; hscroll
    .word 960   ; vscroll
-   .byte 90    ; release_e3
-   .byte 70    ; release_e4
-   .byte 25    ; show_fruit
+   .byte 18    ; release_e3
+   .byte 16    ; release_e4
+   .byte 0     ; show_fruit
    .byte BANANA_FRAME
    .word 10    ; scatter_time
    .word 1350  ; chase_time
    .byte 34    ; vuln_time
-   .byte 0,0   ; skull placement
-   .byte 0     ; no. fireballs
-   .byte 0,0   ; bomb placement
+   .byte 16,12 ; skull placement
+   .byte 2     ; no. fireballs
+   .byte 9,13  ; bomb placement
    .byte 2     ; number of bars
-   .byte 9,11, 18,8
+   .byte 1,8, 18,8
 
 level30:
    .byte 102   ; number of pellets
@@ -863,7 +863,7 @@ level37:
    .byte 1     ; new
    .byte 45    ; east neighbor
    .byte 29    ; west neighbor
-   .byte 38    ; south neighbor
+   .byte 0     ; south neighbor
    .byte 36    ; north neighbor
    .word 1280  ; hscroll
    .word 960   ; vscroll
@@ -877,8 +877,8 @@ level37:
    .byte 0,0   ; skull placement
    .byte 0     ; no. fireballs
    .byte 0,0   ; bomb placement
-   .byte 2     ; number of bars
-   .byte 9,11, 18,8
+   .byte 3     ; number of bars
+   .byte 3,8, 9,2, 17,8
 
 level38:
    .byte 102   ; number of pellets
