@@ -24,6 +24,6 @@ Build requirements: gcc, cc65
 Please note at this time that the game is not yet fully
 playable. It is under active development, so the master branch is not stable.
 
-Last working demo commit: https://github.com/SlithyMatt/x16-chasevault/tree/6a13c050f2e9a674f14ff1f10ccf38f70a9ba562
+Last working demo commit: https://github.com/SlithyMatt/x16-chasevault/tree/0005ca6bf6decab56a57915193a0c4efc59b1a3c
 
 The levels 1-31, 33, 34, 37-39, 41, 44 and 45 are fully playable in this build, but no further levels have been developed at this time.
