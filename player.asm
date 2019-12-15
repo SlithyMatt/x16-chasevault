@@ -930,10 +930,12 @@ next_level:
 light_bomb:
    jsr bomb_light
    SET_TIMER BOMB_LIT_TICKS, @detonated
+   jsr fireball_clear
    rts
 @detonated:
    jsr enemy_clear
    jsr skull_clear
+   jsr fireball_clear
    jmp timer_done
 
 
