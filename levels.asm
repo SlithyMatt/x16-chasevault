@@ -925,9 +925,9 @@ level39:
    .byte 9,4, 9,13, 1,8, 18,8
 
 level40:
-   .byte 102   ; number of pellets
+   .byte 105   ; number of pellets
    .byte 1     ; new
-   .byte 48    ; east neighbor
+   .byte 0     ; east neighbor
    .byte 32    ; west neighbor
    .byte 0    ; south neighbor
    .byte 39    ; north neighbor
@@ -943,8 +943,8 @@ level40:
    .byte 0,0   ; skull placement
    .byte 0     ; no. fireballs
    .byte 0,0   ; bomb placement
-   .byte 2     ; number of bars
-   .byte 9,11, 18,8
+   .byte 3     ; number of bars
+   .byte 9,2, 9,12, 1,8
 
 level41:
    .byte 11    ; number of pellets
@@ -969,10 +969,10 @@ level41:
    .byte 9,13, 1,8
 
 level42:
-   .byte 102   ; number of pellets
+   .byte 105   ; number of pellets
    .byte 1     ; new
    .byte 0     ; east neighbor
-   .byte 34    ; west neighbor
+   .byte 0     ; west neighbor
    .byte 43    ; south neighbor
    .byte 41    ; north neighbor
    .word 1600  ; hscroll
@@ -988,7 +988,7 @@ level42:
    .byte 0     ; no. fireballs
    .byte 0,0   ; bomb placement
    .byte 2     ; number of bars
-   .byte 9,11, 18,8
+   .byte 9,2, 9,12
 
 level43:
    .byte 102   ; number of pellets
