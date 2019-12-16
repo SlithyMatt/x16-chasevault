@@ -749,7 +749,7 @@ level31:
    .byte 9,2, 1,8, 18,8, 9,12
 
 level32:
-   .byte 102   ; number of pellets
+   .byte 96    ; number of pellets
    .byte 1     ; new
    .byte 40    ; east neighbor
    .byte 24    ; west neighbor
@@ -767,8 +767,8 @@ level32:
    .byte 0,0   ; skull placement
    .byte 0     ; no. fireballs
    .byte 0,0   ; bomb placement
-   .byte 2     ; number of bars
-   .byte 9,11, 18,8
+   .byte 4     ; number of bars
+   .byte 9,2, 9,12, 1,8, 17,8
 
 level33:
    .byte 69    ; number of pellets
@@ -815,7 +815,7 @@ level34:
    .byte 9,2, 1,8
 
 level35:
-   .byte 102   ; number of pellets
+   .byte 96    ; number of pellets
    .byte 1     ; new
    .byte 43    ; east neighbor
    .byte 27    ; west neighbor
@@ -833,11 +833,11 @@ level35:
    .byte 0,0   ; skull placement
    .byte 0     ; no. fireballs
    .byte 0,0   ; bomb placement
-   .byte 2     ; number of bars
-   .byte 9,11, 18,8
+   .byte 3     ; number of bars
+   .byte 9,1, 9,12, 18,8
 
 level36:
-   .byte 102   ; number of pellets
+   .byte 96   ; number of pellets
    .byte 1     ; new
    .byte 44    ; east neighbor
    .byte 28    ; west neighbor
@@ -855,8 +855,8 @@ level36:
    .byte 0,0   ; skull placement
    .byte 0     ; no. fireballs
    .byte 0,0   ; bomb placement
-   .byte 2     ; number of bars
-   .byte 9,11, 18,8
+   .byte 4     ; number of bars
+   .byte 1,8, 9,2, 9,12, 17,8
 
 level37:
    .byte 102   ; number of pellets
@@ -1045,7 +1045,7 @@ level45:
    .word 960   ; vscroll
    .byte 100   ; release_e3
    .byte 100   ; release_e4
-   .byte 10    ; show_fruit
+   .byte 0     ; show_fruit
    .byte GUAVA_FRAME
    .word 1     ; scatter_time
    .word 3000  ; chase_time
