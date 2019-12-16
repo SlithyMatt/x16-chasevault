@@ -815,12 +815,12 @@ level34:
    .byte 9,2, 1,8
 
 level35:
-   .byte 96    ; number of pellets
+   .byte 106   ; number of pellets
    .byte 1     ; new
    .byte 43    ; east neighbor
    .byte 27    ; west neighbor
    .byte 36    ; south neighbor
-   .byte 34    ; north neighbor
+   .byte 0     ; north neighbor
    .word 1280  ; hscroll
    .word 480   ; vscroll
    .byte 100   ; release_e3
@@ -834,7 +834,7 @@ level35:
    .byte 0     ; no. fireballs
    .byte 0,0   ; bomb placement
    .byte 3     ; number of bars
-   .byte 9,1, 9,12, 18,8
+   .byte 1,8, 9,12, 18,8
 
 level36:
    .byte 96   ; number of pellets
@@ -1079,7 +1079,7 @@ level46:
    .byte 9,11, 18,8
 
 level47:
-   .byte 102   ; number of pellets
+   .byte 109   ; number of pellets
    .byte 1     ; new
    .byte 0     ; east neighbor
    .byte 39    ; west neighbor
@@ -1087,8 +1087,8 @@ level47:
    .byte 46    ; north neighbor
    .word 1600  ; hscroll
    .word 1440  ; vscroll
-   .byte 100   ; release_e3
-   .byte 100   ; release_e4
+   .byte 107   ; release_e3
+   .byte 105   ; release_e4
    .byte 10    ; show_fruit
    .byte CARAMBOLA_FRAME
    .word 1     ; scatter_time
@@ -1097,8 +1097,8 @@ level47:
    .byte 0,0   ; skull placement
    .byte 0     ; no. fireballs
    .byte 0,0   ; bomb placement
-   .byte 2     ; number of bars
-   .byte 9,11, 18,8
+   .byte 3     ; number of bars
+   .byte 9,2, 9,12, 1,8
 
 level48:
    .byte 102   ; number of pellets
