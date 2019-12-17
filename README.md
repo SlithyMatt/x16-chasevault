@@ -21,9 +21,5 @@ Simply `LOAD "CHASEVAULT.PRG"` then `RUN`, or auto-run with the emulator from th
 
 Build requirements: gcc, cc65
 
-Please note at this time that the game is not yet fully
-playable. It is under active development, so the master branch is not stable.
-
-Last working demo commit: https://github.com/SlithyMatt/x16-chasevault/tree/12e747a356c923b985d890254fa7e9a59145609f
-
-The levels 1-42, 44, 45 and 47 are fully playable in this build, but no further levels have been developed at this time.
+This game is now undergoing beta testing. The master baseline is not guaranteed to be fully working. The latest stable release is
+https://github.com/SlithyMatt/x16-chasevault/releases/tag/v0.1b
