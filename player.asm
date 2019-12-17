@@ -809,13 +809,6 @@ refresh_status:
 
 player_die:
    jsr player_stop
-   ldx #ENEMY1_idx
-   jsr enemy_stop
-   ldx #ENEMY2_idx
-   jsr enemy_stop
-   ldx #ENEMY3_idx
-   jsr enemy_stop
-   ldx #ENEMY4_idx
    jsr enemy_stop
    jsr skull_stop
    jsr fireball_stop
@@ -931,6 +924,7 @@ light_bomb:
    jsr bomb_light
    SET_TIMER BOMB_LIT_TICKS, @detonated
    jsr fireball_clear
+   jsr enemy_stop
    rts
 @detonated:
    jsr enemy_clear

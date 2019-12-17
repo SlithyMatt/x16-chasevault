@@ -991,7 +991,7 @@ level42:
    .byte 9,2, 9,12
 
 level43:
-   .byte 102   ; number of pellets
+   .byte 100   ; number of pellets
    .byte 1     ; new
    .byte 0     ; east neighbor
    .byte 35    ; west neighbor
@@ -999,7 +999,7 @@ level43:
    .byte 42    ; north neighbor
    .word 1600  ; hscroll
    .word 480   ; vscroll
-   .byte 100   ; release_e3
+   .byte 98    ; release_e3
    .byte 90    ; release_e4
    .byte 15    ; show_fruit
    .byte BANANA_FRAME
@@ -1010,7 +1010,7 @@ level43:
    .byte 0     ; no. fireballs
    .byte 0,0   ; bomb placement
    .byte 2     ; number of bars
-   .byte 9,11, 18,8
+   .byte 9,2, 9,12, 1,8
 
 level44:
    .byte 95   ; number of pellets
@@ -1035,7 +1035,7 @@ level44:
    .byte 9,4, 9,13, 1,8
 
 level45:
-   .byte 23    ; number of pellets
+   .byte 24    ; number of pellets
    .byte 1     ; new
    .byte 0     ; east neighbor
    .byte 0     ; west neighbor
@@ -1052,12 +1052,12 @@ level45:
    .byte 23    ; vuln_time
    .byte 17,6  ; skull placement
    .byte 4     ; no. fireballs
-   .byte 2,11  ; bomb placement
+   .byte 1,3   ; bomb placement
    .byte 2     ; number of bars
    .byte 9,13, 9,2
 
 level46:
-   .byte 102   ; number of pellets
+   .byte 96    ; number of pellets
    .byte 1     ; new
    .byte 0     ; east neighbor
    .byte 38    ; west neighbor
@@ -1065,8 +1065,8 @@ level46:
    .byte 45    ; north neighbor
    .word 1600  ; hscroll
    .word 1200  ; vscroll
-   .byte 100   ; release_e3
-   .byte 100   ; release_e4
+   .byte 94    ; release_e3
+   .byte 92    ; release_e4
    .byte 10    ; show_fruit
    .byte GRAPEFRUIT_FRAME
    .word 1     ; scatter_time
@@ -1076,7 +1076,7 @@ level46:
    .byte 0     ; no. fireballs
    .byte 0,0   ; bomb placement
    .byte 2     ; number of bars
-   .byte 9,11, 18,8
+   .byte 9,4, 9,13, 1,8
 
 level47:
    .byte 109   ; number of pellets
@@ -1101,26 +1101,26 @@ level47:
    .byte 9,2, 9,12, 1,8
 
 level48:
-   .byte 102   ; number of pellets
+   .byte 90    ; number of pellets
    .byte 1     ; new
    .byte 0     ; east neighbor
-   .byte 40    ; west neighbor
+   .byte 0     ; west neighbor
    .byte 0     ; south neighbor
    .byte 47    ; north neighbor
    .word 1600  ; hscroll
    .word 1680  ; vscroll
-   .byte 100   ; release_e3
-   .byte 100   ; release_e4
+   .byte 88    ; release_e3
+   .byte 86    ; release_e4
    .byte 10    ; show_fruit
    .byte CHERRY_FRAME
    .word 1     ; scatter_time
    .word 10000 ; chase_time
    .byte 23    ; vuln_time
-   .byte 0,0   ; skull placement
-   .byte 0     ; no. fireballs
-   .byte 0,0   ; bomb placement
-   .byte 2     ; number of bars
-   .byte 9,11, 18,8
+   .byte 17,4  ; skull placement
+   .byte 4     ; no. fireballs
+   .byte 7,3   ; bomb placement
+   .byte 1     ; number of bars
+   .byte 9,2
 
 __level_changing: .byte 0
 

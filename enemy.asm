@@ -67,13 +67,6 @@ ticks_mode_rem:   .word 300   ; ticks remaining until switch between chase and s
 enemy_clear:
    lda #1
    sta enemies_cleared
-   ldx #ENEMY1_idx
-   jsr enemy_stop
-   ldx #ENEMY2_idx
-   jsr enemy_stop
-   ldx #ENEMY3_idx
-   jsr enemy_stop
-   ldx #ENEMY4_idx
    jsr enemy_stop
    lda #ENEMY1_idx
    jsr sprite_disable
@@ -859,11 +852,16 @@ enemy_release: ; X: sprite index
    sta enemies,y
    rts
 
-enemy_stop:    ; X: sprite index
+enemy_stop:
+   ldx #ENEMY1_idx
+@loop:
    ldy enemy_map,x
    lda enemies,y
    and #$EF
    sta enemies,y
+   inx
+   cpx #(ENEMY4_idx+1)
+   bmi @loop
    rts
 
 enemy_eaten: ; X: sprite index
