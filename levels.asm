@@ -2,10 +2,12 @@
 LEVELS_INC = 1
 
 .include "x16.inc"
+.include "tiles.inc"
 .include "globals.asm"
 .include "timer.asm"
 .include "skull.asm"
 .include "bomb.asm"
+.include "wallstub.asm"
 
 LEVEL_X  = 10
 LEVEL_Y  = 0

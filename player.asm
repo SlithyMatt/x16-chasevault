@@ -911,7 +911,14 @@ next_level:
    rts
 @level_up:
    SUPERIMPOSE "complete!", 5, 9
+   lda level
+   cmp #48
+   beq @win
    SET_TIMER 30, @update_level
+   jmp timer_done
+@win:
+   lda #1
+   sta winscreen_req
    jmp timer_done
 @update_level:
    SUPERIMPOSE_RESTORE

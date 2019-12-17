@@ -13,6 +13,7 @@ GAME_INC = 1
 .include "skull.asm"
 .include "fireball.asm"
 .include "bomb.asm"
+.include "winscreen.asm"
 
 init_game:
    lda #0
@@ -43,7 +44,7 @@ game_tick:        ; called after every VSYNC detected (60 Hz)
    jsr skull_tick
    jsr fireball_tick
    jsr bomb_tick
-   ; TODO add other tick handlers
+   jsr winscreen_tick
 @return:
    rts
 
