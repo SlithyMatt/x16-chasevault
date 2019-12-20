@@ -14,11 +14,13 @@ GAME_INC = 1
 .include "fireball.asm"
 .include "bomb.asm"
 .include "winscreen.asm"
+.include "music.asm"
 
 init_game:
    lda #0
    jsr MOUSE   ; disable mouse
    jsr regenerate
+   jsr init_music
    rts
 
 game_tick:        ; called after every VSYNC detected (60 Hz)
@@ -45,6 +47,7 @@ game_tick:        ; called after every VSYNC detected (60 Hz)
    jsr fireball_tick
    jsr bomb_tick
    jsr winscreen_tick
+   jsr music_tick
 @return:
    rts
 

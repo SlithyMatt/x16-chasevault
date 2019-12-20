@@ -61,6 +61,7 @@ APPLE_FRAME       = 29
 BITMAP_BANK       = 0
 NORMX_BANK        = 5
 NORMY_BANK        = 6
+MUSIC_BANK        = 7
 
 ; --------- Global Variables ---------
 

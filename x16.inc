@@ -10,10 +10,11 @@ JOY1					= $02BC
 JOY2					= $02BF
 
 ; Zero-Page userspace
-ZP_PTR_1 = $00
-ZP_PTR_2 = $02
-ZP_PTR_3 = $04
-ZP_PTR_4 = $06
+ZP_PTR_1 			= $00	; first four pointers for temporary use only
+ZP_PTR_2 			= $02
+ZP_PTR_3 			= $04
+ZP_PTR_4 			= $06
+MUSIC_PTR      	= $08
 
 ; I/O Registers
 VERA_addr_low     = $9F20
@@ -27,6 +28,9 @@ VERA_irq          = $9F27
 
 ROM_BANK          = $9F60
 RAM_BANK          = $9F61
+
+YM_reg         	= $9FE0
+YM_data        	= $9FE1
 
 ; Emulator Registers
 GIF_ctrl          = $9FB5
