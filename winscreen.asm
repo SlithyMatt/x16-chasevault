@@ -4,6 +4,7 @@ WINSCREEN_INC = 1
 .include "x16.inc"
 .include "globals.asm"
 .include "levels.asm"
+.include "fruit.asm"
 
 WS_MAX_SCROLL = 704
 

@@ -18,7 +18,7 @@ GAME_INC = 1
 
 init_game:
    lda #0
-   jsr MOUSE   ; disable mouse
+   jsr MOUSE_CONFIG  ; disable mouse cursor
    jsr regenerate
    jsr init_music
    rts
