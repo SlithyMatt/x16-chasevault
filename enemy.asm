@@ -530,6 +530,7 @@ __enemy_reverse:
 
 __enemy_move:  ; X: enemy offset (0-3)
    bra @start
+@jmptable:  .byte 0
 @offset:    .byte 0
 @enemy:     .byte 0
 @last_x:    .byte 0
@@ -549,22 +550,25 @@ __enemy_move:  ; X: enemy offset (0-3)
 @NORTH_BLOCKED = $08
 @start:
    stx @offset
+   lda @jmptable
+   bne @get_dir
    lda #<@move_right    ; copy jump table to zero page
-   sta ZP_PTR_1
+   sta ENEMY_JMPTABLE
    lda #>@move_right
-   sta ZP_PTR_1+1
+   sta ENEMY_JMPTABLE+1
    lda #<@move_left
-   sta ZP_PTR_1+2
+   sta ENEMY_JMPTABLE+2
    lda #>@move_left
-   sta ZP_PTR_1+3
+   sta ENEMY_JMPTABLE+3
    lda #<@move_down
-   sta ZP_PTR_1+4
+   sta ENEMY_JMPTABLE+4
    lda #>@move_down
-   sta ZP_PTR_1+5
+   sta ENEMY_JMPTABLE+5
    lda #<@move_up
-   sta ZP_PTR_1+6
+   sta ENEMY_JMPTABLE+6
    lda #>@move_up
-   sta ZP_PTR_1+7
+   sta ENEMY_JMPTABLE+7
+@get_dir:
    lda enemies,x
    sta @enemy
    and #ENEMY_DIRECTION
@@ -682,7 +686,7 @@ __enemy_move:  ; X: enemy offset (0-3)
    asl
    tax
    lda @index
-   jmp (ZP_PTR_1,x)
+   jmp (ENEMY_JMPTABLE,x)
 @calc_dir:
    sec
    lda @target_x
