@@ -90,28 +90,9 @@ check_input:
    ; load level 1 bitmap from banked RAM into layer 0
    lda #7
    jsr set_bg_palette
-   stz VERA_ctrl
-   VERA_SET_ADDR VRAM_BITMAP, 1
-   lda #BITMAP_BANK
-   ldx #0
-   ldy #0
-   jsr bank2vram
-   lda #(BITMAP_BANK+1)
-   ldx #0
-   ldy #0
-   jsr bank2vram
-   lda #(BITMAP_BANK+2)
-   ldx #0
-   ldy #0
-   jsr bank2vram
-   lda #(BITMAP_BANK+3)
-   ldx #0
-   ldy #0
-   jsr bank2vram
-   lda #(BITMAP_BANK+4)
-   ldx #0
-   ldy #$B0
-   jsr bank2vram
+   ; raster the bitmap twice to make sure it takes
+   jsr raster_bitmap
+   jsr raster_bitmap
    lda #15
    jsr set_bg_palette
    stz VERA_ctrl
@@ -145,6 +126,31 @@ check_input:
    sta paused
    SUPERIMPOSE "paused", 7, 9
 check_input_return:
+   rts
+
+raster_bitmap:
+   stz VERA_ctrl
+   VERA_SET_ADDR VRAM_BITMAP, 1
+   lda #BITMAP_BANK
+   ldx #0
+   ldy #0
+   jsr bank2vram
+   lda #(BITMAP_BANK+1)
+   ldx #0
+   ldy #0
+   jsr bank2vram
+   lda #(BITMAP_BANK+2)
+   ldx #0
+   ldy #0
+   jsr bank2vram
+   lda #(BITMAP_BANK+3)
+   ldx #0
+   ldy #0
+   jsr bank2vram
+   lda #(BITMAP_BANK+4)
+   ldx #0
+   ldy #$B0
+   jsr bank2vram
    rts
 
 .endif

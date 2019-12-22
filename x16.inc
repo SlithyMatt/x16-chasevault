@@ -90,6 +90,20 @@ RAM_WIN_SIZE      = $2000
 ROM_WIN           = $C000
 
 ; Kernal Subroutines
+GRAPH_LL_init                  := $FEF6
+GRAPH_LL_get_info              := $FEF9
+GRAPH_LL_set_palette           := $FEFC
+GRAPH_LL_cursor_position       := $FEFF
+GRAPH_LL_cursor_next_line      := $FF02
+GRAPH_LL_get_pixel             := $FF05
+GRAPH_LL_get_pixels            := $FF08
+GRAPH_LL_set_pixel             := $FF0B
+GRAPH_LL_set_pixels            := $FF0E
+GRAPH_LL_set_8_pixels          := $FF11
+GRAPH_LL_set_8_pixels_opaque   := $FF14
+GRAPH_LL_fill_pixels           := $FF17
+GRAPH_LL_filter_pixels         := $FF1A
+GRAPH_LL_move_pixels           := $FF1D
 JOYSTICK_SCAN     := $FF53
 JOYSTICK_GET		:= $FF56
 MOUSE_CONFIG		:= $FF68
