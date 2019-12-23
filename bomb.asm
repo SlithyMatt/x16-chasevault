@@ -23,8 +23,28 @@ BOMB_BLINK_TICKS = 10
 __bomb_stored_x: .byte 0
 __bomb_stored_y: .byte 0
 
+__bomb_jmptable_set: .byte 0
 
 bomb_tick:
+   lda __bomb_jmptable_set
+   bne @start
+   lda #<@move_up
+   sta BOMB_JMPTABLE
+   lda #>@move_up
+   sta BOMB_JMPTABLE+1
+   lda #<@move_down
+   sta BOMB_JMPTABLE+2
+   lda #>@move_down
+   sta BOMB_JMPTABLE+3
+   lda #<@move_right
+   sta BOMB_JMPTABLE+4
+   lda #>@move_right
+   sta BOMB_JMPTABLE+5
+   lda #<@move_left
+   sta BOMB_JMPTABLE+6
+   lda #>@move_left
+   sta BOMB_JMPTABLE+7
+@start:
    lda bomb
    bit #BOMB_PLACED
    bne @show
@@ -54,26 +74,9 @@ bomb_tick:
    jsr sprite_frame
    lda frame_num
    and #$06
-   pha
-   lda #<@move_up
-   sta ZP_PTR_1
-   lda #>@move_up
-   sta ZP_PTR_1+1
-   lda #<@move_down
-   sta ZP_PTR_1+2
-   lda #>@move_down
-   sta ZP_PTR_1+3
-   lda #<@move_right
-   sta ZP_PTR_1+4
-   lda #>@move_right
-   sta ZP_PTR_1+5
-   lda #<@move_left
-   sta ZP_PTR_1+6
-   lda #>@move_left
-   sta ZP_PTR_1+7
-   plx
+   tax
    lda #BOMB_idx
-   jmp (ZP_PTR_1,x)
+   jmp (BOMB_JMPTABLE,x)
 @move_up:
    ldx #1
    jsr move_sprite_right

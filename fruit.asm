@@ -6,7 +6,7 @@ FRUIT_INC = 1
 .include "globals.asm"
 .include "sprite.asm"
 .include "tilelib.asm"
-
+.include "superimpose.asm"
 
 FRUIT_START_X = 9
 FRUIT_START_Y = 5

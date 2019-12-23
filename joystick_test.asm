@@ -110,7 +110,7 @@ start:
 
    SUPERIMPOSE "joystick1  joystick2", 0, 0
    SUPERIMPOSE "left       left", 0, 1
-   SUPERIMPOSE "right      down", 0, 2
+   SUPERIMPOSE "right      right", 0, 2
    SUPERIMPOSE "down       down", 0, 3
    SUPERIMPOSE "up         up", 0, 4
    SUPERIMPOSE "select     select", 0, 5

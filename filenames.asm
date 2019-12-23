@@ -13,8 +13,9 @@ ssbg_fn:       .asciiz "startscrnbg.bin"
 bm_filename:   .asciiz "bitmap.bin"
 normx_fn:      .asciiz "normx.bin"
 normy_fn:      .asciiz "normy.bin"
+music_fn:      .asciiz "music.bin"
 end_filenames:
-FILES_TO_LOAD = 3
+FILES_TO_LOAD = 4
 bankparams:
 .byte BITMAP_BANK                ; bank
 .byte normx_fn-bm_filename-1     ; filename length
@@ -23,7 +24,10 @@ bankparams:
 .byte normy_fn-normx_fn-1
 .word normx_fn
 .byte NORMY_BANK
-.byte end_filenames-normy_fn-1
+.byte music_fn-normy_fn-1
 .word normy_fn
+.byte MUSIC_BANK
+.byte end_filenames-music_fn-1
+.word music_fn
 
 .endif

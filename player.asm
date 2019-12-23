@@ -65,24 +65,30 @@ player_freeze:
    sta player
    rts
 
+__player_jmp_table_set: .byte 0
+
 player_tick:
-@start:
+   lda __player_jmp_table_set
+   bne @start
    lda #<@move_right    ; copy jump table to zero page
-   sta ZP_PTR_1
+   sta PLAYER_JMPTABLE
    lda #>@move_right
-   sta ZP_PTR_1+1
+   sta PLAYER_JMPTABLE+1
    lda #<@move_left
-   sta ZP_PTR_1+2
+   sta PLAYER_JMPTABLE+2
    lda #>@move_left
-   sta ZP_PTR_1+3
+   sta PLAYER_JMPTABLE+3
    lda #<@move_down
-   sta ZP_PTR_1+4
+   sta PLAYER_JMPTABLE+4
    lda #>@move_down
-   sta ZP_PTR_1+5
+   sta PLAYER_JMPTABLE+5
    lda #<@move_up
-   sta ZP_PTR_1+6
+   sta PLAYER_JMPTABLE+6
    lda #>@move_up
-   sta ZP_PTR_1+7
+   sta PLAYER_JMPTABLE+7
+   lda #1
+   sta __player_jmp_table_set
+@start:
    lda player
    bit #$02             ; check for movable
    bne @check_right
@@ -123,7 +129,7 @@ player_tick:
    lsr
    tax
    lda #PLAYER_idx
-   jmp (ZP_PTR_1,x)
+   jmp (PLAYER_JMPTABLE,x)
 @move_right:
    ldx #TICK_MOVEMENT
    jsr move_sprite_right
