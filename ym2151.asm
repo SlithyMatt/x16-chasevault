@@ -3,6 +3,13 @@ YM2151_INC = 1
 
 .include "x16.inc"
 
+.macro YM_SET_REG reg, val
+   lda #reg
+   sta YM_reg
+   lda #val
+   sta YM_data
+.endmacro
+
 YM_TEST        = $01
 YM_LFO_RESET   = $02
 

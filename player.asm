@@ -16,6 +16,7 @@ PLAYER_INC = 1
 .include "fruit.asm"
 .include "skull.asm"
 .include "bomb.asm"
+.include "music.asm"
 
 SCOREBOARD_X   = 11
 SCOREBOARD_Y   = 1
@@ -819,6 +820,7 @@ player_die:
    jsr skull_stop
    jsr fireball_stop
    jsr fruit_stop
+   jsr stop_music
    stz player_index_d
    SET_TIMER 5, @animation
    lda player
@@ -863,6 +865,7 @@ regenerate:
    jsr refresh_status
    SET_TIMER 60, readygo
    jsr enemy_reset
+   jsr start_music
    rts
 readygo:
    SUPERIMPOSE "ready?", 7, 9
@@ -923,6 +926,7 @@ next_level:
    SET_TIMER 30, @update_level
    jmp timer_done
 @win:
+   jsr stop_music
    lda #1
    sta winscreen_req
    jmp timer_done
