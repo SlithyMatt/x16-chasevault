@@ -111,6 +111,7 @@ check_input:
    beq @check_continue
    SUPERIMPOSE_RESTORE
    stz paused
+   jsr start_music
    bra check_input_return
 @check_continue:
    lda continue_prompt
@@ -125,6 +126,7 @@ check_input:
    lda #1
    sta paused
    SUPERIMPOSE "paused", 7, 9
+   jsr stop_music
 check_input_return:
    rts
 
