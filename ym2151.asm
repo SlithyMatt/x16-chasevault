@@ -18,6 +18,7 @@ YM_SN_M1       = $08
 YM_SN_C1       = $10
 YM_SN_M2       = $20
 YM_SN_C2       = $40
+YM_SN_ALL      = YM_SN_M1 | YM_SN_C1 | YM_SN_M2 | YM_SN_C2
 YM_CH_1        = $00
 YM_CH_2        = $01
 YM_CH_3        = $02

@@ -63,6 +63,10 @@ NORMX_BANK        = 6
 NORMY_BANK        = 7
 MUSIC_BANK        = 8
 
+OPM_DELAY_REG   = 2
+OPM_DONE_REG    = 4
+
+
 ; --------- Global Variables ---------
 
 player:     .byte 0 ; 7-4 (TBD) | 3:2 - direction | 1 - movable | 0 - animated

@@ -17,6 +17,7 @@ PLAYER_INC = 1
 .include "skull.asm"
 .include "bomb.asm"
 .include "music.asm"
+.include "soundfx.asm"
 
 SCOREBOARD_X   = 11
 SCOREBOARD_Y   = 1
@@ -821,8 +822,9 @@ player_die:
    jsr fireball_stop
    jsr fruit_stop
    jsr stop_music
+   jsr sfx_play_death
    stz player_index_d
-   SET_TIMER 5, @animation
+   SET_TIMER 10, @animation
    lda player
    ora #$80
    sta player
@@ -837,7 +839,7 @@ player_die:
    ldx #(player_index_d-player_frames_d)
    cpx player_index_d
    beq @animation_done
-   SET_TIMER 3, @animation
+   SET_TIMER 4, @animation
    jmp timer_done
 @animation_done:
    dec lives
@@ -846,7 +848,7 @@ player_die:
    SET_TIMER 30, game_over
    bra @return
 @regenerate:
-   SET_TIMER 30, regenerate
+   SET_TIMER 60, regenerate
 @return:
    jmp timer_done
 

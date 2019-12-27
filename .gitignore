@@ -5,6 +5,7 @@
 *.list
 *.o
 *.exe
+*.hex
 font.txt
 normx.txt
 normy.txt

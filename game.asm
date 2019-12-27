@@ -15,6 +15,7 @@ GAME_INC = 1
 .include "bomb.asm"
 .include "winscreen.asm"
 .include "music.asm"
+.include "soundfx.asm"
 
 init_game:
    lda #0
@@ -33,6 +34,7 @@ game_tick:        ; called after every VSYNC detected (60 Hz)
 @tick:
    jsr timer_tick
    jsr joystick_tick
+   jsr sfx_tick
    jsr check_input
    lda start_prompt
    ora paused
