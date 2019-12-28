@@ -416,6 +416,7 @@ eat_pellet: ; Input:
    sty VERA_addr_high
    stz VERA_data0
    stz VERA_data0
+   jsr sfx_play_pellet
    dec pellets
    lda #10
    jsr add_score
@@ -434,6 +435,7 @@ eat_powerpellet:  ; Input:
    sty VERA_addr_high
    stz VERA_data0
    stz VERA_data0
+   jsr sfx_play_pwr_pellet
    dec pellets
    lda #100
    jsr add_score
