@@ -436,6 +436,7 @@ eat_powerpellet:  ; Input:
    stz VERA_data0
    stz VERA_data0
    jsr sfx_play_pwr_pellet
+   ;jsr sfx_play_bomb
    dec pellets
    lda #100
    jsr add_score
@@ -948,6 +949,7 @@ light_bomb:
    jsr enemy_stop
    rts
 @detonated:
+   jsr sfx_play_bomb
    jsr enemy_clear
    jsr skull_clear
    jsr fireball_clear

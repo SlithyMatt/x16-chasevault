@@ -27,7 +27,8 @@ YM_CH_5        = $04
 YM_CH_6        = $05
 YM_CH_7        = $06
 YM_CH_8        = $07
-YM_SN_NOISE    = YM_SN_C2 | YM_CH_8
+YM_NOISE_ON    = YM_SN_C2 | YM_CH_8
+YM_NOISE_OFF   = YM_CH_8
 
 YM_NE_NFRQ     = $0F
 YM_NE          = $80
@@ -118,7 +119,13 @@ YM_PMS_AMS     = $38
 
 YM_DT1_MUL     = $40
 
-YM_TL          = $60
+YM_TL_M1       = $60
+
+YM_TL_C1       = $68
+
+YM_TL_M2       = $70
+
+YM_TL_C2       = $78
 
 YM_KS_AR       = $80
 
