@@ -436,7 +436,6 @@ eat_powerpellet:  ; Input:
    stz VERA_data0
    stz VERA_data0
    jsr sfx_play_pwr_pellet
-   ;jsr sfx_play_bomb
    dec pellets
    lda #100
    jsr add_score
@@ -478,6 +477,7 @@ eat_key: ; Input:
    stx VERA_addr_low
    sty VERA_addr_high
    stz VERA_data0
+   jsr sfx_play_key_fruit
    inc keys
    lda #200
    jsr add_score
@@ -531,6 +531,7 @@ check_vlock:   ; Input:
    rts
 
 use_key:
+   jsr sfx_play_unlock
    dec keys
    lda #1
    ldx #KEYS_X
@@ -727,6 +728,7 @@ check_collision:
 
 eat_fruit:
    jsr fruit_blink
+   jsr sfx_play_key_fruit
    lda #200       ; Add 500 to score
    jsr add_score
    lda #200
@@ -740,6 +742,7 @@ eat_fruit:
 
 eat_enemy:  ; X: enemy sprite index
    jsr enemy_eaten
+   jsr sfx_play_ghost
    ldx score_mult
 @score:
    lda #200
@@ -938,6 +941,7 @@ next_level:
 @update_level:
    SUPERIMPOSE_RESTORE
    jsr clear_bars
+   jsr sfx_play_bars
    jsr fruit_blink
    jsr player_move
    jmp timer_done
