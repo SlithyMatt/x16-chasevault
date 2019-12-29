@@ -24,6 +24,8 @@ handle_irq:
    and #$01
    beq @done_vsync
    sta vsync_trig
+   ; clear vera irq flag
+   sta VERA_irq
 
 @done_vsync:
 
