@@ -1,7 +1,7 @@
 # x16-chasevault
 Chase Vault: A new game for the Commander X16 retrocomputer.
 
-As seen on YouTube: https://youtu.be/yGmt1wu0pKo
+As seen on YouTube: https://youtu.be/lE0dLCHoDAE
 
 ![](cv9.gif)
 
@@ -19,8 +19,9 @@ Simply `LOAD "CHASEVAULT.PRG"` then `RUN`, or auto-run with the emulator from th
 * **NORMX.BIN** - vector normalization X-value lookup table, loaded by program to banked RAM
 * **NORMY.BIN** - vector normalization Y-value lookup table, loaded by program to banked RAM
 * **MUSIC.BIN** - music for YM2151 FM synthesizer
+* **WINMUSIC.BIN** - music for winners only
 
 Build requirements: gcc, cc65
 
 This game is now undergoing beta testing. The master baseline is not guaranteed to be fully working. The latest stable release is
-https://github.com/SlithyMatt/x16-chasevault/releases/tag/v0.2b
+https://github.com/SlithyMatt/x16-chasevault/releases/tag/v0.3b
