@@ -62,6 +62,7 @@ winscreen_tick:
    cmp #>WS_MAX_SCROLL
    bne @scroll
    stz winscreen_req
+   jsr stop_music_loop
    jmp @return
 @scroll:
    stz VERA_ctrl

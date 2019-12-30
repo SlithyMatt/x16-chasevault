@@ -9,6 +9,8 @@ __music_delay: .byte 0
 
 __music_playing: .byte 1
 
+__music_looping: .byte 1
+
 music_bank: .byte GAME_MUSIC_BANK
 
 .macro INC_MUSIC_PTR
@@ -40,6 +42,15 @@ stop_music:
    YM_SET_REG YM_KEY_ON, YM_CH_7
    YM_SET_REG YM_KEY_ON, YM_CH_8
    jsr init_music
+   rts
+
+stop_music_loop:
+   stz __music_looping
+   rts
+
+enable_music_loop:
+   lda #1
+   sta __music_looping
    rts
 
 start_music:
@@ -74,6 +85,11 @@ music_tick:
    INC_MUSIC_PTR
    bra @return
 @done:
+   lda __music_looping
+   bne @reinit
+   jsr stop_music
+   bra @return
+@reinit:
    jsr init_music
    bra @return
 @write:

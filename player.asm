@@ -935,8 +935,14 @@ next_level:
    jmp timer_done
 @win:
    jsr stop_music
+   SET_TIMER 2, @win_music
    lda #1
    sta winscreen_req
+   jmp timer_done
+@win_music:
+   lda #WIN_MUSIC_BANK
+   sta music_bank
+   jsr start_music
    jmp timer_done
 @update_level:
    SUPERIMPOSE_RESTORE

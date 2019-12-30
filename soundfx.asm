@@ -108,14 +108,16 @@ sfx_bomb:
 .byte YM_NE_NFRQ,    YM_NE | $02
 .byte OPM_DELAY_REG, 10
 .byte YM_KEY_ON,     YM_NOISE_OFF
+.byte YM_NE_NFRQ,    0
 .byte OPM_DONE_REG,  0
 
 sfx_key:
 .byte YM_KEY_ON,     YM_CH_5
 .byte YM_KC+YM_CH_5, YM_KC_OCT5 | YM_KC_C
+.byte YM_KEY_ON,     YM_CH_5 | YM_SN_ALL
 .byte YM_KEY_ON,     YM_CH_6
 .byte YM_KC+YM_CH_6, YM_KC_OCT5 | YM_KC_F
-.byte YM_KEY_ON,     YM_CH_5 | YM_SN_ALL
+.byte YM_KEY_ON,     YM_CH_6 | YM_SN_ALL
 .byte OPM_DELAY_REG, 16
 .byte YM_KEY_ON,     YM_CH_5
 .byte YM_KC+YM_CH_5, YM_KC_OCT6 | YM_KC_B_FL
@@ -141,6 +143,7 @@ sfx_unlock:
 .byte YM_KEY_ON,     YM_CH_5
 .byte YM_KEY_ON,     YM_CH_6
 .byte YM_KEY_ON,     YM_NOISE_OFF
+.byte YM_NE_NFRQ,    0
 .byte OPM_DONE_REG,  0
 
 sfx_ghost:
