@@ -129,12 +129,17 @@ sfx_unlock:
 .byte YM_KEY_ON,     YM_CH_5
 .byte YM_KC+YM_CH_5, YM_KC_OCT3 | YM_KC_E_FL
 .byte YM_KEY_ON,     YM_CH_5 | YM_SN_ALL
+.byte YM_KEY_ON,     YM_CH_6
+.byte YM_KC+YM_CH_6, YM_KC_OCT3 | YM_KC_D
+.byte YM_KEY_ON,     YM_CH_6 | YM_SN_ALL
 .byte YM_KEY_ON,     YM_NOISE_OFF
+.byte OPM_DELAY_REG, 1
 .byte YM_KC+YM_CH_8, YM_KC_MIDDLE_C
 .byte YM_NE_NFRQ,    YM_NE | $05
 .byte YM_KEY_ON,     YM_NOISE_ON
 .byte OPM_DELAY_REG, 8
 .byte YM_KEY_ON,     YM_CH_5
+.byte YM_KEY_ON,     YM_CH_6
 .byte YM_KEY_ON,     YM_NOISE_OFF
 .byte OPM_DONE_REG,  0
 
@@ -235,7 +240,8 @@ sfx_ghost:
 .byte OPM_DELAY_REG, 1
 .byte YM_KC+YM_CH_7, YM_KC_OCT3 | YM_KC_C
 .byte YM_KF+YM_CH_7, $00
-.byte OPM_DELAY_REG, 16
+.byte OPM_DELAY_REG, 8
+.byte YM_KEY_ON,     YM_CH_7
 .byte OPM_DONE_REG,  0
 
 sfx_bars:

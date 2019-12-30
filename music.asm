@@ -9,6 +9,8 @@ __music_delay: .byte 0
 
 __music_playing: .byte 1
 
+music_bank: .byte GAME_MUSIC_BANK
+
 .macro INC_MUSIC_PTR
    clc
    lda MUSIC_PTR
@@ -55,7 +57,7 @@ music_tick:
    dec __music_delay
    bra @return
 @load:
-   lda #MUSIC_BANK
+   lda music_bank
    sta RAM_BANK
 @loop:
    ldy #0

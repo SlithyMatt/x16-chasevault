@@ -26,7 +26,7 @@ bankparams:
 .byte NORMY_BANK
 .byte music_fn-normy_fn-1
 .word normy_fn
-.byte MUSIC_BANK
+.byte GAME_MUSIC_BANK
 .byte end_filenames-music_fn-1
 .word music_fn
 

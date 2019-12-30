@@ -61,7 +61,8 @@ APPLE_FRAME       = 29
 BITMAP_BANK       = 1
 NORMX_BANK        = 6
 NORMY_BANK        = 7
-MUSIC_BANK        = 8
+GAME_MUSIC_BANK   = 8
+WIN_MUSIC_BANK    = 9
 
 OPM_DELAY_REG   = 2
 OPM_DONE_REG    = 4
