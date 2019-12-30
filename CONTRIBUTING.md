@@ -8,7 +8,7 @@ need to build the master branch themselves or wait until the next release build.
 If you want to make changes in your fork that significantly change the game to make merger non-trivial, please set up
 any pull requests carefully to make them incremental or prepare to be orphaned.
 
-All contributions must be completely "free software" that can have the [GPL 2 license](LICENSE) applied.
+All contributions must be completely "free software" that can have the [GPL 3 license](LICENSE) applied.
 No copyrighted code or any other type of proprietary media may be added to this repo. No contributors will
 be compensated monetarily for their work, nor is it allowable for this software to be sold for any price.
 
