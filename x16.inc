@@ -61,9 +61,6 @@ ZP_PTR_2          = $22
 ZP_PTR_3          = $24
 ZP_PTR_4          = $26
 MUSIC_PTR         = $28
-PLAYER_JMPTABLE   = $2A
-ENEMY_JMPTABLE    = $32
-BOMB_JMPTABLE     = $3A
 
 ; I/O Registers
 VERA_addr_low     = $9F20
