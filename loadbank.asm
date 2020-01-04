@@ -8,9 +8,9 @@ loadbank:
    lda #0
    sta ROM_BANK
    lda #1
-   ldx #1
+   ldx #8
    ldy #0
-   jsr SETLFS        ; SetFileParams(LogNum=1,DevNum=1,SA=0)
+   jsr SETLFS        ; SetFileParams(LogNum=1,DevNum=8,SA=0)
    lda #<bankparams
    sta ZP_PTR_1
    lda #>bankparams
