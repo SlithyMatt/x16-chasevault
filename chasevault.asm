@@ -16,23 +16,6 @@
 .include "globals.asm"
 
 start:
-   ; move text to layer 0 (TODO: replace with bitmap)
-   stz VERA_ctrl
-   VERA_SET_ADDR VRAM_layer0, 1
-   lda #1
-   sta VERA_ctrl
-   VERA_SET_ADDR VRAM_layer1, 1
-   ldx #10
-@copy_loop:
-   lda VERA_data1
-   sta VERA_data0
-   dex
-   bne @copy_loop
-   stz VERA_ctrl
-   VERA_SET_ADDR VRAM_layer0, 0  ; disable VRAM layer 0
-   lda #$FE
-   and VERA_data0
-   sta VERA_data0
 
    ; Setup tiles on layer 1
    stz VERA_ctrl

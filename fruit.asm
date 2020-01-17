@@ -263,7 +263,6 @@ fruit_stop:
    lda fruit
    and #FRUIT_STOP_MASK
    sta fruit
-   ; TODO stop fireballs
    rts
 
 fruit_blink:

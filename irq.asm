@@ -16,7 +16,7 @@ init_irq:
    sta IRQVec+1
    rts
 
-   
+
 
 handle_irq:
    ; check for VSYNC
@@ -28,8 +28,6 @@ handle_irq:
    sta VERA_irq
 
 @done_vsync:
-
-   ; TODO check other IRQs
 
    jmp (def_irq)
 

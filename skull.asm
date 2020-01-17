@@ -320,7 +320,7 @@ skull_place:   ; A: tile layer index
 skull_clear:
    stz skull
    stz __skull_path_idx
-   ; TODO: clear all fireballs
+   jsr fireball_clear
    rts
 
 skull_move:

@@ -720,7 +720,6 @@ eat_fruit:
    jsr add_score
    lda #1
    jsr fruit_status
-   ; TODO: level-specific result
    rts
 
 eat_enemy:  ; X: enemy sprite index
