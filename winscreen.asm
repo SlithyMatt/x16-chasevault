@@ -5,6 +5,7 @@ WINSCREEN_INC = 1
 .include "globals.asm"
 .include "levels.asm"
 .include "fruit.asm"
+.include "music.asm"
 
 WS_MAX_SCROLL = 704
 
