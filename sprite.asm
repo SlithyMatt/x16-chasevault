@@ -593,24 +593,21 @@ sprite_setpos: ; A: Bit 7: tile layer, Bits 6-0: sprite index
    rol @ypos+1
    asl @ypos
    rol @ypos+1
-   stz VERA_ctrl
    and #$80
    bne @layer1
-   VERA_SET_ADDR VRAM_layer0, 1
+   lda VERA_L0_tilebase
    bra @get_regs
 @layer1:
-   VERA_SET_ADDR VRAM_layer1, 1
+   lda VERA_L0_tilebase
 @get_regs:
-   lda VERA_data0 ; ignore
-   lda VERA_data0
    pha
-   bit #$20
+   bit #$02
    beq @check_tilew
    asl @ypos
    rol @ypos+1
 @check_tilew:
    pla
-   bit #$10
+   bit #$01
    beq @move_sprite
    asl @xpos
    rol @xpos+1

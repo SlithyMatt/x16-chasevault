@@ -6,12 +6,15 @@ NUKE_ENABLED   = 0
 
 ; ------------ Constants ------------
 
+; zero page pointers
+MUSIC_PTR      = $28
 
-VRAM_TILEMAP   = $04000 ; 128x128
-VRAM_STARTSCRN = $0B800 ; 64x32
-VRAM_SPRITES   = $0E000 ; 64 4bpp 16x16 frames
-VRAM_TILES     = $10000 ; 212 4bpp 16x16 (may also be used as sprite frames)
-VRAM_BITMAP    = $16A00 ; 4bpp 320x240
+; VRAM map
+VRAM_SPRITES   = $00000 ; 208 4bpp 16x16 frames
+VRAM_BITMAP    = $06800 ; 4bpp 320x240
+VRAM_TILEMAP   = $10000 ; 128x128
+VRAM_STARTSCRN = $17800 ; 64x32
+VRAM_TILES     = $18800 ; 227 4bpp 16x16 tiles (may also be used as sprite frames)
 
 
 ; sprite indices
@@ -28,6 +31,7 @@ FIREBALL4_idx  = 10
 BOMB_idx       = 11
 SKULL_idx      = 12
 
+BITMAP_PO      = VERA_L0_hscroll_h
 
 ACTIVE_ENEMY_L = $0E400
 ACTIVE_ENEMY_H = $0E600

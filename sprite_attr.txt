@@ -1,26 +1,26 @@
-# $F5000: sprite 0 - Mouse
+# $1FC00: sprite 0 - Mouse
 00 00 00 00 00 00 00 00
-# $F5008: sprite 1 - Player
-00 07 90 00 A0 00 1C 50
-# $F5010: sprite 2 - Enemy 1
-38 07 90 00 50 00 2C 50
-# $F5018: sprite 3 - Enemy 2
-40 07 90 00 71 00 2C 52
-# $F5020: sprite 4 - Enemy 3
-3C 07 80 00 6e 00 2C 51
-# $F5028: sprite 5 - Enemy 4
-3C 07 a0 00 6e 00 2C 53
-# $F5030: sprite 6 - Fruit
-5C 07 90 00 50 00 40 50
-# $F5038: sprite 7 - Fireball 1
-7C 07 98 00 10 00 20 50
+# $1FC08: sprite 1 - Player
+00 00 90 00 A0 00 1C 50
+# $1FC10: sprite 2 - Enemy 1
+38 00 90 00 50 00 2C 50
+# $1FC18: sprite 3 - Enemy 2
+40 00 90 00 71 00 2C 52
+# $1FC20: sprite 4 - Enemy 3
+3C 00 80 00 6e 00 2C 51
+# $1FC28: sprite 5 - Enemy 4
+3C 00 a0 00 6e 00 2C 53
+# $1FC30: sprite 6 - Fruit
+5C 00 90 00 50 00 40 50
+# $1FC38: sprite 7 - Fireball 1
+7C 00 98 00 10 00 20 50
 # $F5040: sprite 8 - Fireball 2
-78 07 F8 00 70 00 20 50
+78 00 F8 00 70 00 20 50
 # $F5048: sprite 9 - Fireball 3
-7C 07 98 00 D0 00 21 50
+7C 00 98 00 D0 00 21 50
 # $F5050: sprite 10 - Fireball 4
-78 07 38 00 70 00 22 50
+78 00 38 00 70 00 22 50
 # $F5058: sprite 11 - Bomb
-84 07 B0 00 A0 00 40 50
+84 00 B0 00 A0 00 40 50
 # $F5060: sprite 12 - Skull
-8C 07 70 00 A0 00 20 50
+8C 00 70 00 A0 00 20 50

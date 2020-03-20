@@ -17,31 +17,27 @@
 
 start:
 
-   ; Setup tiles on layer 1
-   stz VERA_ctrl
-   VERA_SET_ADDR VRAM_layer1, 1  ; configure VRAM layer 1
-   lda #$60                      ; 4bpp tiles
-   sta VERA_data0
-   lda #$31                      ; 64x32 map of 16x16 tiles
-   sta VERA_data0
-   lda #((VRAM_STARTSCRN >> 2) & $FF)
-   sta VERA_data0
-   lda #((VRAM_STARTSCRN >> 10) & $FF)
-   sta VERA_data0
-   lda #((VRAM_TILES >> 2) & $FF)
-   sta VERA_data0
-   lda #((VRAM_TILES >> 10) & $FF)
-   sta VERA_data0
-   lda #$00                      ; initial scroll position on screen 0
-   sta VERA_data0
-   sta VERA_data0
-   sta VERA_data0
-   sta VERA_data0
+   ; Disable layers and sprites
+   lda VERA_dc_video
+   and #$8F
+   sta VERA_dc_video
 
-   VERA_SET_ADDR VRAM_hscale, 1  ; set display to 2x scale
+   ; Setup tiles on layer 1
+   lda #$12                      ; 64x32 map of 4bpp tiles
+   sta VERA_L1_config
+   lda #((VRAM_STARTSCRN >> 9) & $FF)
+   sta VERA_L1_mapbase
+   lda #((((VRAM_TILES >> 11) & $3F) << 2) | $03)  ; 16x16 tiles
+   sta VERA_L1_tilebase
+   stz VERA_L1_hscroll_l         ; set scroll position to 0,0
+   stz VERA_L1_hscroll_h
+   stz VERA_L1_vscroll_l
+   stz VERA_L1_vscroll_h
+
+   ; set display to 2x scale
    lda #64
-   sta VERA_data0
-   sta VERA_data0
+   sta VERA_dc_hscale
+   sta VERA_dc_vscale
 
    ; load VRAM data from binaries
    lda #>(VRAM_TILEMAP>>4)
@@ -73,28 +69,17 @@ start:
    jsr loadbank
 
    ; configure layer 0 for background bitmaps
-   stz VERA_ctrl
-   VERA_SET_ADDR VRAM_layer0, 1  ; configure VRAM layer 0
-   lda #$C1
-   sta VERA_data0 ; 4bpp bitmap
-   stz VERA_data0 ; 320x240
-   stz VERA_data0
-   stz VERA_data0
-   lda #<(VRAM_BITMAP >> 2)
-   sta VERA_data0
-   lda #>(VRAM_BITMAP >> 2)
-   sta VERA_data0
-   stz VERA_data0
+   lda #$06       ; 4bpp bitmap
+   sta VERA_L0_config
+   lda #((((VRAM_BITMAP >> 11) & $3F) << 2) | $00) ; 320x240
+   sta VERA_L0_tilebase
    lda #8
-   sta VERA_data0 ; Palette offset = 8
-   stz VERA_data0
-   stz VERA_data0
+   sta BITMAP_PO ; Palette offset = 8
 
-   stz VERA_ctrl
-   VERA_SET_ADDR VRAM_layer1, 0  ; enable VRAM layer 1
-   lda #$01
-   ora VERA_data0
-   sta VERA_data0
+   ; enable layers
+   lda VERA_dc_video
+   ora #$30
+   sta VERA_dc_video
 
    ; setup interrupts
    jsr init_irq

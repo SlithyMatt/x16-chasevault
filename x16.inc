@@ -3,6 +3,11 @@ X16_INC  = 1
 
 __CX16__ = 1
 
+SD_DEVICE   = 1
+HOST_DEVICE = 8
+DISK_DEVICE = HOST_DEVICE
+
+
 ; RAM Addresses
 
 ; Kernal Registers
@@ -60,7 +65,6 @@ ZP_PTR_1          = $00	; first four pointers for temporary use only
 ZP_PTR_2          = $22
 ZP_PTR_3          = $24
 ZP_PTR_4          = $26
-MUSIC_PTR         = $28
 
 ; I/O Registers
 VERA_addr_low     = $9F20
@@ -69,8 +73,37 @@ VERA_addr_bank    = $9F22
 VERA_data0        = $9F23
 VERA_data1        = $9F24
 VERA_ctrl         = $9F25
-VERA_irq_ctrl     = $9F26
-VERA_irq          = $9F27
+VERA_ien          = $9F26
+VERA_isr          = $9F27
+VERA_irqline_l    = $9F28
+VERA_dc_video     = $9F29
+VERA_dc_hscale    = $9F2A
+VERA_dc_vscale    = $9F2B
+VERA_dc_border    = $9F2C
+VERA_dc_hstart    = $9F29
+VERA_dc_hstop     = $9F2A
+VERA_dc_vsstart   = $9F2B
+VERA_dc_vstop     = $9F2C
+VERA_L0_config    = $9F2D
+VERA_L0_mapbase   = $9F2E
+VERA_L0_tilebase  = $9F2F
+VERA_L0_hscroll_l = $9F30
+VERA_L0_hscroll_h = $9F31
+VERA_L0_vscroll_l = $9F32
+VERA_L0_vscroll_h = $9F33
+VERA_L1_config    = $9F34
+VERA_L1_mapbase   = $9F35
+VERA_L1_tilebase  = $9F36
+VERA_L1_hscroll_l = $9F37
+VERA_L1_hscroll_h = $9F38
+VERA_L1_vscroll_l = $9F39
+VERA_L1_vscroll_h = $9F3A
+VERA_audio_ctrl   = $9F3B
+VERA_audio_rate   = $9F3C
+VERA_audio_data   = $9F3D
+VERA_spi_data     = $9F3E
+VERA_spi_ctrl     = $9F3F
+
 
 ROM_BANK          = $9F60
 RAM_BANK          = $9F61
@@ -81,50 +114,71 @@ YM_data           = $9FE1
 ; Emulator Registers
 GIF_ctrl          = $9FB5
 
+; ROM Banks
+KERNAL_ROM_BANK   = 0
+BASIC_ROM_BANK    = 4
+
 ; Banked Addresses
 RAM_WIN           = $A000
 RAM_WIN_SIZE      = $2000
 ROM_WIN           = $C000
 
 ; Kernal Subroutines
-GRAPH_LL_init                  := $FEF6
-GRAPH_LL_get_info              := $FEF9
-GRAPH_LL_set_palette           := $FEFC
-GRAPH_LL_cursor_position       := $FEFF
-GRAPH_LL_cursor_next_line      := $FF02
-GRAPH_LL_get_pixel             := $FF05
-GRAPH_LL_get_pixels            := $FF08
-GRAPH_LL_set_pixel             := $FF0B
-GRAPH_LL_set_pixels            := $FF0E
-GRAPH_LL_set_8_pixels          := $FF11
-GRAPH_LL_set_8_pixels_opaque   := $FF14
-GRAPH_LL_fill_pixels           := $FF17
-GRAPH_LL_filter_pixels         := $FF1A
-GRAPH_LL_move_pixels           := $FF1D
-JOYSTICK_SCAN     := $FF53
-JOYSTICK_GET		:= $FF56
-MOUSE_CONFIG		:= $FF68
-MOUSE_GET			:= $FF6B
-SETLFS            := $FFBA
-SETNAM            := $FFBD
-LOAD              := $FFD5
+MEMORY_FILL                   := $FEE4
+MEMORY_COPY                   := $FEE7
+MEMORY_CRC                    := $FEEA
+MEMORY_DECOMPRESS             := $FEED
+GRAPH_LL_init                 := $FEF6
+GRAPH_LL_get_info             := $FEF9
+GRAPH_LL_set_palette          := $FEFC
+GRAPH_LL_cursor_position      := $FEFF
+GRAPH_LL_cursor_next_line     := $FF02
+GRAPH_LL_get_pixel            := $FF05
+GRAPH_LL_get_pixels           := $FF08
+GRAPH_LL_set_pixel            := $FF0B
+GRAPH_LL_set_pixels           := $FF0E
+GRAPH_LL_set_8_pixels         := $FF11
+GRAPH_LL_set_8_pixels_opaque  := $FF14
+GRAPH_LL_fill_pixels          := $FF17
+GRAPH_LL_filter_pixels        := $FF1A
+GRAPH_LL_move_pixels          := $FF1D
+CLOCK_SET_DATE_TIME           := $FF4D
+CLOCK_GET_DATE_TIME           := $FF50
+JOYSTICK_SCAN                 := $FF53
+JOYSTICK_GET                  := $FF56
+MOUSE_CONFIG                  := $FF68
+MOUSE_GET			            := $FF6B
+MOUSE_SCAN                    := $FF71
+SCINIT                        := $FF81
+IOINIT                        := $FF84
+RAMTAS                        := $FF87
+RESTOR                        := $FF8A
+SETLFS                        := $FFBA
+SETNAM                        := $FFBD
+OPEN                          := $FFC0
+CLOSE                         := $FFC3
+CHKIN                         := $FFC6
+CHKOUT                        := $FFC9
+CLRCHN                        := $FFCC
+CHRIN                         := $FFCF
+CHROUT                        := $FFD2
+LOAD                          := $FFD5
+SAVE                          := $FFD8
+SETTIM                        := $FFDB
+RDTIM                         := $FFDE
+STOP                          := $FFE1
+GETIN                         := $FFE4
+
+; BASIC Vectors
+BASIC_PANIC       := $C000
+BASIC_INIT        := $C003
 
 
 ; VRAM Addresses
-
-VRAM_composer  = $F0000
-VRAM_hscale    = VRAM_composer+1
-VRAM_vscale    = VRAM_composer+2
-VRAM_palette   = $F1000
-VRAM_layer0    = $F2000
-VRAM_layer1    = $F3000
-VRAM_sprreg    = $F4000
-VRAM_sprattr   = $F5000
-VRAM_audio     = $F6000
-VRAM_spi       = $F7000
-VRAM_uart      = $F8000
-
-VROM_petscii   = $1F000
+VRAM_petscii   = $0F800
+VRAM_psg       = $1F9C0
+VRAM_palette   = $1FA00
+VRAM_sprattr   = $1FC00
 
 ; IRQs
 IRQVec         := $0314
@@ -135,7 +189,11 @@ NMIVec         := $0318
 
 .macro VERA_SET_ADDR addr, stride
 	.ifnblank stride
-		lda #((^addr) | (stride << 4))
+      .if stride < 0
+         lda #((^addr) | $08 | ((0-stride) << 4))
+      .else
+         lda #((^addr) | (stride << 4))
+      .endif
 	.else
 		lda #(^addr) | $10
 	.endif

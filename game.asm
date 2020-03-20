@@ -76,35 +76,29 @@ check_input:
    bne @start_game
    jmp @check_pause
 @start_game:
+   ; disable VRAM layer 1
+   lda VERA_dc_video
+   and #$DF
+   sta VERA_dc_video
    ; Setup level map on layer 1
-   stz VERA_ctrl
-   VERA_SET_ADDR VRAM_layer1, 1  ; configure VRAM layer 1
-   lda #$60                      ; 4bpp tiles
-   sta VERA_data0
-   lda #$3A                      ; 128x128 map of 16x16 tiles
-   sta VERA_data0
-   lda #((VRAM_TILEMAP >> 2) & $FF)
-   sta VERA_data0
-   lda #((VRAM_TILEMAP >> 10) & $FF)
-   sta VERA_data0
+   lda #$A2                      ; 128x128 map of 4bpp tiles
+   sta VERA_L1_config
+   lda #((VRAM_TILEMAP >> 9) & $FF)
+   sta VERA_L1_mapbase
    ; setup game parameters and initialize states
    jsr init_game
    ; load level 1 bitmap from banked RAM into layer 0
    lda #7
-   jsr set_bg_palette
+   sta BITMAP_PO
    ; raster the bitmap twice to make sure it takes
    jsr raster_bitmap
    jsr raster_bitmap
    lda #15
-   jsr set_bg_palette
-   stz VERA_ctrl
-   VERA_SET_ADDR VRAM_sprreg, 0  ; enable sprites
-   lda #$01
-   sta VERA_data0
-   VERA_SET_ADDR VRAM_layer1, 0  ; enable VRAM layer 1
-   lda #$01
-   ora VERA_data0
-   sta VERA_data0
+   sta BITMAP_PO
+   ; enable sprites and layers
+   lda VERA_dc_video
+   ora #$70
+   sta VERA_dc_video
    jsr level_backup
    stz start_prompt
    bra check_input_return

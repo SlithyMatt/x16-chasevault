@@ -24,29 +24,21 @@ winscreen_tick:
    jsr sprite_disable
    jsr bomb_clear
    jsr fruit_clear
-   stz VERA_ctrl
-   VERA_SET_ADDR VRAM_layer1, 1
-   lda #$61                      ; 4bpp tiles
-   sta VERA_data0
-   lda #$31                      ; 64x32 map of 16x16 tiles
-   sta VERA_data0
-   lda #((VRAM_STARTSCRN >> 2) & $FF)
-   sta VERA_data0
-   lda #((VRAM_STARTSCRN >> 10) & $FF)
-   sta VERA_data0
-   lda #((VRAM_TILES >> 2) & $FF)
-   sta VERA_data0
-   lda #((VRAM_TILES >> 10) & $FF)
-   sta VERA_data0
+   ; Setup tiles on layer 1
+   lda #$12                      ; 64x32 map of 4bpp tiles
+   sta VERA_L1_config
+   lda #((VRAM_STARTSCRN >> 9) & $FF)
+   sta VERA_L1_mapbase
+   lda #((((VRAM_TILES >> 11) & $3F) << 2) | $03)  ; 16x16 tiles
+   sta VERA_L1_tilebase
    lda __ws_scroll               ; initial scroll position on screen
-   sta VERA_data0
+   sta VERA_L1_hscroll_l
    lda __ws_scroll+1
-   sta VERA_data0
-   lda #0
-   sta VERA_data0
-   sta VERA_data0
+   sta VERA_L1_hscroll_h
+   stz VERA_L1_vscroll_l
+   stz VERA_L1_vscroll_h
    lda #7                        ; blackout background
-   jsr set_bg_palette
+   sta BITMAP_PO
    jmp @return
 @check_scroll:
    clc
@@ -66,17 +58,10 @@ winscreen_tick:
    jsr stop_music_loop
    jmp @return
 @scroll:
-   stz VERA_ctrl
-   lda #<(VRAM_layer1+6)
-   sta VERA_addr_low
-   lda #>VRAM_layer1
-   sta VERA_addr_high
-   lda #(^VRAM_layer1 | $10)
-   sta VERA_addr_bank
    lda __ws_scroll
-   sta VERA_data0
+   sta VERA_L1_hscroll_l
    lda __ws_scroll+1
-   sta VERA_data0
+   sta VERA_L1_hscroll_h
 @return:
    rts
 

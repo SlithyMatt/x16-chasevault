@@ -20,12 +20,10 @@ init_irq:
 
 handle_irq:
    ; check for VSYNC
-   lda VERA_irq
+   lda VERA_isr
    and #$01
    beq @done_vsync
    sta vsync_trig
-   ; clear vera irq flag
-   sta VERA_irq
 
 @done_vsync:
 

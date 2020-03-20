@@ -1155,28 +1155,21 @@ level_tick:
    cmp __level_fade_out
    bne @check_fade_in
    lda #7   ; fade to black
-   jsr set_bg_palette
+   sta BITMAP_PO
    bra @load_curr_scroll
 @check_fade_in:
    cmp __level_fade_in
    bne @load_curr_scroll
    lda #14  ; start fade-in
-   jsr set_bg_palette
+   sta BITMAP_PO
 @load_curr_scroll:
-   stz VERA_ctrl
-   lda #<(VRAM_layer1+6)
-   sta VERA_addr_low
-   lda #>VRAM_layer1
-   sta VERA_addr_high
-   lda #(^VRAM_layer1 | $10)
-   sta VERA_addr_bank
-   lda VERA_data0
+   lda VERA_L1_hscroll_l
    sta @hscroll
-   lda VERA_data0
+   lda VERA_L1_hscroll_h
    sta @hscroll+1
-   lda VERA_data0
+   lda VERA_L1_vscroll_l
    sta @vscroll
-   lda VERA_data0
+   lda VERA_L1_vscroll_h
    sta @vscroll+1
    lda #0
    jsr select_level
@@ -1218,7 +1211,7 @@ level_tick:
    bne @scroll_down
    stz __level_changing
    lda #15
-   jsr set_bg_palette
+   sta BITMAP_PO
    bra @return
 @scroll_left:
    sec
@@ -1257,21 +1250,14 @@ level_tick:
    sta @vscroll+1
    bra @set_scroll
 @set_scroll:
-   stz VERA_ctrl
-   lda #<(VRAM_layer1+6)
-   sta VERA_addr_low
-   lda #>VRAM_layer1
-   sta VERA_addr_high
-   lda #(^VRAM_layer1 | $10)
-   sta VERA_addr_bank
    lda @hscroll
-   sta VERA_data0
+   sta VERA_L1_hscroll_l
    lda @hscroll+1
-   sta VERA_data0
+   sta VERA_L1_hscroll_h
    lda @vscroll
-   sta VERA_data0
+   sta VERA_L1_vscroll_l
    lda @vscroll+1
-   sta VERA_data0
+   sta VERA_L1_vscroll_h
 @return:
    rts
 
@@ -1491,7 +1477,7 @@ level_restore:
 level_transition:
    ; start fade of background
    lda #14
-   jsr set_bg_palette
+   sta BITMAP_PO
    ; set fade out and in frame numbers
    clc
    lda frame_num
@@ -1687,14 +1673,6 @@ level_backup:
    sta @dest+2
    jmp @row_loop
 @return:
-   rts
-
-set_bg_palette: ; A: palette offset
-   pha
-   stz VERA_ctrl
-   VERA_SET_ADDR $F2007, 0
-   pla
-   sta VERA_data0
    rts
 
 __level_prepare_locks:
