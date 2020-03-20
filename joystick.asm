@@ -34,9 +34,8 @@ joystick2_a: .byte 0
 
 joystick_tick:
    jsr JOYSTICK_SCAN
-   ldx #0
+   lda #0
    jsr JOYSTICK_GET
-   ldx #1
    bit #JOY_RT
    beq :+
    stz joystick1_right
@@ -77,8 +76,8 @@ joystick_tick:
    stz joystick1_a
    bra :++
 :  stx joystick1_a
-:  jsr JOYSTICK_GET
-   ldx #1
+:  lda #1
+   jsr JOYSTICK_GET
    bit #JOY_RT
    beq :+
    stz joystick2_right
