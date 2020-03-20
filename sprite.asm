@@ -598,7 +598,7 @@ sprite_setpos: ; A: Bit 7: tile layer, Bits 6-0: sprite index
    lda VERA_L0_tilebase
    bra @get_regs
 @layer1:
-   lda VERA_L0_tilebase
+   lda VERA_L1_tilebase
 @get_regs:
    pha
    bit #$02
