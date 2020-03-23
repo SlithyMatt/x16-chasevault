@@ -1059,7 +1059,7 @@ level45:
    .byte 9,13, 9,2
 
 level46:
-   .byte 96    ; number of pellets
+   .byte 97    ; number of pellets
    .byte 1     ; new
    .byte 0     ; east neighbor
    .byte 38    ; west neighbor
@@ -1103,7 +1103,7 @@ level47:
    .byte 9,2, 9,12, 1,8
 
 level48:
-   .byte 90    ; number of pellets
+   .byte 93    ; number of pellets
    .byte 1     ; new
    .byte 0     ; east neighbor
    .byte 0     ; west neighbor

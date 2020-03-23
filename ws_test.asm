@@ -30,7 +30,7 @@ init_irq:
 
 handle_irq:
    ; check for VSYNC
-   lda VERA_irq
+   lda VERA_isr
    and #$01
    beq @done_vsync
    sta vsync_trig
@@ -40,10 +40,10 @@ handle_irq:
 
 start:
 
-   VERA_SET_ADDR VRAM_hscale, 1  ; set display to 2x scale
+   ; set display to 2x scale
    lda #64
-   sta VERA_data0
-   sta VERA_data0
+   sta VERA_dc_hscale
+   sta VERA_dc_vscale
 
    lda #>(VRAM_TILEMAP>>4)
    ldx #<(VRAM_TILEMAP>>4)

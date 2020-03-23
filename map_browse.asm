@@ -21,49 +21,27 @@ select_down: .byte 0
 next_scale: .byte 128
 
 start:
-   ; move text to layer 0 (TODO: replace with bitmap)
-   stz VERA_ctrl
-   VERA_SET_ADDR VRAM_layer0, 1
-   lda #1
-   sta VERA_ctrl
-   VERA_SET_ADDR VRAM_layer1, 1
-   ldx #10
-@copy_loop:
-   lda VERA_data1
-   sta VERA_data0
-   dex
-   bne @copy_loop
-   stz VERA_ctrl
-   VERA_SET_ADDR VRAM_layer0, 0  ; disable VRAM layer 0
-   lda #$FE
-   and VERA_data0
-   sta VERA_data0
+   ; Disable layers and sprites
+   lda VERA_dc_video
+   and #$8F
+   sta VERA_dc_video
 
    ; Setup tiles on layer 1
-   stz VERA_ctrl
-   VERA_SET_ADDR VRAM_layer1, 1  ; configure VRAM layer 1
-   lda #$60                      ; 4bpp tiles
-   sta VERA_data0
-   lda #$3A                      ; 128x128 map of 16x16 tiles
-   sta VERA_data0
-   lda #((VRAM_TILEMAP >> 2) & $FF)
-   sta VERA_data0
-   lda #((VRAM_TILEMAP >> 10) & $FF)
-   sta VERA_data0
-   lda #((VRAM_TILES >> 2) & $FF)
-   sta VERA_data0
-   lda #((VRAM_TILES >> 10) & $FF)
-   sta VERA_data0
-   lda #$00                      ; initial scroll position on screen 0
-   sta VERA_data0
-   sta VERA_data0
-   sta VERA_data0
-   sta VERA_data0
+   lda #$A2                      ; 128x128 map of 4bpp tiles
+   sta VERA_L1_config
+   lda #((VRAM_TILEMAP >> 9) & $FF)
+   sta VERA_L1_mapbase
+   lda #((((VRAM_TILES >> 11) & $3F) << 2) | $03)  ; 16x16 tiles
+   sta VERA_L1_tilebase
+   stz VERA_L1_hscroll_l         ; set scroll position to 0,0
+   stz VERA_L1_hscroll_h
+   stz VERA_L1_vscroll_l
+   stz VERA_L1_vscroll_h
 
-   VERA_SET_ADDR VRAM_hscale, 1  ; set display to 2x scale
+   ; set display to 2x scale
    lda #64
-   sta VERA_data0
-   sta VERA_data0
+   sta VERA_dc_hscale
+   sta VERA_dc_vscale
 
    ; load VRAM data from binaries
    lda #>(VRAM_TILEMAP>>4)
@@ -81,19 +59,13 @@ start:
    ldy #<palette_fn
    jsr loadvram
 
-   ; TODO: store bitmap binaries to banked RAM
-
-   ; TODO: configure layer 0 for background bitmaps
-
-   ; TODO: load screen 0 bitmap from banked RAM into layer 0
-
    ; setup game parameters and initialize states
    jsr init_game
 
-   VERA_SET_ADDR VRAM_layer1, 0  ; enable VRAM layer 1
-   lda #$01
-   ora VERA_data0
-   sta VERA_data0
+   ; enable layer 1
+   lda VERA_dc_video
+   ora #$20
+   sta VERA_dc_video
 
    ; setup interrupts
    jsr init_irq
@@ -111,11 +83,9 @@ mainloop:
    bne @check_right
    lda #1
    sta select_down
-   stz VERA_ctrl
-   VERA_SET_ADDR VRAM_hscale,1
    lda next_scale
-   sta VERA_data0
-   sta VERA_data0
+   sta VERA_dc_hscale
+   sta VERA_dc_vscale
    cmp #64
    beq @next128
    lda #64
@@ -172,16 +142,14 @@ mainloop:
    sbc #0
    sta vscroll+1
 @set_scroll:
-   stz VERA_ctrl
-   VERA_SET_ADDR $F3006, 1
    lda hscroll
-   sta VERA_data0
+   sta VERA_L1_hscroll_l
    lda hscroll+1
-   sta VERA_data0
+   sta VERA_L1_hscroll_h
    lda vscroll
-   sta VERA_data0
+   sta VERA_L1_vscroll_l
    lda vscroll+1
-   sta VERA_data0
+   sta VERA_L1_vscroll_h
 
    stz vsync_trig
    jmp mainloop  ; loop forever
