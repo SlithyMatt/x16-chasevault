@@ -10,10 +10,11 @@ NUKE_ENABLED   = 0
 MUSIC_PTR      = $28
 
 ; VRAM map
-VRAM_SPRITES   = $00000 ; 208 4bpp 16x16 frames
-VRAM_BITMAP    = $06800 ; 4bpp 320x240
-VRAM_TILEMAP   = $10000 ; 128x128
-VRAM_STARTSCRN = $17800 ; 64x32
+VRAM_SPRITES   = $00000 ; 192 4bpp 16x16 frames
+VRAM_LOADMAP   = $06000 ; 32x32 tilemap
+VRAM_BITMAP    = $06800 ; 4bpp 320x240 bitmap
+VRAM_TILEMAP   = $10000 ; 128x128 tilemap
+VRAM_STARTSCRN = $17800 ; 64x32 tilemap
 VRAM_TILES     = $18800 ; 227 4bpp 16x16 tiles (may also be used as sprite frames)
 
 

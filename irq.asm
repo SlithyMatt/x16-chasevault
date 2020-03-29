@@ -6,6 +6,7 @@ IRQ_INC = 1
 def_irq: .word $0000
 
 init_irq:
+   sei
    lda IRQVec
    sta def_irq
    lda IRQVec+1
@@ -14,6 +15,7 @@ init_irq:
    sta IRQVec
    lda #>handle_irq
    sta IRQVec+1
+   cli
    rts
 
 
