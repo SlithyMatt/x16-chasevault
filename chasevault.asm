@@ -71,26 +71,91 @@ start:
    ldy #<sprites_fn
    jsr loadvram
 
-   ;jmp mainloop
+   ; add 1 to progress bar
+   lda #1
+   ldx #4
+   ldy #13
+   jsr xy2vaddr
+   stz VERA_ctrl
+   ora #$20
+   sta VERA_addr_bank
+   stx VERA_addr_low
+   sty VERA_addr_high
+   lda #$D7
+   sta VERA_data0
+
+   SUPERIMPOSE "ram banks", 5, 11
 
    ; store additional binaries to banked RAM
    jsr loadbank
 
+   ; add 7 to progress bar
+   lda #1
+   ldx #5
+   ldy #13
+   jsr xy2vaddr
+   stz VERA_ctrl
+   ora #$20
+   sta VERA_addr_bank
+   stx VERA_addr_low
+   sty VERA_addr_high
+   lda #$D7
+   sta VERA_data0
+   sta VERA_data0
+   sta VERA_data0
+   sta VERA_data0
+   sta VERA_data0
+   sta VERA_data0
+   sta VERA_data0
 
+   SUPERIMPOSE " tile map", 5, 11
 
    lda #>(VRAM_TILEMAP>>4)
    ldx #<(VRAM_TILEMAP>>4)
    ldy #<tilemap_fn
    jsr loadvram
 
+   ; add 4 to progress bar
+   lda #1
+   ldx #12
+   ldy #13
+   jsr xy2vaddr
+   stz VERA_ctrl
+   ora #$20
+   sta VERA_addr_bank
+   stx VERA_addr_low
+   sty VERA_addr_high
+   lda #$D7
+   sta VERA_data0
+   sta VERA_data0
+   sta VERA_data0
+   sta VERA_data0
 
+   SUPERIMPOSE " bitmap  ", 5, 11
 
    lda #>(VRAM_BITMAP>>4)
    ldx #<(VRAM_BITMAP>>4)
    ldy #<ssbg_fn
    jsr loadvram
 
+   ; add 4 to progress bar
+   lda #1
+   ldx #16
+   ldy #13
+   jsr xy2vaddr
+   stz VERA_ctrl
+   ora #$20
+   sta VERA_addr_bank
+   stx VERA_addr_low
+   sty VERA_addr_high
+   lda #$D7
+   sta VERA_data0
+   sta VERA_data0
+   sta VERA_data0
+   lda #$D5
+   sta VERA_data0
 
+   SUPERIMPOSE "  done!  ", 5, 11
 
    ; Disable layers and sprites
    lda VERA_dc_video
