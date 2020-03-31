@@ -15,14 +15,43 @@
 .include "game.asm"
 .include "globals.asm"
 
+.macro PRINT_STRING str_arg
+   .scope
+         jmp end_string
+      string_begin: .byte str_arg
+      end_string:
+         lda #<string_begin
+         sta ZP_PTR_1
+         lda #>string_begin
+         sta ZP_PTR_1+1
+         ldx #(end_string-string_begin)
+         ldy #0
+      loop:
+         lda (ZP_PTR_1),y
+         jsr CHROUT
+         iny
+         dex
+         bne loop
+   .endscope
+.endmacro
+
+.macro PRINT_CR
+   lda #$0D
+   jsr CHROUT
+.endmacro
+
 start:
+
+   PRINT_STRING "loading palette..."
+   PRINT_CR
 
    lda #>(VRAM_palette>>4)
    ldx #<(VRAM_palette>>4)
    ldy #<palette_fn
    jsr loadvram
 
-
+   PRINT_STRING "loading tiles..."
+   PRINT_CR
 
    ; load VRAM data from binaries
    lda #>(VRAM_TILES>>4)
@@ -30,14 +59,13 @@ start:
    ldy #<tiles_fn
    jsr loadvram
 
-
+   PRINT_STRING "loading load screen..."
+   PRINT_CR
 
    lda #>(VRAM_LOADMAP>>4)
    ldx #<(VRAM_LOADMAP>>4)
    ldy #<loadmap_fn
    jsr loadvram
-
-
 
    ; Disable layers and sprites
    lda VERA_dc_video
