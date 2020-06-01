@@ -321,26 +321,28 @@ sfx_bars_delay:
    lda sfx_playing
    bit #playing_bit
    bne :+
-   jmp :+++++
+   jmp :++++++
 :  lda delay
    beq :+
    dec delay
    lda delay
    beq :+
-   jmp :++++
+   jmp :+++++
 :  ldx offset
    lda data,x
    cmp #OPM_DELAY_REG
-   beq :+
-   cmp #OPM_DONE_REG
    beq :++
+   cmp #OPM_DONE_REG
+   beq :+++
+:  bit YM_data
+   bmi :-
    sta YM_reg
    inc offset
    ldx offset
    lda data,x
    sta YM_data
    inc offset
-   bra :-
+   bra :--
 :  inc offset
    ldx offset
    lda data,x

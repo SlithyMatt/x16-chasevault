@@ -93,6 +93,8 @@ music_tick:
    jsr init_music
    bra @return
 @write:
+   bit YM_data
+   bmi @write
    sta YM_reg
    lda (MUSIC_PTR),y
    sta YM_data
