@@ -15,7 +15,7 @@ Simply `LOAD "CHASVALT.PRG"` then `RUN`, or auto-run with the emulator from this
 * **PAL.BIN** - custom palette, loaded by program to VERA register
 * **SPRTATTR.BIN** - initial sprite attributes, loaded by program to VERA registers
 * **STARTBG.BIN** - start screen background bitmap, loaded by program directly to VRAM at start
-* **BITMAP.BIN** - game level background bitmap, loaded by program to banked RAM at start, then replaces STARTSCRNBG.BIN in VRAM after start
+* **BITMAP.BIN** - game level background bitmap, loaded by program to banked RAM at start, then replaces STARTBG.BIN in VRAM after start
 * **NORMX.BIN** - vector normalization X-value lookup table, loaded by program to banked RAM
 * **NORMY.BIN** - vector normalization Y-value lookup table, loaded by program to banked RAM
 * **MUSIC.BIN** - music for YM2151 FM synthesizer
