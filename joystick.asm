@@ -79,6 +79,7 @@ joystick_tick:
 :  stx joystick1_a
 :  lda #1
    jsr JOYSTICK_GET
+   ldx #1
    bit #JOY_RT
    beq :+
    stz joystick2_right
