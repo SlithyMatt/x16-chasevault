@@ -10,6 +10,7 @@ To build game files, run **build.sh** in bash (Git bash is recommended for Windo
 * **CHASVALT.PRG** - Program that needs to be loaded by BASIC.
 Simply `LOAD "CHASVALT.PRG"` then `RUN`, or auto-run with the emulator from this directory: `path/to/x16emu -prg CHASVALT.PRG -run`
 * **TILEMAP.BIN** - 128x128 map of 16x16 tiles, loaded by program to VRAM
+* **LOADMAP.BIN** - 32x32 map of 16x16 tiles, loaded to VRAM to display load screen until final tilemap is loaded.
 * **SPRITES.BIN** - 16x16 4bpp sprite frames, loaded by program to VRAM
 * **TILES.BIN** - 16x16 4bpp tiles, loaded by program to VRAM
 * **PAL.BIN** - custom palette, loaded by program to VERA register
