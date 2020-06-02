@@ -25,4 +25,4 @@ Simply `LOAD "CHASVALT.PRG"` then `RUN`, or auto-run with the emulator from this
 Build requirements: gcc, cc65
 
 This game is now undergoing beta testing. The master baseline is not guaranteed to be fully working. The latest stable release is
-https://github.com/SlithyMatt/x16-chasevault/releases/tag/v0.5.1b
+https://github.com/SlithyMatt/x16-chasevault/releases/tag/v0.6b
