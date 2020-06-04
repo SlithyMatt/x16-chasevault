@@ -91,6 +91,14 @@ int main(int argc, char **argv) {
          case 0xc0: // Sega PCM (expected from Deflemask)
             fread(idata,1,3,ifp); // ignore data
             break;
+		 case 0x67: // data block - just skip over it
+			fread(idata, 1, 2, ifp); // ignore fake end byte, data type
+			fread(idata, 1, 4, ifp); // read block length
+			data_offset = (int)idata[0] + (((int)idata[1]) << 8) +
+				(((int)idata[2]) << 16) + (((int)idata[3]) << 24);
+			printf("Skipping %d byte data block\n",data_offset);
+			fseek(ifp, data_offset, SEEK_CUR);
+			break;
          default:
             // TODO: support other sounds chips to include or ignore
             // assume any other data code to be single-byte
