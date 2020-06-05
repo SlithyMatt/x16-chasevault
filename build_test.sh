@@ -6,3 +6,4 @@ cl65 --cpu 65C02 -o joystick_test.prg -l joystick_test.list joystick_test.asm
 cl65 --cpu 65C02 -o ws_test.prg -l ws_test.list ws_test.asm
 ./asc2bin.exe spritesheet.txt SPRITESHEET.BIN 4000
 cl65 --cpu 65C02 -o sprite_sheet.prg -l sprite_sheet.list sprite_sheet.asm
+cl65 --cpu 65C02 -o TSTMUSIC.PRG -l music_test.list music_test.asm
