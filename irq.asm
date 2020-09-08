@@ -1,7 +1,7 @@
 .ifndef IRQ_INC
 IRQ_INC = 1
 
-.include "vsync.asm"
+.include "game.asm"
 
 def_irq: .word $0000
 
@@ -25,7 +25,7 @@ handle_irq:
    lda VERA_isr
    and #$01
    beq @done_vsync
-   sta vsync_trig
+   jsr game_tick
 
 @done_vsync:
 

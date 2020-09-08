@@ -11,8 +11,6 @@
 .include "loadbank.asm"
 .include "loadvram.asm"
 .include "irq.asm"
-.include "vsync.asm"
-.include "game.asm"
 .include "globals.asm"
 
 .macro PRINT_STRING str_arg
@@ -214,5 +212,4 @@ start:
 
 mainloop:
    wai
-   jsr check_vsync
    bra mainloop  ; loop forever
