@@ -2,7 +2,7 @@
 SOUNDFX_INC = 1
 
 .include "x16.inc"
-.include "ym2151.asm"
+.include "ym2151.inc"
 .include "globals.asm"
 
 sfx_death:
