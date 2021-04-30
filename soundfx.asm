@@ -79,7 +79,6 @@ sfx_pwr_pellet:
 
 sfx_bomb:
 .byte YM_KEY_ON,     YM_NOISE_OFF
-.byte YM_KC+YM_CH_8, YM_KC_MIDDLE_C
 .byte YM_NE_NFRQ,    YM_NE | $1E
 .byte YM_KEY_ON,     YM_NOISE_ON
 .byte OPM_DELAY_REG, 1
@@ -136,7 +135,6 @@ sfx_unlock:
 .byte YM_KEY_ON,     YM_CH_6 | YM_SN_ALL
 .byte YM_KEY_ON,     YM_NOISE_OFF
 .byte OPM_DELAY_REG, 1
-.byte YM_KC+YM_CH_8, YM_KC_MIDDLE_C
 .byte YM_NE_NFRQ,    YM_NE | $05
 .byte YM_KEY_ON,     YM_NOISE_ON
 .byte OPM_DELAY_REG, 8
