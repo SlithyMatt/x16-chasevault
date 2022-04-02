@@ -2,7 +2,7 @@
 GLOBALS_INC = 1
 
 ; ---------- Build Options ----------
-NUKE_ENABLED   = 0
+NUKE_ENABLED   = 1
 
 ; ------------ Constants ------------
 
