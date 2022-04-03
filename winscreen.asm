@@ -11,6 +11,7 @@ WS_MAX_SCROLL = 704
 
 __ws_scroll:  .word 320
 __ws_reqd:    .byte 0
+__ws_delay:   .byte 120
 
 winscreen_tick:
    lda winscreen_req
@@ -41,6 +42,10 @@ winscreen_tick:
    sta BITMAP_PO
    jmp @return
 @check_scroll:
+   dec __ws_delay
+   bne @return
+   lda #5
+   sta __ws_delay
    clc
    lda __ws_scroll
    adc #1
