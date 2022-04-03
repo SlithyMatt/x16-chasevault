@@ -1,7 +1,7 @@
 # x16-chasevault
 Chase Vault: A new game for the Commander X16 retrocomputer.
 
-As seen on YouTube: https://youtu.be/xFjnOoglXfI
+As seen on YouTube: https://youtu.be/f6d036XFiTk
 
 ![](cv9.gif)
 
@@ -25,4 +25,4 @@ Simply `LOAD "CHASVALT.PRG"` then `RUN`, or auto-run with the emulator from this
 Build requirements: gcc, cc65
 
 This game is now undergoing beta testing. The master baseline is not guaranteed to be fully working. The latest stable release is
-https://github.com/SlithyMatt/x16-chasevault/releases/tag/v0.6b
+https://github.com/SlithyMatt/x16-chasevault/releases/tag/v0.7b
